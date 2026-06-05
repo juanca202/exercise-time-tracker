@@ -18,7 +18,7 @@ export function TasksPage() {
   return (
     <div className="flex flex-col gap-8">
       <Button
-        variant="secondary"
+        variant="primary"
         className="w-fit"
         onClick={() => openModal("newTask")}
       >
@@ -28,12 +28,12 @@ export function TasksPage() {
 
       <header className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-semibold tracking-tight text-on-surface">
+          <h1 className="text-headline-lg-mobile md:text-headline-lg tracking-tight text-primary">
             Tareas
           </h1>
-          <p className="text-sm text-on-surface-variant">
+          <p className="text-body-md text-on-surface-variant">
             Has alcanzado el{" "}
-            <span className="font-semibold text-on-surface">
+            <span className="font-semibold text-accent">
               {weeklyGoalPercent}%
             </span>{" "}
             de tu meta semanal
@@ -41,19 +41,19 @@ export function TasksPage() {
         </div>
 
         <div className="flex shrink-0 gap-3">
-          <article className="min-w-36 rounded-lg border border-outline-variant bg-surface-container-lowest px-5 py-4 shadow-sm">
-            <p className="font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+          <article className="min-w-36 rounded-lg border border-card-border bg-surface-container-lowest px-5 py-4 shadow-elevation-1">
+            <p className="text-label-mono uppercase text-on-surface-variant">
               Total Semanal
             </p>
-            <p className="mt-2 font-mono text-xl font-semibold text-on-surface">
+            <p className="mt-2 text-xl font-semibold text-primary">
               {formatDurationHoursMinutes(weeklyTotalMs)}
             </p>
           </article>
-          <article className="min-w-36 rounded-lg border border-outline-variant bg-surface-container-lowest px-5 py-4 shadow-sm">
-            <p className="font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+          <article className="min-w-36 rounded-lg border border-card-border bg-surface-container-lowest px-5 py-4 shadow-elevation-1">
+            <p className="text-label-mono uppercase text-on-surface-variant">
               Total Mensual
             </p>
-            <p className="mt-2 font-mono text-xl font-semibold text-on-surface">
+            <p className="mt-2 text-xl font-semibold text-primary">
               {formatDurationHoursMinutes(monthlyTotalMs)}
             </p>
           </article>

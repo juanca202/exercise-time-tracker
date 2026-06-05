@@ -26,11 +26,11 @@ export function ActiveTimerPanel() {
 
   if (!activeTimer) {
     return (
-      <section className="flex min-h-80 flex-col items-center justify-center rounded-lg border border-outline-variant bg-surface-container-lowest p-8 text-center shadow-sm">
-        <p className="font-mono text-xs tracking-widest text-on-surface-variant uppercase">
+      <section className="flex min-h-80 flex-col items-center justify-center rounded-lg border border-card-border bg-surface-container-lowest p-8 text-center shadow-elevation-1">
+        <p className="text-label-mono uppercase text-on-surface-variant">
           Sin sesión activa
         </p>
-        <p className="mt-3 max-w-sm text-sm text-on-surface-variant">
+        <p className="mt-3 max-w-sm text-body-md text-on-surface-variant">
           Crea una tarea o pulsa Play en Tareas Recientes para iniciar el
           temporizador.
         </p>
@@ -54,43 +54,39 @@ export function ActiveTimerPanel() {
 
   return (
     <section
-      className="flex min-h-80 flex-col items-center justify-center rounded-lg border border-outline-variant border-l-4 border-l-secondary bg-surface-container-lowest p-8 text-center shadow-sm"
+      className="flex min-h-80 flex-col items-center justify-center rounded-lg border border-card-border bg-surface-container-lowest p-8 text-center shadow-elevation-1"
       aria-live="polite"
     >
       <div className="flex flex-col items-center gap-2">
         {project ? (
-          <p className="font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+          <p className="text-label-mono uppercase text-accent">
             {project.name}
           </p>
         ) : null}
 
-        <h2 className="text-2xl font-semibold leading-tight text-on-surface md:text-3xl">
+        <h2 className="text-headline-md font-semibold text-primary">
           {task?.name ?? "Tarea desconocida"}
         </h2>
 
-        <p className="mt-2 flex items-center justify-center gap-2 text-sm text-on-surface-variant">
+        <p className="mt-2 flex items-center justify-center gap-2 text-body-md text-on-surface-variant">
           <ClockIcon className={iconClassName("sm")} aria-hidden="true" />
           Iniciado a las {formatStartedAt(activeTimer.startedAt)}
         </p>
 
         <p
-          className="mt-6 font-sans text-5xl font-bold tracking-tight text-on-surface md:text-6xl"
+          className="text-display-time mt-6 text-primary"
           aria-label={`Tiempo transcurrido: ${formatDurationHms(elapsedMs)}`}
         >
           {formatDurationHms(elapsedMs)}
         </p>
 
-        <Button
-          variant="secondary"
-          className="mt-8 min-w-48"
-          onClick={handleStop}
-        >
+        <Button variant="stop" className="mt-8 min-w-48" onClick={handleStop}>
           <StopIcon className={iconClassName("sm")} aria-hidden="true" />
           Detener Sesión
         </Button>
 
         {error ? (
-          <p className="mt-2 text-sm text-error" role="alert">
+          <p className="mt-2 text-body-md text-error" role="alert">
             {error}
           </p>
         ) : null}

@@ -24,7 +24,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col">
       {navItems.map((item) => {
         const isActive =
           item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
@@ -35,16 +35,16 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "flex items-center gap-3 border-l-4 py-3 pl-5 pr-4 text-body-md transition-colors",
               isActive
-                ? "bg-surface-container text-on-surface"
-                : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface",
+                ? "border-l-accent bg-nav-active font-semibold text-primary"
+                : "border-l-transparent text-on-surface-variant hover:bg-nav-active hover:text-on-surface",
             )}
           >
             <item.Icon
               className={iconClassName(
                 "lg",
-                isActive ? "text-on-surface" : "text-on-surface-variant",
+                isActive ? "text-primary" : "text-on-surface-variant",
               )}
               aria-hidden="true"
             />
@@ -63,14 +63,14 @@ export function Sidebar() {
 
   return (
     <>
-      <div className="flex items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-4 py-3 md:hidden">
-        <p className="text-base font-semibold text-on-surface">Time Tracker</p>
+      <div className="flex items-center justify-between border-b border-card-border bg-sidebar px-4 py-3 md:hidden">
+        <p className="text-body-lg font-bold text-primary">TimeTracker</p>
         <button
           type="button"
           aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((open) => !open)}
-          className="rounded border border-outline-variant p-2 text-on-surface"
+          className="rounded border border-input-border p-2 text-on-surface"
         >
           {mobileOpen ? (
             <XMarkIcon className={iconClassName("lg")} aria-hidden="true" />
@@ -90,17 +90,21 @@ export function Sidebar() {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex h-full min-h-full w-[280px] shrink-0 flex-col border-r border-outline-variant bg-surface-container-lowest px-4 py-6 transition-transform md:static md:h-auto md:min-h-full md:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex h-full w-[280px] shrink-0 flex-col border-r border-card-border bg-sidebar transition-transform md:sticky md:top-0 md:h-screen md:translate-x-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
-        <div className="mb-8 hidden px-2 md:block">
-          <p className="text-lg font-semibold text-on-surface">Time Tracker</p>
-          <p className="text-sm text-on-surface-variant">Panel de Control</p>
+        <div className="mb-8 hidden px-6 pt-6 md:block">
+          <p className="text-xl font-bold text-primary">TimeTracker</p>
+          <p className="mt-0.5 text-body-md text-on-surface-variant">
+            Panel de Control
+          </p>
         </div>
-        <NavLinks onNavigate={() => setMobileOpen(false)} />
+        <div className="flex flex-1 flex-col overflow-y-auto">
+          <NavLinks onNavigate={() => setMobileOpen(false)} />
+        </div>
         {showSidebarTimer ? (
-          <div className="mt-auto pt-6">
+          <div className="sticky bottom-0 shrink-0 px-6 pb-6 pt-4">
             <SidebarActiveTimer />
           </div>
         ) : null}

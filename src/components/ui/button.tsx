@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import type { ButtonHTMLAttributes } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "ghost";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "stop";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -13,9 +13,10 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary:
     "bg-primary text-on-primary hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary/40",
   secondary:
-    "border border-outline bg-surface-container-lowest text-on-surface hover:bg-surface-container-low focus-visible:ring-2 focus-visible:ring-outline/40",
+    "border border-input-border bg-surface-container-lowest text-on-surface hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-outline/40",
   ghost:
-    "bg-transparent text-on-surface hover:bg-surface-container-low focus-visible:ring-2 focus-visible:ring-outline/30",
+    "bg-transparent text-on-surface hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-outline/30",
+  stop: "border border-error/40 bg-[#fef2f2] text-error hover:bg-error-container focus-visible:ring-2 focus-visible:ring-error/25",
 };
 
 export function Button({

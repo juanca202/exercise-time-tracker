@@ -15,7 +15,7 @@ export function Textarea({ className, label, id, ...props }: TextareaProps) {
       {label ? (
         <label
           htmlFor={textareaId}
-          className="font-mono text-xs font-medium tracking-wider text-on-surface-variant uppercase opacity-70"
+          className="text-label-mono uppercase text-on-surface-variant opacity-50"
         >
           {label}
         </label>
@@ -23,7 +23,7 @@ export function Textarea({ className, label, id, ...props }: TextareaProps) {
       <textarea
         id={textareaId}
         className={cn(
-          "min-h-24 w-full resize-y rounded border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20",
+          "min-h-24 w-full resize-y rounded border border-input-border bg-surface-container-lowest px-3 py-2 text-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20",
           className,
         )}
         {...props}

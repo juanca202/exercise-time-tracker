@@ -33,33 +33,31 @@ export function SidebarActiveTimer() {
 
   return (
     <section
-      className="rounded-lg border border-outline-variant border-l-4 border-l-secondary bg-surface-container-low p-4 shadow-sm"
+      className="rounded-lg border border-card-border bg-nav-active p-4 shadow-elevation-1"
       aria-live="polite"
     >
       {project ? (
-        <p className="font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
-          {project.name}
-        </p>
+        <p className="text-label-mono uppercase text-accent">{project.name}</p>
       ) : null}
 
-      <p className="mt-1 line-clamp-2 text-sm font-semibold text-on-surface">
+      <p className="mt-1 line-clamp-2 text-body-md font-semibold text-primary">
         {task?.name ?? "Tarea desconocida"}
       </p>
 
       <p
-        className="mt-3 font-mono text-2xl font-bold tracking-tight text-on-surface"
+        className="mt-3 font-mono text-2xl font-bold tracking-tight text-primary"
         aria-label={`Tiempo transcurrido: ${formatDurationHms(elapsedMs)}`}
       >
         {formatDurationHms(elapsedMs)}
       </p>
 
-      <Button variant="secondary" className="mt-4 w-full" onClick={handleStop}>
+      <Button variant="stop" className="mt-4 w-full" onClick={handleStop}>
         <StopIcon className={iconClassName("sm")} aria-hidden="true" />
         Detener Sesión
       </Button>
 
       {error ? (
-        <p className="mt-2 text-xs text-error" role="alert">
+        <p className="mt-2 text-label-mono text-error" role="alert">
           {error}
         </p>
       ) : null}

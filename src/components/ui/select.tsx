@@ -29,7 +29,7 @@ export function Select({
   return (
     <div className="flex flex-col gap-1.5">
       {label ? (
-        <span className="font-mono text-xs font-medium tracking-wider text-on-surface-variant uppercase opacity-70">
+        <span className="text-label-mono uppercase text-on-surface-variant opacity-50">
           {label}
         </span>
       ) : null}
@@ -42,7 +42,7 @@ export function Select({
       >
         <BaseSelect.Trigger
           className={cn(
-            "flex w-full items-center justify-between rounded border border-outline-variant bg-surface-container-lowest px-3 py-2 text-left text-sm text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-50",
+            "flex w-full items-center justify-between rounded border border-input-border bg-surface-container-lowest px-3 py-2 text-left text-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-50",
           )}
         >
           <BaseSelect.Value>
@@ -58,13 +58,13 @@ export function Select({
         </BaseSelect.Trigger>
         <BaseSelect.Portal>
           <BaseSelect.Positioner className="z-50" sideOffset={4}>
-            <BaseSelect.Popup className="max-h-60 overflow-auto rounded border border-outline-variant bg-surface-container-lowest py-1 shadow-lg">
+            <BaseSelect.Popup className="max-h-60 overflow-auto rounded border border-card-border bg-surface-container-lowest py-1 shadow-elevation-2">
               <BaseSelect.List>
                 {options.map((option) => (
                   <BaseSelect.Item
                     key={option.value}
                     value={option.value}
-                    className="cursor-pointer px-3 py-2 text-sm text-on-surface outline-none data-highlighted:bg-surface-container-low"
+                    className="cursor-pointer px-3 py-2 text-body-md text-on-surface outline-none data-highlighted:bg-row-hover"
                   >
                     <BaseSelect.ItemText>{option.label}</BaseSelect.ItemText>
                   </BaseSelect.Item>

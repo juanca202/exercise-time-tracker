@@ -15,7 +15,7 @@ export function Input({ className, label, id, ...props }: InputProps) {
       {label ? (
         <label
           htmlFor={inputId}
-          className="font-mono text-xs font-medium tracking-wider text-on-surface-variant uppercase opacity-70"
+          className="text-label-mono uppercase text-on-surface-variant opacity-50"
         >
           {label}
         </label>
@@ -23,7 +23,7 @@ export function Input({ className, label, id, ...props }: InputProps) {
       <input
         id={inputId}
         className={cn(
-          "w-full rounded border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20",
+          "w-full rounded border border-input-border bg-surface-container-lowest px-3 py-2 text-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20",
           className,
         )}
         {...props}

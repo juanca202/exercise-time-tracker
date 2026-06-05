@@ -61,8 +61,8 @@ export function ManualEntryPanel() {
   };
 
   return (
-    <section className="flex min-h-80 flex-col rounded-lg border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
-      <h2 className="text-base font-semibold text-on-surface">
+    <section className="flex min-h-80 flex-col rounded-lg border border-card-border bg-surface-container-lowest p-6 shadow-elevation-1">
+      <h2 className="text-body-lg font-semibold text-on-surface">
         Entrada Manual
       </h2>
 
@@ -95,19 +95,19 @@ export function ManualEntryPanel() {
         />
 
         {tasks.length === 0 ? (
-          <p className="text-sm text-on-surface-variant">
+          <p className="text-body-md text-on-surface-variant">
             Crea un proyecto y una tarea antes de registrar tiempo manualmente.
           </p>
         ) : null}
 
         {error ? (
-          <p className="text-sm text-error" role="alert">
+          <p className="text-body-md text-error" role="alert">
             {error}
           </p>
         ) : null}
 
         {success ? (
-          <p className="text-sm text-secondary" role="status">
+          <p className="text-body-md text-secondary" role="status">
             Registro guardado correctamente.
           </p>
         ) : null}

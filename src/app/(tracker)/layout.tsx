@@ -14,7 +14,7 @@ export default function TrackerLayout({
   return (
     <div className="flex min-h-full flex-1 flex-col md:flex-row">
       <Sidebar />
-      <main className="flex-1 overflow-auto p-4 md:p-10">
+      <main className="flex-1 overflow-auto bg-background p-4 md:p-10">
         <div className="mx-auto max-w-[1280px]">{children}</div>
       </main>
     </div>

@@ -35,7 +35,7 @@ export function HistoryPage() {
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <h1 className="text-3xl font-semibold tracking-tight text-on-surface">
+        <h1 className="text-headline-lg-mobile md:text-headline-lg tracking-tight text-primary">
           Historial de Tiempo
         </h1>
         <PeriodSelector />
@@ -49,15 +49,15 @@ export function HistoryPage() {
             return (
               <article
                 key={project.projectId}
-                className="flex items-center gap-4 rounded-lg border border-outline-variant border-l-4 bg-surface-container-lowest p-4 shadow-sm"
+                className="flex items-center gap-4 rounded-lg border border-card-border border-l-4 bg-surface-container-lowest p-4 shadow-elevation-1"
                 style={{ borderLeftColor: accent }}
               >
                 <ProjectIconBadge
                   projectName={project.name}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-outline-variant/60"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-card-border/60"
                 />
                 <div className="min-w-0">
-                  <h2 className="truncate font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+                  <h2 className="truncate text-label-mono uppercase text-on-surface-variant">
                     {project.name}
                   </h2>
                   <p className="mt-1 font-mono text-2xl font-semibold text-on-surface">
@@ -70,21 +70,21 @@ export function HistoryPage() {
         </div>
       ) : null}
 
-      <section className="overflow-hidden rounded-lg border border-outline-variant bg-surface-container-lowest shadow-sm">
+      <section className="overflow-hidden rounded-lg border border-card-border bg-surface-container-lowest shadow-elevation-1">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="border-b border-outline-variant bg-surface-container-low">
+          <table className="w-full min-w-[640px] text-left text-body-md">
+            <thead className="border-b border-card-border bg-surface-container-low">
               <tr>
-                <th className="px-6 py-3 font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+                <th className="px-6 py-3 text-label-mono uppercase text-on-surface-variant">
                   Fecha
                 </th>
-                <th className="px-6 py-3 font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+                <th className="px-6 py-3 text-label-mono uppercase text-on-surface-variant">
                   Proyecto
                 </th>
-                <th className="px-6 py-3 font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+                <th className="px-6 py-3 text-label-mono uppercase text-on-surface-variant">
                   Tarea
                 </th>
-                <th className="px-6 py-3 text-right font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+                <th className="px-6 py-3 text-right text-label-mono uppercase text-on-surface-variant">
                   Duración
                 </th>
               </tr>
@@ -103,7 +103,7 @@ export function HistoryPage() {
                 rows.map((row) => (
                   <tr
                     key={row.entryId}
-                    className="border-b border-outline-variant last:border-b-0 hover:bg-surface-container-low"
+                    className="border-b border-card-border last:border-b-0 hover:bg-row-hover"
                   >
                     <td className="px-6 py-4 text-on-surface">
                       {formatHistoryDate(row.date)}
@@ -124,34 +124,34 @@ export function HistoryPage() {
           </table>
         </div>
 
-        <footer className="flex flex-col gap-4 border-t border-outline-variant bg-surface-container-lowest px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+        <footer className="flex flex-col gap-4 border-t border-card-border bg-surface-container-lowest px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-6 sm:gap-8">
             <div>
-              <p className="font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+              <p className="text-label-mono uppercase text-on-surface-variant">
                 Registros encontrados
               </p>
-              <p className="mt-1 text-base font-semibold text-on-surface">
+              <p className="mt-1 text-body-lg font-semibold text-on-surface">
                 {summary.count} registros
               </p>
             </div>
 
             <div
-              className="hidden h-12 w-px bg-outline-variant sm:block"
+              className="hidden h-12 w-px bg-card-border sm:block"
               aria-hidden="true"
             />
 
             <div>
-              <p className="font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+              <p className="text-label-mono uppercase text-on-surface-variant">
                 Proyectos
               </p>
-              <p className="mt-1 text-base font-semibold text-on-surface">
+              <p className="mt-1 text-body-lg font-semibold text-on-surface">
                 {summary.projectCount} proyectos
               </p>
             </div>
           </div>
 
-          <div className="rounded-lg border border-outline-variant bg-surface-container-lowest px-6 py-4 sm:min-w-52 sm:text-right">
-            <p className="font-mono text-[10px] font-medium tracking-widest text-on-surface-variant uppercase">
+          <div className="rounded-lg border border-card-border bg-surface-container-lowest px-6 py-4 sm:min-w-52 sm:text-right">
+            <p className="text-label-mono uppercase text-on-surface-variant">
               Total de horas
             </p>
             <p className="mt-1 font-mono text-2xl font-bold text-on-surface">
