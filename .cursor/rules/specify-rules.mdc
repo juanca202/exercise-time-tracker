@@ -3,6 +3,40 @@ alwaysApply: true
 ---
 
 <!-- SPECKIT START -->
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+## Active feature: 001-time-tracker
+
+**Plan**: [specs/001-time-tracker/plan.md](../../specs/001-time-tracker/plan.md)  
+**Spec**: [specs/001-time-tracker/spec.md](../../specs/001-time-tracker/spec.md)  
+**Branch**: `001-time-tracker`
+
+### Stack (constitution + ADRs)
+
+- Next.js 16 App Router, React 19, TypeScript strict
+- Zustand + `persist` → `localStorage` key `time-tracker:v1`
+- Tailwind v4 + tokens from `DESIGN.md` (Precision Focus)
+- Base UI (`@base-ui/react`) wrappers in `src/components/ui/`
+- Icons: `@heroicons/react` (outline/solid per wireframe; FR-030)
+- Vitest + Testing Library; TDD on `src/features/time-tracker/lib/` and `store/`
+
+### Structure
+
+- Routes: `src/app/(tracker)/` → `/`, `/proyectos`, `/historial`
+- Domain: `src/features/time-tracker/` (components, store, lib, testing)
+- Wireframes: `specs/001-time-tracker/assets/LB-TT-img-*.png`
+
+### Key commands
+
+```bash
+npm run dev
+npm run test:run
+npm run lint
+npm run build
+```
+
+### Contracts
+
+- [routes.md](../../specs/001-time-tracker/contracts/routes.md)
+- [store-actions.md](../../specs/001-time-tracker/contracts/store-actions.md)
+- [data-model.md](../../specs/001-time-tracker/data-model.md)
+- [quickstart.md](../../specs/001-time-tracker/quickstart.md)
 <!-- SPECKIT END -->
