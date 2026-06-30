@@ -1,9 +1,14 @@
-## Reglas y decisiones del proyecto (orden de consulta obligatorio)
+# Agents
 
-1. Las decisiones y reglas del proyecto se consultan primero en `.agents/MEMORY.md`.
-2. Luego revisar si existe `docs/adr/README.md` segun el tema cuando requieras decisiones de arquitectura.
-3. Si hay ambiguedades entre reglas o decisiones, preguntar al usuario antes de proceder.
-4. Si la respuesta del usuario puede servir para futuras consideraciones, preguntarle si desea guardarla en `.agents/MEMORY.md` antes de actualizar ese archivo.
+## Contexto estático
+- @.agents/MEMORY.md — memoria persistente del proyecto
+- @docs/adr/README.md — índice de Architecture Decision Records (decisiones arquitectónicas vigentes)
+
+## Regla de precedencia
+
+- Si la información es arquitectónica → consultar ADRs
+- Si es preferencia o regla operativa → usar MEMORY.md
+- Si hay conflicto → ADRs tienen prioridad sobre MEMORY.md
 
 ## Regla clave de Next.js
 
