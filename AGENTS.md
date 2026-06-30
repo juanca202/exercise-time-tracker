@@ -4,7 +4,7 @@
 - @.agents/MEMORY.md — memoria persistente del proyecto
 - @docs/adr/README.md — índice de Architecture Decision Records (decisiones arquitectónicas vigentes)
 
-## Regla de precedencia
+### Regla de precedencia
 
 - Si la información es arquitectónica → consultar ADRs
 - Si es preferencia o regla operativa → usar MEMORY.md
