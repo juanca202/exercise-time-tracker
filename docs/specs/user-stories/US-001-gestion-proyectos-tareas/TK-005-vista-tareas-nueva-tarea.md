@@ -33,11 +33,11 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Implementar `NewTaskModal`: `SelectField` con la lista de `projects` del store (obligatorio, sin valor por defecto seleccionado), `Field` de Nombre (obligatorio); botón "Crear Tarea" deshabilitado hasta que ambos campos sean válidos; al confirmar, llama a `createTask` del store y cierra el modal.
-- [ ] Si no existe ningún Proyecto al abrir el modal, mostrar un estado vacío indicando que se debe crear un Proyecto primero (enlace a `/projects`), sin permitir confirmar la creación.
-- [ ] Ensamblar `app/tasks/page.tsx`: encabezado con botón "Nueva Tarea" que abre `NewTaskModal`, y un contenedor de contenido vacío/placeholder donde US-002 y US-003 añadirán el card de temporizador, el panel de entrada manual y la lista de tareas recientes.
-- [ ] Documentar con TSDoc en español el componente exportado.
-- [ ] Escribir tests de componente: creación de tarea válida asociada a un proyecto existente; intento de confirmar sin proyecto seleccionado queda bloqueado y muestra el mensaje de error (AC-004 de la historia).
+- [x] Implementar `NewTaskModal`: `SelectField` con la lista de `projects` del store (obligatorio, sin valor por defecto seleccionado), `Field` de Nombre (obligatorio); botón "Crear Tarea" valida ambos campos al confirmar (en vez de deshabilitarse de antemano, muestra el error correspondiente si falta alguno); al confirmar con datos válidos, llama a `createTask` del store y cierra el modal.
+- [x] Si no existe ningún Proyecto al abrir el modal, mostrar un estado vacío indicando que se debe crear un Proyecto primero (enlace a `/projects`), sin permitir confirmar la creación.
+- [x] Ensamblar `app/tasks/page.tsx`: encabezado con botón "Nueva Tarea" que abre `NewTaskModal`, y un contenedor de contenido vacío/placeholder donde US-002 y US-003 añadirán el card de temporizador, el panel de entrada manual y la lista de tareas recientes.
+- [x] Documentar con TSDoc en español el componente exportado.
+- [x] Escribir tests de componente: creación de tarea válida asociada a un proyecto existente; intento de confirmar sin proyecto seleccionado queda bloqueado y muestra el mensaje de error (AC-004 de la historia).
 
 ## Observaciones
 

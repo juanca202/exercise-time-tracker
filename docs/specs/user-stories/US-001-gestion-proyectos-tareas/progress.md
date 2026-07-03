@@ -73,8 +73,14 @@
   - Se añadió `formatHoursAndMinutes(seconds)` a `totals.ts` (formato "Nh MMm") para las tarjetas de tiempo total; es un formato distinto del `formatDuration` HH:MM:SS que introducirá TK-002 de US-002 para el temporizador en vivo. Se reutilizará en la vista de Historial (US-003).
 
 - TK-005 Vista "Tareas" (esqueleto) y modal "Nueva Tarea"
-  Estado: Pending
+  Estado: Done
   Implementador: "juanca202"
-  Archivos: []
-  Notas: []
-  Decisiones adicionales: []
+  Archivos:
+  - src/features/time-tracking/components/new-task-modal.tsx
+  - src/app/tasks/page.tsx
+  - src/app/tasks/page.test.tsx
+    Notas:
+  - Suite completa (US-001): 34 tests en verde, 85% cobertura de ramas en lib/store. `npm run build` en verde con las 3 rutas (/, /projects, /tasks) generadas.
+  - US-001 (Gestión de Proyectos y Tareas) queda completamente implementada: TK-001 a TK-005 en Done.
+    Decisiones adicionales:
+  - `app/tasks/page.tsx` se declaró como Client Component completo (usa `useState` para el modal); es la página que en US-002/US-003 concentrará más estado interactivo (temporizador, entrada manual), por lo que no se buscó dividirla en Server+Client todavía.
