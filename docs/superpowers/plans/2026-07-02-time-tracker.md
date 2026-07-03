@@ -3508,3 +3508,269 @@ Expected: all tests PASS, lint clean, build succeeds.
 git add src/features/time-tracker/components/history-view src/app/history/page.tsx
 git commit -m "feat: compose Historial page"
 ```
+
+---
+
+### Task 19: Task List (fixes: no UI path to start a timer on a task with zero entries)
+
+**Found in the final whole-branch review:** the only ▷ (start timer) button in the app lives on `RecentEntriesList` rows, which only lists tasks that already have at least one `TimeEntry`. A freshly created task (via `NewTaskModal`) has no way to start its timer — it only appears in `ManualEntryForm`'s dropdown. This drops the spec's "Vista Tareas" acceptance criterion that every task row has a ▷ button. This task adds a persistent, always-visible list of all tasks grouped by project, each with its own ▷ button, rendered in `TasksView` alongside `RecentEntriesList`.
+
+**Files:**
+
+- Create: `src/features/time-tracker/components/task-list/task-list.tsx`
+- Test: `src/features/time-tracker/components/task-list/task-list.test.tsx`
+- Modify: `src/features/time-tracker/components/tasks-view.tsx`
+- Modify: `src/features/time-tracker/components/tasks-view.test.tsx`
+
+**Interfaces:**
+
+- Consumes: `useTimeTrackerStore` (Tasks 6-9), `aProject`/`aTask` (Task 5).
+- Produces: `TaskList()`, rendered by `TasksView` alongside `RecentEntriesList`.
+
+- [ ] **Step 1: Write the failing tests**
+
+```tsx
+// src/features/time-tracker/components/task-list/task-list.test.tsx
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { aProject, aTask } from "../../testing/object-mothers";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
+import { TaskList } from "./task-list";
+
+beforeEach(() => {
+  useTimeTrackerStore.setState(initialTimeTrackerState);
+  localStorage.clear();
+});
+
+describe("TaskList", () => {
+  it("shows the empty state when there are no tasks", () => {
+    render(<TaskList />);
+    expect(screen.getByText("Aún no hay tareas.")).toBeInTheDocument();
+  });
+
+  it("groups tasks by project and shows a start button for each", () => {
+    const projectA = aProject({ id: "project-1", name: "Rediseño" });
+    const projectB = aProject({ id: "project-2", name: "Nexus App" });
+    const taskA1 = aTask({
+      id: "task-1",
+      projectId: "project-1",
+      name: "Wireframes",
+    });
+    const taskA2 = aTask({
+      id: "task-2",
+      projectId: "project-1",
+      name: "Revisión de Componentes",
+    });
+    const taskB1 = aTask({
+      id: "task-3",
+      projectId: "project-2",
+      name: "Integración de API",
+    });
+
+    useTimeTrackerStore.setState({
+      projects: { [projectA.id]: projectA, [projectB.id]: projectB },
+      tasks: {
+        [taskA1.id]: taskA1,
+        [taskA2.id]: taskA2,
+        [taskB1.id]: taskB1,
+      },
+    });
+
+    render(<TaskList />);
+
+    expect(screen.getByText("Rediseño")).toBeInTheDocument();
+    expect(screen.getByText("Nexus App")).toBeInTheDocument();
+    expect(screen.getByText("Wireframes")).toBeInTheDocument();
+    expect(screen.getByText("Revisión de Componentes")).toBeInTheDocument();
+    expect(screen.getByText("Integración de API")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "Iniciar temporizador para Wireframes",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("starts a timer for the clicked task", () => {
+    const project = aProject({ id: "project-1", name: "Rediseño" });
+    const task = aTask({
+      id: "task-1",
+      projectId: "project-1",
+      name: "Wireframes",
+    });
+    useTimeTrackerStore.setState({
+      projects: { [project.id]: project },
+      tasks: { [task.id]: task },
+    });
+
+    render(<TaskList />);
+    screen
+      .getByRole("button", { name: "Iniciar temporizador para Wireframes" })
+      .click();
+
+    expect(useTimeTrackerStore.getState().activeTimer?.taskId).toBe("task-1");
+  });
+});
+```
+
+- [ ] **Step 2: Run the tests to verify they fail**
+
+Run: `npx vitest run src/features/time-tracker/components/task-list/task-list.test.tsx`
+Expected: FAIL with "Cannot find module './task-list'"
+
+- [ ] **Step 3: Implement TaskList**
+
+```tsx
+// src/features/time-tracker/components/task-list/task-list.tsx
+"use client";
+
+import { useTimeTrackerStore } from "../../store/time-tracker-store";
+
+export function TaskList() {
+  const projects = useTimeTrackerStore((state) => state.projects);
+  const tasks = useTimeTrackerStore((state) => state.tasks);
+  const startTimer = useTimeTrackerStore((state) => state.startTimer);
+
+  const taskList = Object.values(tasks);
+
+  if (taskList.length === 0) {
+    return (
+      <section
+        aria-label="Todas las Tareas"
+        className="rounded-lg border border-outline-variant p-6"
+      >
+        <h2 className="text-headline-md font-semibold text-on-surface">
+          Todas las Tareas
+        </h2>
+        <p className="mt-4 text-body-lg text-on-surface-variant">
+          Aún no hay tareas.
+        </p>
+      </section>
+    );
+  }
+
+  const tasksByProject = new Map<string, typeof taskList>();
+  for (const task of taskList) {
+    const existing = tasksByProject.get(task.projectId) ?? [];
+    existing.push(task);
+    tasksByProject.set(task.projectId, existing);
+  }
+
+  return (
+    <section
+      aria-label="Todas las Tareas"
+      className="rounded-lg border border-outline-variant p-6"
+    >
+      <h2 className="text-headline-md font-semibold text-on-surface">
+        Todas las Tareas
+      </h2>
+      <div className="mt-4 flex flex-col gap-6">
+        {Array.from(tasksByProject.entries()).map(
+          ([projectId, projectTasks]) => {
+            const project = projects[projectId];
+            return (
+              <div key={projectId}>
+                <p className="text-label-mono uppercase text-on-surface-variant">
+                  {project?.name ?? "Proyecto"}
+                </p>
+                <ul className="mt-2 flex flex-col divide-y divide-outline-variant">
+                  {projectTasks.map((task) => (
+                    <li
+                      key={task.id}
+                      className="flex items-center justify-between py-3"
+                    >
+                      <span className="text-body-lg text-on-surface">
+                        {task.name}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label={`Iniciar temporizador para ${task.name}`}
+                        onClick={() => startTimer(task.id)}
+                        className="rounded-full border border-outline p-2"
+                      >
+                        ▷
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          },
+        )}
+      </div>
+    </section>
+  );
+}
+```
+
+- [ ] **Step 4: Run the tests to verify they pass**
+
+Run: `npx vitest run src/features/time-tracker/components/task-list/task-list.test.tsx`
+Expected: PASS (3 tests)
+
+- [ ] **Step 5: Wire `TaskList` into `TasksView`**
+
+Modify `src/features/time-tracker/components/tasks-view.tsx` to render `<TaskList />` between the timer/manual-entry row and `<RecentEntriesList />`:
+
+```tsx
+// src/features/time-tracker/components/tasks-view.tsx
+"use client";
+
+import { ManualEntryForm } from "./manual-entry-form/manual-entry-form";
+import { NewTaskModal } from "./new-task-modal/new-task-modal";
+import { RecentEntriesList } from "./recent-entries-list/recent-entries-list";
+import { TaskList } from "./task-list/task-list";
+import { TimerPanel } from "./timer-panel/timer-panel";
+
+export function TasksView() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-headline-lg font-semibold text-on-surface">
+          Tareas
+        </h1>
+        <NewTaskModal />
+      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
+        <TimerPanel />
+        <ManualEntryForm />
+      </div>
+      <TaskList />
+      <RecentEntriesList />
+    </div>
+  );
+}
+```
+
+- [ ] **Step 6: Update `TasksView`'s test to expect the new region**
+
+Add a `region` assertion for "Todas las Tareas" alongside the existing three, in `src/features/time-tracker/components/tasks-view.test.tsx`:
+
+```tsx
+expect(
+  screen.getByRole("region", { name: "Temporizador" }),
+).toBeInTheDocument();
+expect(
+  screen.getByRole("region", { name: "Entrada Manual" }),
+).toBeInTheDocument();
+expect(
+  screen.getByRole("region", { name: "Todas las Tareas" }),
+).toBeInTheDocument();
+expect(
+  screen.getByRole("region", { name: "Tareas Recientes" }),
+).toBeInTheDocument();
+```
+
+- [ ] **Step 7: Run the full suite, lint, and build**
+
+Run: `npm run test:run && npm run lint && npm run build`
+Expected: all tests PASS, lint clean, build succeeds.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add src/features/time-tracker/components/task-list src/features/time-tracker/components/tasks-view.tsx src/features/time-tracker/components/tasks-view.test.tsx
+git commit -m "feat: add task list so a new task's timer can be started"
+```
