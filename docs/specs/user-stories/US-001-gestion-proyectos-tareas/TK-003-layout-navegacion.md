@@ -32,11 +32,11 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Implementar `Sidebar` (Client Component) con `next/link` a `/tasks`, `/projects`, `/history`, resaltando el enlace activo con `usePathname` de `next/navigation`.
-- [ ] Integrar `Sidebar` en `app/layout.tsx` dentro de un contenedor flex (sidebar fijo 280px + área de contenido), conforme a `DESIGN.md`.
-- [ ] Cambiar `app/page.tsx` para redirigir a `/tasks` con `redirect()` de `next/navigation` (Server Component).
-- [ ] Documentar `Sidebar` con TSDoc en español.
-- [ ] Escribir test de componente para `Sidebar` verificando que el enlace correspondiente a la ruta actual queda marcado como activo (accesible vía rol/aria-current).
+- [x] Implementar `Sidebar` (Client Component) con `next/link` a `/tasks`, `/projects`, `/history`, resaltando el enlace activo con `usePathname` de `next/navigation`.
+- [x] Integrar `Sidebar` en `app/layout.tsx` dentro de un contenedor flex (sidebar fijo 280px + área de contenido), conforme a `DESIGN.md`.
+- [x] Cambiar `app/page.tsx` para redirigir a `/tasks` con `redirect()` de `next/navigation` (Server Component).
+- [x] Documentar `Sidebar` con TSDoc en español.
+- [x] Escribir test de componente para `Sidebar` verificando que el enlace correspondiente a la ruta actual queda marcado como activo (accesible vía rol/aria-current).
 
 ## Observaciones
 

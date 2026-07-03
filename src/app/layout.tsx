@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { Sidebar } from "@/features/time-tracking/components/sidebar";
 import "./globals.css";
 
 const inter = Inter({
@@ -28,7 +29,12 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <div className="root flex min-h-full flex-1 flex-col">{children}</div>
+        <div className="root flex min-h-full flex-1">
+          <Sidebar />
+          <main className="min-w-0 flex-1 overflow-y-auto bg-surface p-8">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

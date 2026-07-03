@@ -45,11 +45,17 @@
   - Se eliminó el soporte de `prefers-color-scheme: dark` de `globals.css`: `DESIGN.md` (Precision Focus) no define paleta oscura.
 
 - TK-003 Layout de aplicación y navegación lateral
-  Estado: Pending
+  Estado: Done
   Implementador: "juanca202"
-  Archivos: []
-  Notas: []
-  Decisiones adicionales: []
+  Archivos:
+  - src/features/time-tracking/components/sidebar.tsx
+  - src/features/time-tracking/components/sidebar.test.tsx
+  - src/app/layout.tsx
+  - src/app/page.tsx
+    Notas:
+  - `npm run build` verificado en verde tras el cambio (redirect en "/" no requiere que /tasks exista aún en build time).
+    Decisiones adicionales:
+  - Ancho del sidebar aplicado como valor arbitrario `w-[280px]` (no hay step de espaciado Tailwind exacto para 280px).
 
 - TK-004 Vista "Proyectos" y modal "Nuevo Proyecto"
   Estado: Pending
