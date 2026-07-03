@@ -19,6 +19,7 @@
 - **Model addition beyond the spec:** `TimeEntry` gets a `createdAt: string` (ISO) field, set at creation time. The approved spec's data model didn't include it, but "Tareas Recientes" needs a well-defined recency order (two manual entries can share the same `date`), and `createdAt` is the only reliable sort key for that.
 - Path alias `@/*` resolves to `src/*` (already configured in `tsconfig.json`).
 - No edit/delete for Projects, Tasks, or TimeEntries — out of scope per spec.
+- **Fix found in Task 11:** do not add the native `required` HTML5 attribute to `Field.Control` inputs whose validation error message must come from a store action's thrown `Error`. The browser's native constraint validation blocks form `submit` (and thus `onSubmit`) before React ever runs, so the store's Spanish error message never renders and the "shows a validation error" test hangs/fails. Validation is fully delegated to the store action's thrown error instead.
 
 ---
 
@@ -1336,13 +1337,11 @@ describe("addManualEntry", () => {
 
   it("throws when the task does not exist", () => {
     expect(() =>
-      useTimeTrackerStore
-        .getState()
-        .addManualEntry({
-          taskId: "missing",
-          date: "2026-07-02",
-          durationSeconds: 60,
-        }),
+      useTimeTrackerStore.getState().addManualEntry({
+        taskId: "missing",
+        date: "2026-07-02",
+        durationSeconds: 60,
+      }),
     ).toThrow("La tarea no existe.");
   });
 
@@ -1370,13 +1369,11 @@ describe("addManualEntry", () => {
       .createTask({ projectId: project.id, name: "Wireframes" });
 
     expect(() =>
-      useTimeTrackerStore
-        .getState()
-        .addManualEntry({
-          taskId: task.id,
-          date: "2026-07-02",
-          durationSeconds: 0,
-        }),
+      useTimeTrackerStore.getState().addManualEntry({
+        taskId: task.id,
+        date: "2026-07-02",
+        durationSeconds: 0,
+      }),
     ).toThrow("La duración debe ser mayor a cero.");
   });
 });
@@ -2488,7 +2485,6 @@ export function NewTaskModal() {
                 Nombre
               </Field.Label>
               <Field.Control
-                required
                 value={name}
                 onValueChange={setName}
                 placeholder="¿En qué estás trabajando?"
