@@ -12,5 +12,12 @@ export default defineConfig({
     include: ["**/*.{test,spec}.{ts,tsx}"],
     exclude: ["node_modules", ".next", "out"],
     passWithNoTests: true,
+    coverage: {
+      provider: "v8",
+      include: ["src/features/**/lib/**", "src/features/**/store/**"],
+      thresholds: {
+        branches: 80,
+      },
+    },
   },
 });
