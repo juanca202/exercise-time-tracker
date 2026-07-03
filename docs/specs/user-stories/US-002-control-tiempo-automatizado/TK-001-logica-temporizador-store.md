@@ -31,13 +31,13 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Añadir `activeTimer: ActiveTimer` al estado del store, inicializado desde la persistencia (`loadState`).
-- [ ] Implementar `startTimer(taskId)`: si ya hay un `activeTimer` para una Tarea distinta, primero ejecutar internamente la lógica de `stopTimer()` para esa tarea (calcular duración, validar > 0, persistir `TimeEntry` con `source: 'timer'`) y luego fijar el nuevo `activeTimer = { taskId, startedAt: now }`.
-- [ ] Implementar `stopTimer()`: si no hay `activeTimer`, no-op; si lo hay, calcular `durationSeconds = now - startedAt`; si `durationSeconds > 0`, crear y persistir el `TimeEntry` (`source: 'timer'`, `startTime`, `endTime`); en cualquier caso, limpiar `activeTimer` a `null`.
-- [ ] Si `durationSeconds <= 0` al detener, no persistir el `TimeEntry` (descartar silenciosamente la sesión inválida) conforme a BR-06 de la historia.
-- [ ] Persistir el estado (`activeTimer` incluido) en `localStorage` tras cada mutación, reutilizando `saveState` de TK-001 de US-001.
-- [ ] Documentar con TSDoc en español `startTimer` y `stopTimer`, incluyendo la regla de auto-detención.
-- [ ] Escribir tests unitarios (Vitest con `vi.useFakeTimers()` o inyección de tiempo controlada) cubriendo: iniciar sin temporizador previo; iniciar con uno activo en otra tarea (auto-stop + persistencia del anterior); detener y persistir con duración válida; detener cuando la duración calculada es `<= 0` (no persiste).
+- [x] Añadir `activeTimer: ActiveTimer` al estado del store, inicializado desde la persistencia (`loadState`).
+- [x] Implementar `startTimer(taskId)`: si ya hay un `activeTimer` para una Tarea distinta, primero ejecutar internamente la lógica de `stopTimer()` para esa tarea (calcular duración, validar > 0, persistir `TimeEntry` con `source: 'timer'`) y luego fijar el nuevo `activeTimer = { taskId, startedAt: now }`.
+- [x] Implementar `stopTimer()`: si no hay `activeTimer`, no-op; si lo hay, calcular `durationSeconds = now - startedAt`; si `durationSeconds > 0`, crear y persistir el `TimeEntry` (`source: 'timer'`, `startTime`, `endTime`); en cualquier caso, limpiar `activeTimer` a `null`.
+- [x] Si `durationSeconds <= 0` al detener, no persistir el `TimeEntry` (descartar silenciosamente la sesión inválida) conforme a BR-06 de la historia.
+- [x] Persistir el estado (`activeTimer` incluido) en `localStorage` tras cada mutación, reutilizando `saveState` de TK-001 de US-001.
+- [x] Documentar con TSDoc en español `startTimer` y `stopTimer`, incluyendo la regla de auto-detención.
+- [x] Escribir tests unitarios (Vitest con `vi.useFakeTimers()` o inyección de tiempo controlada) cubriendo: iniciar sin temporizador previo; iniciar con uno activo en otra tarea (auto-stop + persistencia del anterior); detener y persistir con duración válida; detener cuando la duración calculada es `<= 0` (no persiste).
 
 ## Observaciones
 
