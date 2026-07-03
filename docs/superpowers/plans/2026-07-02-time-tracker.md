@@ -12,7 +12,7 @@
 
 - All UI copy is in **Spanish**, matching the wireframe labels exactly (e.g. "Nueva Tarea", "Guardar Registro", "Detener Sesión", "Tareas Recientes").
 - Tests are co-located next to the code they test, named `*.test.ts`/`*.test.tsx` (ADR-005).
-- Every test file resets the store in `beforeEach`: `useTimeTrackerStore.setState(initialTimeTrackerState, true); localStorage.clear();`.
+- Every test file resets the store in `beforeEach`: `useTimeTrackerStore.setState(initialTimeTrackerState); localStorage.clear();`.
 - No timer/clock-dependent code reads `new Date()` implicitly where a test needs determinism — functions and store actions that need "now" accept it as an optional parameter defaulting to `new Date()`.
 - **Design decision — duration display formats:** the wireframes show inconsistent duration formats (`HH:MM:SS`, `Xh Ym`, and placeholder `XXh XXm` text). This plan standardizes on: `HH:MM:SS` (`formatDurationClock`) for the live timer and any single time-entry row; `Xh Ym` (`formatDurationShort`) for aggregate totals shown on cards (project cards, period totals).
 - **Design decision — dropdowns:** "Proyecto" and "Proyecto / Tarea" selectors use a native `<select>` wrapped in Base UI's `Field.Root`/`Field.Label` (via `Field.Control render={<select />}`) instead of Base UI's `Select` compound component. Base UI `Select` uses floating-ui positioning that needs `ResizeObserver`/layout polyfills to interact with in `jsdom`; a native `<select>` keeps full keyboard/screen-reader accessibility and label association through `Field`, without that risk. Modals still use Base UI `Dialog` (ADR-006).
@@ -25,10 +25,12 @@
 ### Task 1: Design tokens — copy DESIGN.md and wire the Precision Focus theme into Tailwind
 
 **Files:**
+
 - Create: `DESIGN.md` (repo root)
 - Modify: `src/app/globals.css`
 
 **Interfaces:**
+
 - Produces: Tailwind color utilities (`bg-primary`, `text-on-surface`, `border-outline-variant`, etc.), radius utilities (`rounded`, `rounded-lg`, etc.), and custom text-style utilities (`text-display-time`, `text-headline-lg`, `text-headline-md`, `text-body-lg`, `text-body-md`, `text-label-mono`) that every later UI task relies on.
 
 This task has no unit-testable logic (pure CSS/config), so it's verified by a successful build instead of a test cycle.
@@ -39,90 +41,90 @@ This task has no unit-testable logic (pure CSS/config), so it's verified by a su
 ---
 name: Precision Focus
 colors:
-  surface: '#f7f9fb'
-  surface-dim: '#d8dadc'
-  surface-bright: '#f7f9fb'
-  surface-container-lowest: '#ffffff'
-  surface-container-low: '#f2f4f6'
-  surface-container: '#eceef0'
-  surface-container-high: '#e6e8ea'
-  surface-container-highest: '#e0e3e5'
-  on-surface: '#191c1e'
-  on-surface-variant: '#45464e'
-  inverse-surface: '#2d3133'
-  inverse-on-surface: '#eff1f3'
-  outline: '#75777e'
-  outline-variant: '#c6c6ce'
-  surface-tint: '#525e7f'
-  primary: '#182442'
-  on-primary: '#ffffff'
-  primary-container: '#2e3a59'
-  on-primary-container: '#98a4c9'
-  inverse-primary: '#bac6ec'
-  secondary: '#006c4b'
-  on-secondary: '#ffffff'
-  secondary-container: '#64f9bc'
-  on-secondary-container: '#00714e'
-  tertiary: '#16263a'
-  on-tertiary: '#ffffff'
-  tertiary-container: '#2c3c51'
-  on-tertiary-container: '#96a6bf'
-  error: '#ba1a1a'
-  on-error: '#ffffff'
-  error-container: '#ffdad6'
-  on-error-container: '#93000a'
-  primary-fixed: '#dae2ff'
-  primary-fixed-dim: '#bac6ec'
-  on-primary-fixed: '#0d1a38'
-  on-primary-fixed-variant: '#3a4666'
-  secondary-fixed: '#68fcbf'
-  secondary-fixed-dim: '#45dfa4'
-  on-secondary-fixed: '#002114'
-  on-secondary-fixed-variant: '#005137'
-  tertiary-fixed: '#d3e4fe'
-  tertiary-fixed-dim: '#b7c8e1'
-  on-tertiary-fixed: '#0b1c30'
-  on-tertiary-fixed-variant: '#38485d'
-  background: '#f7f9fb'
-  on-background: '#191c1e'
-  surface-variant: '#e0e3e5'
+  surface: "#f7f9fb"
+  surface-dim: "#d8dadc"
+  surface-bright: "#f7f9fb"
+  surface-container-lowest: "#ffffff"
+  surface-container-low: "#f2f4f6"
+  surface-container: "#eceef0"
+  surface-container-high: "#e6e8ea"
+  surface-container-highest: "#e0e3e5"
+  on-surface: "#191c1e"
+  on-surface-variant: "#45464e"
+  inverse-surface: "#2d3133"
+  inverse-on-surface: "#eff1f3"
+  outline: "#75777e"
+  outline-variant: "#c6c6ce"
+  surface-tint: "#525e7f"
+  primary: "#182442"
+  on-primary: "#ffffff"
+  primary-container: "#2e3a59"
+  on-primary-container: "#98a4c9"
+  inverse-primary: "#bac6ec"
+  secondary: "#006c4b"
+  on-secondary: "#ffffff"
+  secondary-container: "#64f9bc"
+  on-secondary-container: "#00714e"
+  tertiary: "#16263a"
+  on-tertiary: "#ffffff"
+  tertiary-container: "#2c3c51"
+  on-tertiary-container: "#96a6bf"
+  error: "#ba1a1a"
+  on-error: "#ffffff"
+  error-container: "#ffdad6"
+  on-error-container: "#93000a"
+  primary-fixed: "#dae2ff"
+  primary-fixed-dim: "#bac6ec"
+  on-primary-fixed: "#0d1a38"
+  on-primary-fixed-variant: "#3a4666"
+  secondary-fixed: "#68fcbf"
+  secondary-fixed-dim: "#45dfa4"
+  on-secondary-fixed: "#002114"
+  on-secondary-fixed-variant: "#005137"
+  tertiary-fixed: "#d3e4fe"
+  tertiary-fixed-dim: "#b7c8e1"
+  on-tertiary-fixed: "#0b1c30"
+  on-tertiary-fixed-variant: "#38485d"
+  background: "#f7f9fb"
+  on-background: "#191c1e"
+  surface-variant: "#e0e3e5"
 typography:
   display-time:
     fontFamily: Inter
     fontSize: 48px
-    fontWeight: '700'
-    lineHeight: '1.1'
+    fontWeight: "700"
+    lineHeight: "1.1"
     letterSpacing: -0.02em
   headline-lg:
     fontFamily: Inter
     fontSize: 32px
-    fontWeight: '600'
+    fontWeight: "600"
     lineHeight: 40px
   headline-md:
     fontFamily: Inter
     fontSize: 24px
-    fontWeight: '600'
+    fontWeight: "600"
     lineHeight: 32px
   body-lg:
     fontFamily: Inter
     fontSize: 16px
-    fontWeight: '400'
+    fontWeight: "400"
     lineHeight: 24px
   body-md:
     fontFamily: Inter
     fontSize: 14px
-    fontWeight: '400'
+    fontWeight: "400"
     lineHeight: 20px
   label-mono:
     fontFamily: JetBrains Mono
     fontSize: 12px
-    fontWeight: '500'
+    fontWeight: "500"
     lineHeight: 16px
     letterSpacing: 0.05em
   headline-lg-mobile:
     fontFamily: Inter
     fontSize: 24px
-    fontWeight: '600'
+    fontWeight: "600"
     lineHeight: 32px
 rounded:
   sm: 0.125rem
@@ -140,11 +142,13 @@ spacing:
 ---
 
 ## Brand & Style
+
 The design system is engineered for deep work and high-output productivity. The brand personality is disciplined, unobtrusive, and systematic. It aims to evoke a sense of "flow state" by removing visual clutter and prioritizing task-critical information.
 
 The aesthetic follows a **Modern Minimalist** approach with a **Functional/SaaS** core. It utilizes heavy whitespace to reduce cognitive load, high-quality typography for temporal data legibility, and a card-based architecture to organize complex project hierarchies. The emotional response should be one of professional reliability and calm efficiency, ensuring that the tool never competes with the user's work for attention.
 
 ## Colors
+
 This design system utilizes a focused palette designed to guide the eye toward action and status.
 
 - **Primary (Deep Indigo):** Used for navigation, primary buttons, and headings. It provides a grounded, professional foundation.
@@ -153,6 +157,7 @@ This design system utilizes a focused palette designed to guide the eye toward a
 - **Neutral (Soft Gray/White):** A multi-layered background system using `#F8FAFC` for the base and white for elevated cards to create subtle depth.
 
 ## Typography
+
 The typography system prioritizes tabular precision and hierarchy. **Inter** is the workhorse for the interface, chosen for its exceptional legibility in small sizes and its neutral, professional character.
 
 For numerical data, durations, and timestamps, a monospaced font (**JetBrains Mono**) is introduced in label roles to ensure that numbers align perfectly in lists and reports, preventing "jumping" text during active timer counts.
@@ -162,6 +167,7 @@ For numerical data, durations, and timestamps, a monospaced font (**JetBrains Mo
 - **Labels:** Monospaced for all duration-based data to maintain alignment in dense tables.
 
 ## Layout & Spacing
+
 The layout uses a **Fixed Grid** system for desktop to ensure the productivity dashboard remains organized and predictable, transitioning to a **Fluid Grid** for mobile.
 
 - **Desktop:** 12-column grid with a 24px gutter. Content is housed in a 1280px max-width container.
@@ -170,6 +176,7 @@ The layout uses a **Fixed Grid** system for desktop to ensure the productivity d
 - **Reflow:** On tablet (768px), the sidebar collapses into a hamburger menu or bottom bar, and the 12-column grid collapses to 6 columns.
 
 ## Elevation & Depth
+
 This design system uses **Tonal Layers** combined with **Ambient Shadows** to create a structured hierarchy without visual noise.
 
 - **Level 0 (Base):** The `#F8FAFC` background.
@@ -178,6 +185,7 @@ This design system uses **Tonal Layers** combined with **Ambient Shadows** to cr
 - **Modals:** High-contrast elevation with a backdrop blur (8px) to isolate the user's task.
 
 ## Shapes
+
 A **Soft** shape language is employed to balance the professional indigo tones.
 
 - **Standard Elements:** Buttons, input fields, and small cards use a 0.25rem (4px) radius to maintain a crisp, efficient look.
@@ -185,22 +193,29 @@ A **Soft** shape language is employed to balance the professional indigo tones.
 - **Status Pills:** Fully rounded (pill-shaped) to distinguish them from interactive buttons.
 
 ## Components
+
 ### Timer Buttons
+
 Primary action buttons for "Start" use the Primary Indigo. When active, the button transforms into a "Stop" action using a subtle coral/red tint, while the surrounding card container gains a Mint Green pulse or steady border.
 
 ### Activity Charts
+
 Bar and line charts should use the Primary Indigo for historical data and Mint Green for the current day's progress. Use thin 1px grid lines in `#F1F5F9`.
 
 ### Project Cards
+
 Cards must include:
+
 - A title in `body-lg` (Semi-bold).
 - A duration label in `label-mono`.
 - A subtle progress bar at the bottom of the card using the Secondary Mint Green.
 
 ### Input Fields
+
 Clean, outlined inputs with a 1px `#CBD5E1` border. On focus, the border shifts to Primary Indigo with a 2px soft glow. Labels should always be visible above the field in `label-mono` at 50% opacity.
 
 ### Lists & Activity Feeds
+
 Rows should have a subtle hover state (background change to `#F1F5F9`). Use `label-mono` for all time-entry durations to ensure vertical alignment of digits.
 ```
 
@@ -323,11 +338,13 @@ git commit -m "feat: add Precision Focus design tokens"
 ### Task 2: Domain types and id generator
 
 **Files:**
+
 - Create: `src/features/time-tracker/model/types.ts`
 - Create: `src/features/time-tracker/lib/id.ts`
 - Test: `src/features/time-tracker/lib/id.test.ts`
 
 **Interfaces:**
+
 - Produces: `Project`, `Task`, `TimeEntry`, `ActiveTimer` types; `generateId(): string`.
 
 - [ ] **Step 1: Create the domain types**
@@ -375,7 +392,9 @@ import { generateId } from "./id";
 describe("generateId", () => {
   it("returns a UUID v4 formatted string", () => {
     const id = generateId();
-    expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+    expect(id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+    );
   });
 
   it("returns a different value on each call", () => {
@@ -417,12 +436,14 @@ git commit -m "feat: add time-tracker domain types and id generator"
 ### Task 3: Duration formatting/parsing and relative-time formatting
 
 **Files:**
+
 - Create: `src/features/time-tracker/lib/duration.ts`
 - Test: `src/features/time-tracker/lib/duration.test.ts`
 - Create: `src/features/time-tracker/lib/relative-time.ts`
 - Test: `src/features/time-tracker/lib/relative-time.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing (pure functions on primitives).
 - Produces: `formatDurationClock(totalSeconds: number): string`, `formatDurationShort(totalSeconds: number): string`, `parseManualDuration(input: string): number | null`, `formatRelativeTime(isoDate: string, now: Date): string`.
 
@@ -431,7 +452,11 @@ git commit -m "feat: add time-tracker domain types and id generator"
 ```ts
 // src/features/time-tracker/lib/duration.test.ts
 import { describe, expect, it } from "vitest";
-import { formatDurationClock, formatDurationShort, parseManualDuration } from "./duration";
+import {
+  formatDurationClock,
+  formatDurationShort,
+  parseManualDuration,
+} from "./duration";
 
 describe("formatDurationClock", () => {
   it("formats seconds as zero-padded HH:MM:SS", () => {
@@ -530,11 +555,15 @@ const NOW = new Date("2026-07-02T12:00:00.000Z");
 
 describe("formatRelativeTime", () => {
   it("returns 'hace un momento' for less than a minute ago", () => {
-    expect(formatRelativeTime("2026-07-02T11:59:30.000Z", NOW)).toBe("hace un momento");
+    expect(formatRelativeTime("2026-07-02T11:59:30.000Z", NOW)).toBe(
+      "hace un momento",
+    );
   });
 
   it("returns minutes ago under an hour", () => {
-    expect(formatRelativeTime("2026-07-02T10:30:00.000Z", NOW)).toBe("hace 90m");
+    expect(formatRelativeTime("2026-07-02T10:30:00.000Z", NOW)).toBe(
+      "hace 90m",
+    );
   });
 
   it("returns hours ago under a day", () => {
@@ -546,7 +575,9 @@ describe("formatRelativeTime", () => {
   });
 
   it("returns days ago for more than one day", () => {
-    expect(formatRelativeTime("2026-06-29T12:00:00.000Z", NOW)).toBe("hace 3 días");
+    expect(formatRelativeTime("2026-06-29T12:00:00.000Z", NOW)).toBe(
+      "hace 3 días",
+    );
   });
 });
 ```
@@ -601,10 +632,12 @@ git commit -m "feat: add duration and relative-time formatting utilities"
 ### Task 4: Period helpers
 
 **Files:**
+
 - Create: `src/features/time-tracker/lib/period.ts`
 - Test: `src/features/time-tracker/lib/period.test.ts`
 
 **Interfaces:**
+
 - Produces: `type Period = { year: number; month: number }` (month is 1-12), `getCurrentPeriod(now: Date): Period`, `formatPeriodLabel(period: Period): string`, `shiftPeriod(period: Period, delta: number): Period`, `isDateInPeriod(dateStr: string, period: Period): boolean`.
 
 - [ ] **Step 1: Write the failing tests**
@@ -612,11 +645,19 @@ git commit -m "feat: add duration and relative-time formatting utilities"
 ```ts
 // src/features/time-tracker/lib/period.test.ts
 import { describe, expect, it } from "vitest";
-import { formatPeriodLabel, getCurrentPeriod, isDateInPeriod, shiftPeriod } from "./period";
+import {
+  formatPeriodLabel,
+  getCurrentPeriod,
+  isDateInPeriod,
+  shiftPeriod,
+} from "./period";
 
 describe("getCurrentPeriod", () => {
   it("returns the year and 1-based month of the given date", () => {
-    expect(getCurrentPeriod(new Date("2026-10-15T00:00:00.000Z"))).toEqual({ year: 2026, month: 10 });
+    expect(getCurrentPeriod(new Date("2026-10-15T00:00:00.000Z"))).toEqual({
+      year: 2026,
+      month: 10,
+    });
   });
 });
 
@@ -632,19 +673,31 @@ describe("formatPeriodLabel", () => {
 
 describe("shiftPeriod", () => {
   it("moves forward within the same year", () => {
-    expect(shiftPeriod({ year: 2026, month: 10 }, 1)).toEqual({ year: 2026, month: 11 });
+    expect(shiftPeriod({ year: 2026, month: 10 }, 1)).toEqual({
+      year: 2026,
+      month: 11,
+    });
   });
 
   it("moves backward within the same year", () => {
-    expect(shiftPeriod({ year: 2026, month: 10 }, -1)).toEqual({ year: 2026, month: 9 });
+    expect(shiftPeriod({ year: 2026, month: 10 }, -1)).toEqual({
+      year: 2026,
+      month: 9,
+    });
   });
 
   it("rolls over into the next year", () => {
-    expect(shiftPeriod({ year: 2026, month: 12 }, 1)).toEqual({ year: 2027, month: 1 });
+    expect(shiftPeriod({ year: 2026, month: 12 }, 1)).toEqual({
+      year: 2027,
+      month: 1,
+    });
   });
 
   it("rolls back into the previous year", () => {
-    expect(shiftPeriod({ year: 2026, month: 1 }, -1)).toEqual({ year: 2025, month: 12 });
+    expect(shiftPeriod({ year: 2026, month: 1 }, -1)).toEqual({
+      year: 2025,
+      month: 12,
+    });
   });
 });
 
@@ -729,10 +782,12 @@ git commit -m "feat: add period helpers for monthly history navigation"
 ### Task 5: Test Object Mothers
 
 **Files:**
+
 - Create: `src/features/time-tracker/testing/object-mothers.ts`
 - Test: `src/features/time-tracker/testing/object-mothers.test.ts`
 
 **Interfaces:**
+
 - Consumes: `Project`, `Task`, `TimeEntry` from `../model/types` (Task 2).
 - Produces: `aProject(overrides?: Partial<Project>): Project`, `aTask(overrides?: Partial<Task>): Task`, `aTimeEntry(overrides?: Partial<TimeEntry>): TimeEntry` — every task from here on that needs domain fixtures imports these.
 
@@ -745,31 +800,51 @@ import { aProject, aTask, aTimeEntry } from "./object-mothers";
 
 describe("aProject", () => {
   it("returns a valid project with defaults", () => {
-    expect(aProject()).toMatchObject({ id: "project-1", name: "Proyecto de Prueba" });
+    expect(aProject()).toMatchObject({
+      id: "project-1",
+      name: "Proyecto de Prueba",
+    });
   });
 
   it("applies overrides", () => {
-    expect(aProject({ id: "project-2", name: "Otro" })).toMatchObject({ id: "project-2", name: "Otro" });
+    expect(aProject({ id: "project-2", name: "Otro" })).toMatchObject({
+      id: "project-2",
+      name: "Otro",
+    });
   });
 });
 
 describe("aTask", () => {
   it("returns a valid task with defaults", () => {
-    expect(aTask()).toMatchObject({ id: "task-1", projectId: "project-1", name: "Tarea de Prueba" });
+    expect(aTask()).toMatchObject({
+      id: "task-1",
+      projectId: "project-1",
+      name: "Tarea de Prueba",
+    });
   });
 
   it("applies overrides", () => {
-    expect(aTask({ projectId: "project-2" })).toMatchObject({ projectId: "project-2" });
+    expect(aTask({ projectId: "project-2" })).toMatchObject({
+      projectId: "project-2",
+    });
   });
 });
 
 describe("aTimeEntry", () => {
   it("returns a valid time entry with defaults", () => {
-    expect(aTimeEntry()).toMatchObject({ id: "entry-1", taskId: "task-1", durationSeconds: 3600, source: "manual" });
+    expect(aTimeEntry()).toMatchObject({
+      id: "entry-1",
+      taskId: "task-1",
+      durationSeconds: 3600,
+      source: "manual",
+    });
   });
 
   it("applies overrides", () => {
-    expect(aTimeEntry({ source: "timer", durationSeconds: 60 })).toMatchObject({ source: "timer", durationSeconds: 60 });
+    expect(aTimeEntry({ source: "timer", durationSeconds: 60 })).toMatchObject({
+      source: "timer",
+      durationSeconds: 60,
+    });
   });
 });
 ```
@@ -835,31 +910,40 @@ git commit -m "test: add time-tracker object mothers"
 ### Task 6: Store — createProject and createTask
 
 **Files:**
+
 - Create: `src/features/time-tracker/store/time-tracker-store.ts`
 - Test: `src/features/time-tracker/store/time-tracker-store.test.ts`
 
 **Interfaces:**
+
 - Consumes: `generateId` (Task 2), `Project`/`Task`/`TimeEntry`/`ActiveTimer` types (Task 2).
-- Produces: `useTimeTrackerStore` (Zustand hook), `initialTimeTrackerState`, and the actions `createProject`, `createTask` (this task), plus placeholders for `startTimer`/`stopTimer`/`addManualEntry` added in Tasks 7-8. Every later store/component task imports `useTimeTrackerStore` and `initialTimeTrackerState` from this file, and resets with `useTimeTrackerStore.setState(initialTimeTrackerState, true); localStorage.clear();` in `beforeEach`.
+- Produces: `useTimeTrackerStore` (Zustand hook), `initialTimeTrackerState`, and the actions `createProject`, `createTask` (this task), plus placeholders for `startTimer`/`stopTimer`/`addManualEntry` added in Tasks 7-8. Every later store/component task imports `useTimeTrackerStore` and `initialTimeTrackerState` from this file, and resets with `useTimeTrackerStore.setState(initialTimeTrackerState); localStorage.clear();` in `beforeEach`.
 
 - [ ] **Step 1: Write the failing tests for createProject/createTask**
 
 ```ts
 // src/features/time-tracker/store/time-tracker-store.test.ts
 import { beforeEach, describe, expect, it } from "vitest";
-import { initialTimeTrackerState, useTimeTrackerStore } from "./time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "./time-tracker-store";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
 });
 
 describe("createProject", () => {
   it("adds a project with a trimmed name", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "  Rebranding  " });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "  Rebranding  " });
 
     expect(project.name).toBe("Rebranding");
-    expect(useTimeTrackerStore.getState().projects[project.id]).toEqual(project);
+    expect(useTimeTrackerStore.getState().projects[project.id]).toEqual(
+      project,
+    );
   });
 
   it("persists the project to localStorage", () => {
@@ -872,32 +956,42 @@ describe("createProject", () => {
   });
 
   it("throws when the name is empty", () => {
-    expect(() => useTimeTrackerStore.getState().createProject({ name: "   " })).toThrow(
-      "El nombre del proyecto es obligatorio."
-    );
+    expect(() =>
+      useTimeTrackerStore.getState().createProject({ name: "   " }),
+    ).toThrow("El nombre del proyecto es obligatorio.");
   });
 });
 
 describe("createTask", () => {
   it("adds a task linked to an existing project", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const task = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
 
     expect(task.projectId).toBe(project.id);
     expect(useTimeTrackerStore.getState().tasks[task.id]).toEqual(task);
   });
 
   it("throws when the name is empty", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    expect(() => useTimeTrackerStore.getState().createTask({ projectId: project.id, name: " " })).toThrow(
-      "El nombre de la tarea es obligatorio."
-    );
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    expect(() =>
+      useTimeTrackerStore
+        .getState()
+        .createTask({ projectId: project.id, name: " " }),
+    ).toThrow("El nombre de la tarea es obligatorio.");
   });
 
   it("throws when the project does not exist", () => {
-    expect(() => useTimeTrackerStore.getState().createTask({ projectId: "missing", name: "Wireframes" })).toThrow(
-      "El proyecto no existe."
-    );
+    expect(() =>
+      useTimeTrackerStore
+        .getState()
+        .createTask({ projectId: "missing", name: "Wireframes" }),
+    ).toThrow("El proyecto no existe.");
   });
 });
 ```
@@ -928,7 +1022,12 @@ export type TimeTrackerActions = {
   createTask: (input: { projectId: string; name: string }) => Task;
   startTimer: (taskId: string, now?: Date) => void;
   stopTimer: (now?: Date) => void;
-  addManualEntry: (input: { taskId: string; date: string; durationSeconds: number; now?: Date }) => TimeEntry;
+  addManualEntry: (input: {
+    taskId: string;
+    date: string;
+    durationSeconds: number;
+    now?: Date;
+  }) => TimeEntry;
 };
 
 export const initialTimeTrackerState: TimeTrackerState = {
@@ -938,7 +1037,9 @@ export const initialTimeTrackerState: TimeTrackerState = {
   activeTimer: null,
 };
 
-export const useTimeTrackerStore = create<TimeTrackerState & TimeTrackerActions>()(
+export const useTimeTrackerStore = create<
+  TimeTrackerState & TimeTrackerActions
+>()(
   persist(
     (set, get) => ({
       ...initialTimeTrackerState,
@@ -954,7 +1055,9 @@ export const useTimeTrackerStore = create<TimeTrackerState & TimeTrackerActions>
           description: description?.trim() || undefined,
           createdAt: new Date().toISOString(),
         };
-        set((state) => ({ projects: { ...state.projects, [project.id]: project } }));
+        set((state) => ({
+          projects: { ...state.projects, [project.id]: project },
+        }));
         return project;
       },
 
@@ -989,8 +1092,8 @@ export const useTimeTrackerStore = create<TimeTrackerState & TimeTrackerActions>
     {
       name: "time-tracker:v1",
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 ```
 
@@ -1011,10 +1114,12 @@ git commit -m "feat: add time-tracker store with createProject and createTask"
 ### Task 7: Store — startTimer and stopTimer
 
 **Files:**
+
 - Modify: `src/features/time-tracker/store/time-tracker-store.ts`
 - Modify: `src/features/time-tracker/store/time-tracker-store.test.ts`
 
 **Interfaces:**
+
 - Consumes: the store scaffolding from Task 6.
 - Produces: working `startTimer(taskId: string, now?: Date): void` and `stopTimer(now?: Date): void` — later `TimerPanel` (Task 15) and `RecentEntriesList` (Task 17) call these.
 
@@ -1025,8 +1130,12 @@ Add to the end of `src/features/time-tracker/store/time-tracker-store.test.ts`:
 ```ts
 describe("startTimer / stopTimer", () => {
   it("starts a timer for an existing task", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const task = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
     const startedAt = new Date("2026-07-02T09:00:00.000Z");
 
     useTimeTrackerStore.getState().startTimer(task.id, startedAt);
@@ -1038,12 +1147,18 @@ describe("startTimer / stopTimer", () => {
   });
 
   it("throws when the task does not exist", () => {
-    expect(() => useTimeTrackerStore.getState().startTimer("missing")).toThrow("La tarea no existe.");
+    expect(() => useTimeTrackerStore.getState().startTimer("missing")).toThrow(
+      "La tarea no existe.",
+    );
   });
 
   it("stops the active timer and records a time entry with the elapsed duration", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const task = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
     const startedAt = new Date("2026-07-02T09:00:00.000Z");
     const stoppedAt = new Date("2026-07-02T09:30:00.000Z");
 
@@ -1062,27 +1177,43 @@ describe("startTimer / stopTimer", () => {
   });
 
   it("stopping with no active timer is a no-op", () => {
-    useTimeTrackerStore.getState().stopTimer(new Date("2026-07-02T09:30:00.000Z"));
+    useTimeTrackerStore
+      .getState()
+      .stopTimer(new Date("2026-07-02T09:30:00.000Z"));
 
     expect(useTimeTrackerStore.getState().activeTimer).toBeNull();
-    expect(Object.values(useTimeTrackerStore.getState().timeEntries)).toHaveLength(0);
+    expect(
+      Object.values(useTimeTrackerStore.getState().timeEntries),
+    ).toHaveLength(0);
   });
 
   it("discards a zero-duration entry when start and stop happen at the same instant", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const task = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
     const instant = new Date("2026-07-02T09:00:00.000Z");
 
     useTimeTrackerStore.getState().startTimer(task.id, instant);
     useTimeTrackerStore.getState().stopTimer(instant);
 
-    expect(Object.values(useTimeTrackerStore.getState().timeEntries)).toHaveLength(0);
+    expect(
+      Object.values(useTimeTrackerStore.getState().timeEntries),
+    ).toHaveLength(0);
   });
 
   it("switching to a new timer stops the previous one first (RN-03)", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const taskA = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
-    const taskB = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Revisión" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const taskA = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
+    const taskB = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Revisión" });
     const startA = new Date("2026-07-02T09:00:00.000Z");
     const switchAt = new Date("2026-07-02T09:15:00.000Z");
 
@@ -1091,7 +1222,11 @@ describe("startTimer / stopTimer", () => {
 
     const entries = Object.values(useTimeTrackerStore.getState().timeEntries);
     expect(entries).toHaveLength(1);
-    expect(entries[0]).toMatchObject({ taskId: taskA.id, durationSeconds: 900, source: "timer" });
+    expect(entries[0]).toMatchObject({
+      taskId: taskA.id,
+      durationSeconds: 900,
+      source: "timer",
+    });
     expect(useTimeTrackerStore.getState().activeTimer).toEqual({
       taskId: taskB.id,
       startedAt: switchAt.toISOString(),
@@ -1161,10 +1296,12 @@ git commit -m "feat: add startTimer/stopTimer with RN-03 auto-switch"
 ### Task 8: Store — addManualEntry
 
 **Files:**
+
 - Modify: `src/features/time-tracker/store/time-tracker-store.ts`
 - Modify: `src/features/time-tracker/store/time-tracker-store.test.ts`
 
 **Interfaces:**
+
 - Consumes: the store from Tasks 6-7.
 - Produces: working `addManualEntry(input: { taskId: string; date: string; durationSeconds: number; now?: Date }): TimeEntry` — later `ManualEntryForm` (Task 16) calls this.
 
@@ -1175,8 +1312,12 @@ Add to the end of `src/features/time-tracker/store/time-tracker-store.test.ts`:
 ```ts
 describe("addManualEntry", () => {
   it("adds a manual entry for an existing task", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const task = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
 
     const entry = useTimeTrackerStore.getState().addManualEntry({
       taskId: task.id,
@@ -1184,31 +1325,58 @@ describe("addManualEntry", () => {
       durationSeconds: 9000,
     });
 
-    expect(entry).toMatchObject({ taskId: task.id, date: "2026-07-02", durationSeconds: 9000, source: "manual" });
+    expect(entry).toMatchObject({
+      taskId: task.id,
+      date: "2026-07-02",
+      durationSeconds: 9000,
+      source: "manual",
+    });
     expect(useTimeTrackerStore.getState().timeEntries[entry.id]).toEqual(entry);
   });
 
   it("throws when the task does not exist", () => {
     expect(() =>
-      useTimeTrackerStore.getState().addManualEntry({ taskId: "missing", date: "2026-07-02", durationSeconds: 60 })
+      useTimeTrackerStore
+        .getState()
+        .addManualEntry({
+          taskId: "missing",
+          date: "2026-07-02",
+          durationSeconds: 60,
+        }),
     ).toThrow("La tarea no existe.");
   });
 
   it("throws when the date is empty", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const task = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
 
     expect(() =>
-      useTimeTrackerStore.getState().addManualEntry({ taskId: task.id, date: "", durationSeconds: 60 })
+      useTimeTrackerStore
+        .getState()
+        .addManualEntry({ taskId: task.id, date: "", durationSeconds: 60 }),
     ).toThrow("La fecha es obligatoria.");
   });
 
   it("throws when the duration is not greater than zero", () => {
-    const project = useTimeTrackerStore.getState().createProject({ name: "Rebranding" });
-    const task = useTimeTrackerStore.getState().createTask({ projectId: project.id, name: "Wireframes" });
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
 
     expect(() =>
-      useTimeTrackerStore.getState().addManualEntry({ taskId: task.id, date: "2026-07-02", durationSeconds: 0 })
+      useTimeTrackerStore
+        .getState()
+        .addManualEntry({
+          taskId: task.id,
+          date: "2026-07-02",
+          durationSeconds: 0,
+        }),
     ).toThrow("La duración debe ser mayor a cero.");
   });
 });
@@ -1264,10 +1432,12 @@ git commit -m "feat: add addManualEntry action"
 ### Task 9: Selectors — totals and period queries
 
 **Files:**
+
 - Create: `src/features/time-tracker/lib/selectors.ts`
 - Test: `src/features/time-tracker/lib/selectors.test.ts`
 
 **Interfaces:**
+
 - Consumes: `Project`/`Task`/`TimeEntry` types (Task 2), `Period`/`isDateInPeriod` (Task 4), `aProject`/`aTask`/`aTimeEntry` (Task 5).
 - Produces: `getTaskTotalSeconds`, `getProjectTotalSeconds`, `getEntriesForPeriod`, `getProjectTotalsForPeriod`, `getRecentEntries` — consumed by `TimerPanel`/`RecentEntriesList`/`ProjectList`/`HistoryView` (Tasks 12, 15, 17, 18).
 
@@ -1297,9 +1467,21 @@ const tasks = { [task1.id]: task1, [task2.id]: task2, [task3.id]: task3 };
 describe("getTaskTotalSeconds", () => {
   it("sums the durations of entries for a task", () => {
     const entries = {
-      "entry-1": aTimeEntry({ id: "entry-1", taskId: "task-1", durationSeconds: 100 }),
-      "entry-2": aTimeEntry({ id: "entry-2", taskId: "task-1", durationSeconds: 200 }),
-      "entry-3": aTimeEntry({ id: "entry-3", taskId: "task-2", durationSeconds: 999 }),
+      "entry-1": aTimeEntry({
+        id: "entry-1",
+        taskId: "task-1",
+        durationSeconds: 100,
+      }),
+      "entry-2": aTimeEntry({
+        id: "entry-2",
+        taskId: "task-1",
+        durationSeconds: 200,
+      }),
+      "entry-3": aTimeEntry({
+        id: "entry-3",
+        taskId: "task-2",
+        durationSeconds: 999,
+      }),
     };
 
     expect(getTaskTotalSeconds(entries, "task-1")).toBe(300);
@@ -1313,9 +1495,21 @@ describe("getTaskTotalSeconds", () => {
 describe("getProjectTotalSeconds", () => {
   it("sums the durations across all tasks of a project", () => {
     const entries = {
-      "entry-1": aTimeEntry({ id: "entry-1", taskId: "task-1", durationSeconds: 100 }),
-      "entry-2": aTimeEntry({ id: "entry-2", taskId: "task-2", durationSeconds: 200 }),
-      "entry-3": aTimeEntry({ id: "entry-3", taskId: "task-3", durationSeconds: 999 }),
+      "entry-1": aTimeEntry({
+        id: "entry-1",
+        taskId: "task-1",
+        durationSeconds: 100,
+      }),
+      "entry-2": aTimeEntry({
+        id: "entry-2",
+        taskId: "task-2",
+        durationSeconds: 200,
+      }),
+      "entry-3": aTimeEntry({
+        id: "entry-3",
+        taskId: "task-3",
+        durationSeconds: 999,
+      }),
     };
 
     expect(getProjectTotalSeconds(entries, tasks, "project-1")).toBe(300);
@@ -1326,9 +1520,21 @@ describe("getProjectTotalSeconds", () => {
 describe("getEntriesForPeriod", () => {
   it("returns only entries within the period, newest date first", () => {
     const entries = {
-      "entry-1": aTimeEntry({ id: "entry-1", taskId: "task-1", date: "2026-10-05" }),
-      "entry-2": aTimeEntry({ id: "entry-2", taskId: "task-1", date: "2026-10-20" }),
-      "entry-3": aTimeEntry({ id: "entry-3", taskId: "task-1", date: "2026-11-01" }),
+      "entry-1": aTimeEntry({
+        id: "entry-1",
+        taskId: "task-1",
+        date: "2026-10-05",
+      }),
+      "entry-2": aTimeEntry({
+        id: "entry-2",
+        taskId: "task-1",
+        date: "2026-10-20",
+      }),
+      "entry-3": aTimeEntry({
+        id: "entry-3",
+        taskId: "task-1",
+        date: "2026-11-01",
+      }),
     };
 
     const result = getEntriesForPeriod(entries, { year: 2026, month: 10 });
@@ -1340,18 +1546,36 @@ describe("getEntriesForPeriod", () => {
 describe("getProjectTotalsForPeriod", () => {
   it("groups entry totals by project for the given period", () => {
     const entries = {
-      "entry-1": aTimeEntry({ id: "entry-1", taskId: "task-1", date: "2026-10-05", durationSeconds: 100 }),
-      "entry-2": aTimeEntry({ id: "entry-2", taskId: "task-3", date: "2026-10-06", durationSeconds: 200 }),
-      "entry-3": aTimeEntry({ id: "entry-3", taskId: "task-1", date: "2026-09-01", durationSeconds: 999 }),
+      "entry-1": aTimeEntry({
+        id: "entry-1",
+        taskId: "task-1",
+        date: "2026-10-05",
+        durationSeconds: 100,
+      }),
+      "entry-2": aTimeEntry({
+        id: "entry-2",
+        taskId: "task-3",
+        date: "2026-10-06",
+        durationSeconds: 200,
+      }),
+      "entry-3": aTimeEntry({
+        id: "entry-3",
+        taskId: "task-1",
+        date: "2026-09-01",
+        durationSeconds: 999,
+      }),
     };
 
-    const result = getProjectTotalsForPeriod(entries, tasks, projects, { year: 2026, month: 10 });
+    const result = getProjectTotalsForPeriod(entries, tasks, projects, {
+      year: 2026,
+      month: 10,
+    });
 
     expect(result).toEqual(
       expect.arrayContaining([
         { project: project1, totalSeconds: 100 },
         { project: project2, totalSeconds: 200 },
-      ])
+      ]),
     );
     expect(result).toHaveLength(2);
   });
@@ -1360,12 +1584,24 @@ describe("getProjectTotalsForPeriod", () => {
 describe("getRecentEntries", () => {
   it("returns the N most recently created entries, newest first", () => {
     const entries = {
-      "entry-1": aTimeEntry({ id: "entry-1", createdAt: "2026-07-01T10:00:00.000Z" }),
-      "entry-2": aTimeEntry({ id: "entry-2", createdAt: "2026-07-02T10:00:00.000Z" }),
-      "entry-3": aTimeEntry({ id: "entry-3", createdAt: "2026-07-03T10:00:00.000Z" }),
+      "entry-1": aTimeEntry({
+        id: "entry-1",
+        createdAt: "2026-07-01T10:00:00.000Z",
+      }),
+      "entry-2": aTimeEntry({
+        id: "entry-2",
+        createdAt: "2026-07-02T10:00:00.000Z",
+      }),
+      "entry-3": aTimeEntry({
+        id: "entry-3",
+        createdAt: "2026-07-03T10:00:00.000Z",
+      }),
     };
 
-    expect(getRecentEntries(entries, 2).map((entry) => entry.id)).toEqual(["entry-3", "entry-2"]);
+    expect(getRecentEntries(entries, 2).map((entry) => entry.id)).toEqual([
+      "entry-3",
+      "entry-2",
+    ]);
   });
 });
 ```
@@ -1382,7 +1618,10 @@ Expected: FAIL with "Cannot find module './selectors'"
 import type { Project, Task, TimeEntry } from "../model/types";
 import { isDateInPeriod, type Period } from "./period";
 
-export function getTaskTotalSeconds(timeEntries: Record<string, TimeEntry>, taskId: string): number {
+export function getTaskTotalSeconds(
+  timeEntries: Record<string, TimeEntry>,
+  taskId: string,
+): number {
   return Object.values(timeEntries)
     .filter((entry) => entry.taskId === taskId)
     .reduce((total, entry) => total + entry.durationSeconds, 0);
@@ -1391,19 +1630,22 @@ export function getTaskTotalSeconds(timeEntries: Record<string, TimeEntry>, task
 export function getProjectTotalSeconds(
   timeEntries: Record<string, TimeEntry>,
   tasks: Record<string, Task>,
-  projectId: string
+  projectId: string,
 ): number {
   const taskIds = new Set(
     Object.values(tasks)
       .filter((task) => task.projectId === projectId)
-      .map((task) => task.id)
+      .map((task) => task.id),
   );
   return Object.values(timeEntries)
     .filter((entry) => taskIds.has(entry.taskId))
     .reduce((total, entry) => total + entry.durationSeconds, 0);
 }
 
-export function getEntriesForPeriod(timeEntries: Record<string, TimeEntry>, period: Period): TimeEntry[] {
+export function getEntriesForPeriod(
+  timeEntries: Record<string, TimeEntry>,
+  period: Period,
+): TimeEntry[] {
   return Object.values(timeEntries)
     .filter((entry) => isDateInPeriod(entry.date, period))
     .sort((a, b) => b.date.localeCompare(a.date));
@@ -1413,7 +1655,7 @@ export function getProjectTotalsForPeriod(
   timeEntries: Record<string, TimeEntry>,
   tasks: Record<string, Task>,
   projects: Record<string, Project>,
-  period: Period
+  period: Period,
 ): Array<{ project: Project; totalSeconds: number }> {
   const totalsByProject = new Map<string, number>();
   for (const entry of getEntriesForPeriod(timeEntries, period)) {
@@ -1421,14 +1663,25 @@ export function getProjectTotalsForPeriod(
     if (!task) {
       continue;
     }
-    totalsByProject.set(task.projectId, (totalsByProject.get(task.projectId) ?? 0) + entry.durationSeconds);
+    totalsByProject.set(
+      task.projectId,
+      (totalsByProject.get(task.projectId) ?? 0) + entry.durationSeconds,
+    );
   }
   return Array.from(totalsByProject.entries())
-    .map(([projectId, totalSeconds]) => ({ project: projects[projectId], totalSeconds }))
-    .filter((item): item is { project: Project; totalSeconds: number } => Boolean(item.project));
+    .map(([projectId, totalSeconds]) => ({
+      project: projects[projectId],
+      totalSeconds,
+    }))
+    .filter((item): item is { project: Project; totalSeconds: number } =>
+      Boolean(item.project),
+    );
 }
 
-export function getRecentEntries(timeEntries: Record<string, TimeEntry>, limit: number): TimeEntry[] {
+export function getRecentEntries(
+  timeEntries: Record<string, TimeEntry>,
+  limit: number,
+): TimeEntry[] {
   return Object.values(timeEntries)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     .slice(0, limit);
@@ -1452,11 +1705,13 @@ git commit -m "feat: add totals and period selectors"
 ### Task 10: AppShell (sidebar navigation) and root layout
 
 **Files:**
+
 - Create: `src/components/app-shell/app-shell.tsx`
 - Test: `src/components/app-shell/app-shell.test.tsx`
 - Modify: `src/app/layout.tsx`
 
 **Interfaces:**
+
 - Consumes: nothing from the feature (agnostic layout component).
 - Produces: `AppShell({ children }: { children: React.ReactNode })`, wired into the root layout so every page (Tasks 13, 17, 18) renders inside it. Loads `Inter`/`JetBrains Mono` fonts as `--font-inter`/`--font-jetbrains-mono`, matching the CSS variables declared in Task 1.
 
@@ -1477,18 +1732,23 @@ describe("AppShell", () => {
     render(
       <AppShell>
         <p>contenido</p>
-      </AppShell>
+      </AppShell>,
     );
 
-    expect(screen.getByRole("link", { name: "Proyectos" })).toHaveAttribute("aria-current", "page");
-    expect(screen.getByRole("link", { name: "Tareas" })).not.toHaveAttribute("aria-current");
+    expect(screen.getByRole("link", { name: "Proyectos" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(screen.getByRole("link", { name: "Tareas" })).not.toHaveAttribute(
+      "aria-current",
+    );
   });
 
   it("renders the children inside the main content area", () => {
     render(
       <AppShell>
         <p>contenido</p>
-      </AppShell>
+      </AppShell>,
     );
 
     expect(screen.getByText("contenido")).toBeInTheDocument();
@@ -1498,12 +1758,20 @@ describe("AppShell", () => {
     render(
       <AppShell>
         <p>contenido</p>
-      </AppShell>
+      </AppShell>,
     );
 
-    expect(screen.getByRole("link", { name: "Tareas" })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: "Proyectos" })).toHaveAttribute("href", "/projects");
-    expect(screen.getByRole("link", { name: "Historial de Registros" })).toHaveAttribute("href", "/history");
+    expect(screen.getByRole("link", { name: "Tareas" })).toHaveAttribute(
+      "href",
+      "/",
+    );
+    expect(screen.getByRole("link", { name: "Proyectos" })).toHaveAttribute(
+      "href",
+      "/projects",
+    );
+    expect(
+      screen.getByRole("link", { name: "Historial de Registros" }),
+    ).toHaveAttribute("href", "/history");
   });
 });
 ```
@@ -1535,7 +1803,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <aside className="w-[280px] shrink-0 border-r border-outline-variant bg-surface p-6">
-        <p className="text-headline-md font-semibold text-on-surface">TimeTracker</p>
+        <p className="text-headline-md font-semibold text-on-surface">
+          TimeTracker
+        </p>
         <nav aria-label="Navegación principal" className="mt-8">
           <ul className="flex flex-col gap-1">
             {NAV_ITEMS.map((item) => {
@@ -1600,7 +1870,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}>
+    <html
+      lang="es"
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">
         <div className="root flex min-h-full flex-1 flex-col">
           <AppShell>{children}</AppShell>
@@ -1628,10 +1901,12 @@ git commit -m "feat: add AppShell navigation and wire Precision Focus fonts"
 ### Task 11: New Project Modal
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/new-project-modal/new-project-modal.tsx`
 - Test: `src/features/time-tracker/components/new-project-modal/new-project-modal.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `useTimeTrackerStore`, `initialTimeTrackerState` (Task 6-8).
 - Produces: `NewProjectModal({ trigger }: { trigger: React.ReactElement })`. It's rendered twice by `ProjectsView` (Task 13): once with a plain button trigger ("Nuevo Proyecto"), once with a dashed-card trigger ("Crear Nuevo Proyecto") — each instance owns its own open/close state.
 
@@ -1642,38 +1917,59 @@ git commit -m "feat: add AppShell navigation and wire Precision Focus fonts"
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
 import { NewProjectModal } from "./new-project-modal";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
 });
 
 describe("NewProjectModal", () => {
   it("creates a project with the entered name and description", async () => {
     const user = userEvent.setup();
-    render(<NewProjectModal trigger={<button type="button">Nuevo Proyecto</button>} />);
+    render(
+      <NewProjectModal
+        trigger={<button type="button">Nuevo Proyecto</button>}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Nuevo Proyecto" }));
     await user.type(screen.getByLabelText("Nombre del Proyecto"), "Rebranding");
-    await user.type(screen.getByLabelText("Descripción"), "Nueva identidad visual");
+    await user.type(
+      screen.getByLabelText("Descripción"),
+      "Nueva identidad visual",
+    );
     await user.click(screen.getByRole("button", { name: "Crear Proyecto" }));
 
     const projects = Object.values(useTimeTrackerStore.getState().projects);
     expect(projects).toHaveLength(1);
-    expect(projects[0]).toMatchObject({ name: "Rebranding", description: "Nueva identidad visual" });
+    expect(projects[0]).toMatchObject({
+      name: "Rebranding",
+      description: "Nueva identidad visual",
+    });
   });
 
   it("shows a validation error when the name is empty", async () => {
     const user = userEvent.setup();
-    render(<NewProjectModal trigger={<button type="button">Nuevo Proyecto</button>} />);
+    render(
+      <NewProjectModal
+        trigger={<button type="button">Nuevo Proyecto</button>}
+      />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Nuevo Proyecto" }));
     await user.click(screen.getByRole("button", { name: "Crear Proyecto" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("El nombre del proyecto es obligatorio.");
-    expect(Object.values(useTimeTrackerStore.getState().projects)).toHaveLength(0);
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "El nombre del proyecto es obligatorio.",
+    );
+    expect(Object.values(useTimeTrackerStore.getState().projects)).toHaveLength(
+      0,
+    );
   });
 });
 ```
@@ -1710,7 +2006,11 @@ export function NewProjectModal({ trigger }: { trigger: ReactElement }) {
       setError(null);
       setOpen(false);
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "No se pudo crear el proyecto.");
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "No se pudo crear el proyecto.",
+      );
     }
   }
 
@@ -1720,7 +2020,9 @@ export function NewProjectModal({ trigger }: { trigger: ReactElement }) {
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm" />
         <Dialog.Popup className="fixed top-1/2 left-1/2 w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-surface-container-lowest p-8 shadow-lg">
-          <Dialog.Title className="text-headline-md font-semibold text-on-surface">Nuevo Proyecto</Dialog.Title>
+          <Dialog.Title className="text-headline-md font-semibold text-on-surface">
+            Nuevo Proyecto
+          </Dialog.Title>
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <Field.Root className="flex flex-col gap-2">
               <Field.Label className="text-label-mono uppercase text-on-surface-variant">
@@ -1735,7 +2037,9 @@ export function NewProjectModal({ trigger }: { trigger: ReactElement }) {
               />
             </Field.Root>
             <Field.Root className="flex flex-col gap-2">
-              <Field.Label className="text-label-mono uppercase text-on-surface-variant">Descripción</Field.Label>
+              <Field.Label className="text-label-mono uppercase text-on-surface-variant">
+                Descripción
+              </Field.Label>
               <Field.Control
                 render={<textarea />}
                 value={description}
@@ -1753,7 +2057,10 @@ export function NewProjectModal({ trigger }: { trigger: ReactElement }) {
               <Dialog.Close className="rounded border border-outline px-4 py-2 text-body-lg">
                 Cancelar
               </Dialog.Close>
-              <button type="submit" className="rounded bg-primary px-4 py-2 text-body-lg text-on-primary">
+              <button
+                type="submit"
+                className="rounded bg-primary px-4 py-2 text-body-lg text-on-primary"
+              >
                 Crear Proyecto
               </button>
             </div>
@@ -1782,10 +2089,12 @@ git commit -m "feat: add New Project modal"
 ### Task 12: Project List
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/project-list/project-list.tsx`
 - Test: `src/features/time-tracker/components/project-list/project-list.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `useTimeTrackerStore`, `initialTimeTrackerState` (Task 6-8), `getProjectTotalSeconds` (Task 9), `formatDurationShort` (Task 3), `aProject`/`aTask`/`aTimeEntry` (Task 5).
 - Produces: `ProjectList()` — a fragment of `<article>` project cards, composed into the grid by `ProjectsView` (Task 13).
 
@@ -1796,19 +2105,30 @@ git commit -m "feat: add New Project modal"
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { aProject, aTask, aTimeEntry } from "../../testing/object-mothers";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
 import { ProjectList } from "./project-list";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
 });
 
 describe("ProjectList", () => {
   it("renders each project with its name, description and total time", () => {
-    const project = aProject({ id: "project-1", name: "Identidad de Marca Global", description: "Rebranding" });
+    const project = aProject({
+      id: "project-1",
+      name: "Identidad de Marca Global",
+      description: "Rebranding",
+    });
     const task = aTask({ id: "task-1", projectId: "project-1" });
-    const entry = aTimeEntry({ id: "entry-1", taskId: "task-1", durationSeconds: 46800 });
+    const entry = aTimeEntry({
+      id: "entry-1",
+      taskId: "task-1",
+      durationSeconds: 46800,
+    });
 
     useTimeTrackerStore.setState({
       projects: { [project.id]: project },
@@ -1857,13 +2177,21 @@ export function ProjectList() {
           key={project.id}
           className="rounded-lg border border-outline-variant bg-surface-container-lowest p-6"
         >
-          <h3 className="text-body-lg font-semibold text-on-surface">{project.name}</h3>
+          <h3 className="text-body-lg font-semibold text-on-surface">
+            {project.name}
+          </h3>
           {project.description ? (
-            <p className="mt-2 text-body-md text-on-surface-variant">{project.description}</p>
+            <p className="mt-2 text-body-md text-on-surface-variant">
+              {project.description}
+            </p>
           ) : null}
-          <p className="mt-4 text-label-mono uppercase text-on-surface-variant">Tiempo Registrado</p>
+          <p className="mt-4 text-label-mono uppercase text-on-surface-variant">
+            Tiempo Registrado
+          </p>
           <p className="font-mono text-headline-md text-on-surface">
-            {formatDurationShort(getProjectTotalSeconds(timeEntries, tasks, project.id))}
+            {formatDurationShort(
+              getProjectTotalSeconds(timeEntries, tasks, project.id),
+            )}
           </p>
         </article>
       ))}
@@ -1889,11 +2217,13 @@ git commit -m "feat: add Project List component"
 ### Task 13: Projects page composition
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/projects-view.tsx`
 - Test: `src/features/time-tracker/components/projects-view.test.tsx`
 - Create: `src/app/projects/page.tsx`
 
 **Interfaces:**
+
 - Consumes: `NewProjectModal` (Task 11), `ProjectList` (Task 12).
 - Produces: `ProjectsView()`, rendered at route `/projects`.
 
@@ -1903,11 +2233,14 @@ git commit -m "feat: add Project List component"
 // src/features/time-tracker/components/projects-view.test.tsx
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../store/time-tracker-store";
 import { ProjectsView } from "./projects-view";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
 });
 
@@ -1915,9 +2248,15 @@ describe("ProjectsView", () => {
   it("renders the heading and both project-creation entry points", () => {
     render(<ProjectsView />);
 
-    expect(screen.getByRole("heading", { name: "Proyectos" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Nuevo Proyecto" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Crear Nuevo Proyecto" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Proyectos" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Nuevo Proyecto" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Crear Nuevo Proyecto" }),
+    ).toBeInTheDocument();
   });
 });
 ```
@@ -1940,10 +2279,15 @@ export function ProjectsView() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-headline-lg font-semibold text-on-surface">Proyectos</h1>
+        <h1 className="text-headline-lg font-semibold text-on-surface">
+          Proyectos
+        </h1>
         <NewProjectModal
           trigger={
-            <button type="button" className="rounded border border-outline px-4 py-2 text-body-lg font-semibold">
+            <button
+              type="button"
+              className="rounded border border-outline px-4 py-2 text-body-lg font-semibold"
+            >
               Nuevo Proyecto
             </button>
           }
@@ -1998,10 +2342,12 @@ git commit -m "feat: compose Proyectos page"
 ### Task 14: New Task Modal
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/new-task-modal/new-task-modal.tsx`
 - Test: `src/features/time-tracker/components/new-task-modal/new-task-modal.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `useTimeTrackerStore`, `initialTimeTrackerState` (Task 6-8), `aProject` (Task 5).
 - Produces: `NewTaskModal()`, rendered once by `TasksView` (Task 17).
 
@@ -2013,11 +2359,14 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { aProject } from "../../testing/object-mothers";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
 import { NewTaskModal } from "./new-task-modal";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
   const project = aProject({ id: "project-1", name: "Rediseño" });
   useTimeTrackerStore.setState({ projects: { [project.id]: project } });
@@ -2035,7 +2384,10 @@ describe("NewTaskModal", () => {
 
     const tasks = Object.values(useTimeTrackerStore.getState().tasks);
     expect(tasks).toHaveLength(1);
-    expect(tasks[0]).toMatchObject({ projectId: "project-1", name: "Wireframes" });
+    expect(tasks[0]).toMatchObject({
+      projectId: "project-1",
+      name: "Wireframes",
+    });
   });
 
   it("shows a validation error when no project is selected", async () => {
@@ -2046,7 +2398,9 @@ describe("NewTaskModal", () => {
     await user.type(screen.getByLabelText("Nombre"), "Wireframes");
     await user.click(screen.getByRole("button", { name: "Crear Tarea" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Selecciona un proyecto.");
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Selecciona un proyecto.",
+    );
     expect(Object.values(useTimeTrackerStore.getState().tasks)).toHaveLength(0);
   });
 });
@@ -2090,7 +2444,11 @@ export function NewTaskModal() {
       setError(null);
       setOpen(false);
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "No se pudo crear la tarea.");
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "No se pudo crear la tarea.",
+      );
     }
   }
 
@@ -2102,10 +2460,14 @@ export function NewTaskModal() {
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm" />
         <Dialog.Popup className="fixed top-1/2 left-1/2 w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-surface-container-lowest p-8 shadow-lg">
-          <Dialog.Title className="text-headline-md font-semibold text-on-surface">Nueva Tarea</Dialog.Title>
+          <Dialog.Title className="text-headline-md font-semibold text-on-surface">
+            Nueva Tarea
+          </Dialog.Title>
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <Field.Root className="flex flex-col gap-2">
-              <Field.Label className="text-label-mono uppercase text-on-surface-variant">Proyecto</Field.Label>
+              <Field.Label className="text-label-mono uppercase text-on-surface-variant">
+                Proyecto
+              </Field.Label>
               <Field.Control
                 render={<select />}
                 value={projectId}
@@ -2122,7 +2484,9 @@ export function NewTaskModal() {
               </Field.Control>
             </Field.Root>
             <Field.Root className="flex flex-col gap-2">
-              <Field.Label className="text-label-mono uppercase text-on-surface-variant">Nombre</Field.Label>
+              <Field.Label className="text-label-mono uppercase text-on-surface-variant">
+                Nombre
+              </Field.Label>
               <Field.Control
                 required
                 value={name}
@@ -2140,7 +2504,10 @@ export function NewTaskModal() {
               <Dialog.Close className="rounded border border-outline px-4 py-2 text-body-lg">
                 Cancelar
               </Dialog.Close>
-              <button type="submit" className="rounded bg-primary px-4 py-2 text-body-lg text-on-primary">
+              <button
+                type="submit"
+                className="rounded bg-primary px-4 py-2 text-body-lg text-on-primary"
+              >
                 Crear Tarea
               </button>
             </div>
@@ -2169,10 +2536,12 @@ git commit -m "feat: add New Task modal"
 ### Task 15: Timer Panel
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/timer-panel/timer-panel.tsx`
 - Test: `src/features/time-tracker/components/timer-panel/timer-panel.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `useTimeTrackerStore`, `initialTimeTrackerState` (Task 6-8), `formatDurationClock` (Task 3), `aProject`/`aTask` (Task 5).
 - Produces: `TimerPanel()`, rendered by `TasksView` (Task 17).
 
@@ -2183,11 +2552,14 @@ git commit -m "feat: add New Task modal"
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { aProject, aTask } from "../../testing/object-mothers";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
 import { TimerPanel } from "./timer-panel";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
 });
 
@@ -2198,7 +2570,11 @@ afterEach(() => {
 describe("TimerPanel", () => {
   it("shows the empty state when there is no active timer", () => {
     render(<TimerPanel />);
-    expect(screen.getByText("Ningún temporizador activo. Inicia uno desde una tarea.")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Ningún temporizador activo. Inicia uno desde una tarea.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("shows the running task and ticks the elapsed time every second", () => {
@@ -2207,7 +2583,11 @@ describe("TimerPanel", () => {
     vi.setSystemTime(startedAt);
 
     const project = aProject({ id: "project-1", name: "Rediseño" });
-    const task = aTask({ id: "task-1", projectId: "project-1", name: "Wireframes" });
+    const task = aTask({
+      id: "task-1",
+      projectId: "project-1",
+      name: "Wireframes",
+    });
     useTimeTrackerStore.setState({
       projects: { [project.id]: project },
       tasks: { [task.id]: task },
@@ -2280,26 +2660,38 @@ export function TimerPanel() {
         aria-label="Temporizador"
         className="rounded-lg border border-outline-variant bg-surface-container-lowest p-8 text-center"
       >
-        <p className="text-body-lg text-on-surface-variant">Ningún temporizador activo. Inicia uno desde una tarea.</p>
+        <p className="text-body-lg text-on-surface-variant">
+          Ningún temporizador activo. Inicia uno desde una tarea.
+        </p>
       </section>
     );
   }
 
   const task = tasks[activeTimer.taskId];
   const project = task ? projects[task.projectId] : undefined;
-  const elapsedSeconds = Math.floor((now.getTime() - new Date(activeTimer.startedAt).getTime()) / 1000);
+  const elapsedSeconds = Math.floor(
+    (now.getTime() - new Date(activeTimer.startedAt).getTime()) / 1000,
+  );
 
   return (
     <section
       aria-label="Temporizador"
       className="rounded-lg border border-outline-variant bg-surface-container-lowest p-8 text-center"
     >
-      {project ? <p className="text-label-mono uppercase text-on-surface-variant">{project.name}</p> : null}
-      <p className="text-headline-md font-semibold text-on-surface">{task?.name ?? "Tarea"}</p>
+      {project ? (
+        <p className="text-label-mono uppercase text-on-surface-variant">
+          {project.name}
+        </p>
+      ) : null}
+      <p className="text-headline-md font-semibold text-on-surface">
+        {task?.name ?? "Tarea"}
+      </p>
       <p className="text-body-md text-on-surface-variant">
         Iniciado a las {new Date(activeTimer.startedAt).toLocaleTimeString()}
       </p>
-      <p className="font-mono text-display-time text-on-surface">{formatDurationClock(elapsedSeconds)}</p>
+      <p className="font-mono text-display-time text-on-surface">
+        {formatDurationClock(elapsedSeconds)}
+      </p>
       <button
         type="button"
         onClick={() => stopTimer()}
@@ -2329,10 +2721,12 @@ git commit -m "feat: add Timer Panel with live elapsed time"
 ### Task 16: Manual Entry Form
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/manual-entry-form/manual-entry-form.tsx`
 - Test: `src/features/time-tracker/components/manual-entry-form/manual-entry-form.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `useTimeTrackerStore`, `initialTimeTrackerState` (Task 6-8), `parseManualDuration` (Task 3), `aProject`/`aTask` (Task 5).
 - Produces: `ManualEntryForm()`, rendered by `TasksView` (Task 17).
 
@@ -2344,14 +2738,21 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { aProject, aTask } from "../../testing/object-mothers";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
 import { ManualEntryForm } from "./manual-entry-form";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
   const project = aProject({ id: "project-1", name: "Rediseño" });
-  const task = aTask({ id: "task-1", projectId: "project-1", name: "Wireframes" });
+  const task = aTask({
+    id: "task-1",
+    projectId: "project-1",
+    name: "Wireframes",
+  });
   useTimeTrackerStore.setState({
     projects: { [project.id]: project },
     tasks: { [task.id]: task },
@@ -2363,25 +2764,39 @@ describe("ManualEntryForm", () => {
     const user = userEvent.setup();
     render(<ManualEntryForm />);
 
-    await user.selectOptions(screen.getByLabelText("Proyecto / Tarea"), "task-1");
+    await user.selectOptions(
+      screen.getByLabelText("Proyecto / Tarea"),
+      "task-1",
+    );
     await user.type(screen.getByLabelText("Duración"), "02:30");
     await user.click(screen.getByRole("button", { name: "Guardar Registro" }));
 
     const entries = Object.values(useTimeTrackerStore.getState().timeEntries);
     expect(entries).toHaveLength(1);
-    expect(entries[0]).toMatchObject({ taskId: "task-1", durationSeconds: 9000, source: "manual" });
+    expect(entries[0]).toMatchObject({
+      taskId: "task-1",
+      durationSeconds: 9000,
+      source: "manual",
+    });
   });
 
   it("shows a validation error for an invalid duration", async () => {
     const user = userEvent.setup();
     render(<ManualEntryForm />);
 
-    await user.selectOptions(screen.getByLabelText("Proyecto / Tarea"), "task-1");
+    await user.selectOptions(
+      screen.getByLabelText("Proyecto / Tarea"),
+      "task-1",
+    );
     await user.type(screen.getByLabelText("Duración"), "abc");
     await user.click(screen.getByRole("button", { name: "Guardar Registro" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Ingresa una duración válida en formato HH:MM.");
-    expect(Object.values(useTimeTrackerStore.getState().timeEntries)).toHaveLength(0);
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Ingresa una duración válida en formato HH:MM.",
+    );
+    expect(
+      Object.values(useTimeTrackerStore.getState().timeEntries),
+    ).toHaveLength(0);
   });
 
   it("shows a validation error when no task is selected", async () => {
@@ -2391,7 +2806,9 @@ describe("ManualEntryForm", () => {
     await user.type(screen.getByLabelText("Duración"), "02:30");
     await user.click(screen.getByRole("button", { name: "Guardar Registro" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Selecciona una tarea.");
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Selecciona una tarea.",
+    );
   });
 });
 ```
@@ -2447,7 +2864,11 @@ export function ManualEntryForm() {
       setDuration("");
       setError(null);
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "No se pudo guardar el registro.");
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "No se pudo guardar el registro.",
+      );
     }
   }
 
@@ -2456,10 +2877,14 @@ export function ManualEntryForm() {
       aria-label="Entrada Manual"
       className="rounded-lg border border-outline-variant bg-surface-container-lowest p-6"
     >
-      <h2 className="text-headline-md font-semibold text-on-surface">Entrada Manual</h2>
+      <h2 className="text-headline-md font-semibold text-on-surface">
+        Entrada Manual
+      </h2>
       <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
         <Field.Root className="flex flex-col gap-2">
-          <Field.Label className="text-label-mono uppercase text-on-surface-variant">Fecha</Field.Label>
+          <Field.Label className="text-label-mono uppercase text-on-surface-variant">
+            Fecha
+          </Field.Label>
           <Field.Control
             type="date"
             value={date}
@@ -2468,7 +2893,9 @@ export function ManualEntryForm() {
           />
         </Field.Root>
         <Field.Root className="flex flex-col gap-2">
-          <Field.Label className="text-label-mono uppercase text-on-surface-variant">Proyecto / Tarea</Field.Label>
+          <Field.Label className="text-label-mono uppercase text-on-surface-variant">
+            Proyecto / Tarea
+          </Field.Label>
           <Field.Control
             render={<select />}
             value={taskId}
@@ -2484,7 +2911,9 @@ export function ManualEntryForm() {
           </Field.Control>
         </Field.Root>
         <Field.Root className="flex flex-col gap-2">
-          <Field.Label className="text-label-mono uppercase text-on-surface-variant">Duración</Field.Label>
+          <Field.Label className="text-label-mono uppercase text-on-surface-variant">
+            Duración
+          </Field.Label>
           <Field.Control
             value={duration}
             onValueChange={setDuration}
@@ -2497,7 +2926,10 @@ export function ManualEntryForm() {
             {error}
           </p>
         ) : null}
-        <button type="submit" className="rounded bg-primary px-4 py-2 text-body-lg text-on-primary">
+        <button
+          type="submit"
+          className="rounded bg-primary px-4 py-2 text-body-lg text-on-primary"
+        >
           Guardar Registro
         </button>
       </form>
@@ -2523,6 +2955,7 @@ git commit -m "feat: add Manual Entry form"
 ### Task 17: Recent Entries List and Tareas page composition
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/recent-entries-list/recent-entries-list.tsx`
 - Test: `src/features/time-tracker/components/recent-entries-list/recent-entries-list.test.tsx`
 - Create: `src/features/time-tracker/components/tasks-view.tsx`
@@ -2530,6 +2963,7 @@ git commit -m "feat: add Manual Entry form"
 - Create: `src/app/page.tsx`
 
 **Interfaces:**
+
 - Consumes: `getRecentEntries` (Task 9), `formatDurationClock` (Task 3), `formatRelativeTime` (Task 3), `useTimeTrackerStore`/`initialTimeTrackerState` (Task 6-8), `aProject`/`aTask`/`aTimeEntry` (Task 5), `NewTaskModal` (Task 14), `TimerPanel` (Task 15), `ManualEntryForm` (Task 16).
 - Produces: `RecentEntriesList()`, `TasksView()`, rendered at route `/`.
 
@@ -2540,11 +2974,14 @@ git commit -m "feat: add Manual Entry form"
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { aProject, aTask, aTimeEntry } from "../../testing/object-mothers";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
 import { RecentEntriesList } from "./recent-entries-list";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-07-02T12:00:00.000Z"));
@@ -2553,12 +2990,18 @@ beforeEach(() => {
 describe("RecentEntriesList", () => {
   it("shows the empty state when there are no entries", () => {
     render(<RecentEntriesList />);
-    expect(screen.getByText("Aún no hay registros de tiempo.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Aún no hay registros de tiempo."),
+    ).toBeInTheDocument();
   });
 
   it("lists the most recent entries with task, project, duration and relative time", () => {
     const project = aProject({ id: "project-1", name: "Rediseño" });
-    const task = aTask({ id: "task-1", projectId: "project-1", name: "Wireframes" });
+    const task = aTask({
+      id: "task-1",
+      projectId: "project-1",
+      name: "Wireframes",
+    });
     const entry = aTimeEntry({
       id: "entry-1",
       taskId: "task-1",
@@ -2582,7 +3025,11 @@ describe("RecentEntriesList", () => {
 
   it("starts a timer for the entry's task when its play button is clicked", () => {
     const project = aProject({ id: "project-1" });
-    const task = aTask({ id: "task-1", projectId: "project-1", name: "Wireframes" });
+    const task = aTask({
+      id: "task-1",
+      projectId: "project-1",
+      name: "Wireframes",
+    });
     const entry = aTimeEntry({ id: "entry-1", taskId: "task-1" });
 
     useTimeTrackerStore.setState({
@@ -2592,7 +3039,9 @@ describe("RecentEntriesList", () => {
     });
 
     render(<RecentEntriesList />);
-    screen.getByRole("button", { name: "Iniciar temporizador para Wireframes" }).click();
+    screen
+      .getByRole("button", { name: "Iniciar temporizador para Wireframes" })
+      .click();
 
     expect(useTimeTrackerStore.getState().activeTimer?.taskId).toBe("task-1");
   });
@@ -2627,27 +3076,43 @@ export function RecentEntriesList() {
   const recentEntries = getRecentEntries(timeEntries, RECENT_ENTRIES_LIMIT);
 
   return (
-    <section aria-label="Tareas Recientes" className="rounded-lg border border-outline-variant p-6">
-      <h2 className="text-headline-md font-semibold text-on-surface">Tareas Recientes</h2>
+    <section
+      aria-label="Tareas Recientes"
+      className="rounded-lg border border-outline-variant p-6"
+    >
+      <h2 className="text-headline-md font-semibold text-on-surface">
+        Tareas Recientes
+      </h2>
       {recentEntries.length === 0 ? (
-        <p className="mt-4 text-body-lg text-on-surface-variant">Aún no hay registros de tiempo.</p>
+        <p className="mt-4 text-body-lg text-on-surface-variant">
+          Aún no hay registros de tiempo.
+        </p>
       ) : (
         <ul className="mt-4 flex flex-col divide-y divide-outline-variant">
           {recentEntries.map((entry) => {
             const task = tasks[entry.taskId];
             const project = task ? projects[task.projectId] : undefined;
             return (
-              <li key={entry.id} className="flex items-center justify-between py-3">
+              <li
+                key={entry.id}
+                className="flex items-center justify-between py-3"
+              >
                 <div>
-                  <p className="text-body-lg text-on-surface">{task?.name ?? "Tarea eliminada"}</p>
-                  <p className="text-body-md text-on-surface-variant">{project?.name ?? ""}</p>
+                  <p className="text-body-lg text-on-surface">
+                    {task?.name ?? "Tarea eliminada"}
+                  </p>
+                  <p className="text-body-md text-on-surface-variant">
+                    {project?.name ?? ""}
+                  </p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
                     <p className="font-mono text-body-md text-on-surface">
                       {formatDurationClock(entry.durationSeconds)}
                     </p>
-                    <p className="text-body-md text-on-surface-variant">{formatRelativeTime(entry.createdAt, now)}</p>
+                    <p className="text-body-md text-on-surface-variant">
+                      {formatRelativeTime(entry.createdAt, now)}
+                    </p>
                   </div>
                   {task ? (
                     <button
@@ -2681,11 +3146,14 @@ Expected: PASS (3 tests)
 // src/features/time-tracker/components/tasks-view.test.tsx
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../store/time-tracker-store";
 import { TasksView } from "./tasks-view";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
 });
 
@@ -2694,11 +3162,19 @@ describe("TasksView", () => {
     render(<TasksView />);
 
     expect(screen.getByRole("heading", { name: "Tareas" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Nueva Tarea" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Nueva Tarea" }),
+    ).toBeInTheDocument();
     // A <section aria-label="..."> exposes an accessible "region" landmark with that name.
-    expect(screen.getByRole("region", { name: "Temporizador" })).toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Entrada Manual" })).toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Tareas Recientes" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: "Temporizador" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: "Entrada Manual" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: "Tareas Recientes" }),
+    ).toBeInTheDocument();
   });
 });
 ```
@@ -2723,7 +3199,9 @@ export function TasksView() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-headline-lg font-semibold text-on-surface">Tareas</h1>
+        <h1 className="text-headline-lg font-semibold text-on-surface">
+          Tareas
+        </h1>
         <NewTaskModal />
       </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
@@ -2764,11 +3242,13 @@ git commit -m "feat: compose Tareas page"
 ### Task 18: History View and Historial page
 
 **Files:**
+
 - Create: `src/features/time-tracker/components/history-view/history-view.tsx`
 - Test: `src/features/time-tracker/components/history-view/history-view.test.tsx`
 - Create: `src/app/history/page.tsx`
 
 **Interfaces:**
+
 - Consumes: `getCurrentPeriod`/`formatPeriodLabel`/`shiftPeriod`/`Period` (Task 4), `getEntriesForPeriod`/`getProjectTotalsForPeriod` (Task 9), `formatDurationClock`/`formatDurationShort` (Task 3), `useTimeTrackerStore`/`initialTimeTrackerState` (Task 6-8), `aProject`/`aTask`/`aTimeEntry` (Task 5).
 - Produces: `HistoryView({ initialPeriod }?: { initialPeriod?: Period })`, rendered at route `/history`.
 
@@ -2780,15 +3260,22 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { aProject, aTask, aTimeEntry } from "../../testing/object-mothers";
-import { initialTimeTrackerState, useTimeTrackerStore } from "../../store/time-tracker-store";
+import {
+  initialTimeTrackerState,
+  useTimeTrackerStore,
+} from "../../store/time-tracker-store";
 import { HistoryView } from "./history-view";
 
 beforeEach(() => {
-  useTimeTrackerStore.setState(initialTimeTrackerState, true);
+  useTimeTrackerStore.setState(initialTimeTrackerState);
   localStorage.clear();
 
   const project = aProject({ id: "project-1", name: "Rediseño" });
-  const task = aTask({ id: "task-1", projectId: "project-1", name: "Wireframes" });
+  const task = aTask({
+    id: "task-1",
+    projectId: "project-1",
+    name: "Wireframes",
+  });
   const octoberEntry = aTimeEntry({
     id: "entry-1",
     taskId: "task-1",
@@ -2807,7 +3294,10 @@ beforeEach(() => {
   useTimeTrackerStore.setState({
     projects: { [project.id]: project },
     tasks: { [task.id]: task },
-    timeEntries: { [octoberEntry.id]: octoberEntry, [novemberEntry.id]: novemberEntry },
+    timeEntries: {
+      [octoberEntry.id]: octoberEntry,
+      [novemberEntry.id]: novemberEntry,
+    },
   });
 });
 
@@ -2838,7 +3328,9 @@ describe("HistoryView", () => {
     await user.click(screen.getByRole("button", { name: "Periodo siguiente" }));
     await user.click(screen.getByRole("button", { name: "Periodo siguiente" }));
 
-    expect(screen.getByText("No hay registros para este periodo.")).toBeInTheDocument();
+    expect(
+      screen.getByText("No hay registros para este periodo."),
+    ).toBeInTheDocument();
   });
 });
 ```
@@ -2856,25 +3348,49 @@ Expected: FAIL with "Cannot find module './history-view'"
 
 import { useState } from "react";
 import { formatDurationClock, formatDurationShort } from "../../lib/duration";
-import { formatPeriodLabel, getCurrentPeriod, shiftPeriod, type Period } from "../../lib/period";
-import { getEntriesForPeriod, getProjectTotalsForPeriod } from "../../lib/selectors";
+import {
+  formatPeriodLabel,
+  getCurrentPeriod,
+  shiftPeriod,
+  type Period,
+} from "../../lib/period";
+import {
+  getEntriesForPeriod,
+  getProjectTotalsForPeriod,
+} from "../../lib/selectors";
 import { useTimeTrackerStore } from "../../store/time-tracker-store";
 
-export function HistoryView({ initialPeriod }: { initialPeriod?: Period } = {}) {
+export function HistoryView({
+  initialPeriod,
+}: { initialPeriod?: Period } = {}) {
   const timeEntries = useTimeTrackerStore((state) => state.timeEntries);
   const tasks = useTimeTrackerStore((state) => state.tasks);
   const projects = useTimeTrackerStore((state) => state.projects);
-  const [period, setPeriod] = useState<Period>(() => initialPeriod ?? getCurrentPeriod(new Date()));
+  const [period, setPeriod] = useState<Period>(
+    () => initialPeriod ?? getCurrentPeriod(new Date()),
+  );
 
   const entries = getEntriesForPeriod(timeEntries, period);
-  const projectTotals = getProjectTotalsForPeriod(timeEntries, tasks, projects, period);
-  const totalSeconds = entries.reduce((total, entry) => total + entry.durationSeconds, 0);
-  const distinctProjectCount = new Set(projectTotals.map((item) => item.project.id)).size;
+  const projectTotals = getProjectTotalsForPeriod(
+    timeEntries,
+    tasks,
+    projects,
+    period,
+  );
+  const totalSeconds = entries.reduce(
+    (total, entry) => total + entry.durationSeconds,
+    0,
+  );
+  const distinctProjectCount = new Set(
+    projectTotals.map((item) => item.project.id),
+  ).size;
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-headline-lg font-semibold text-on-surface">Historial de Tiempo</h1>
+        <h1 className="text-headline-lg font-semibold text-on-surface">
+          Historial de Tiempo
+        </h1>
         <div className="flex items-center gap-4 rounded-lg border border-outline-variant px-4 py-2">
           <button
             type="button"
@@ -2883,7 +3399,9 @@ export function HistoryView({ initialPeriod }: { initialPeriod?: Period } = {}) 
           >
             {"<"}
           </button>
-          <span className="text-label-mono uppercase text-on-surface-variant">{formatPeriodLabel(period)}</span>
+          <span className="text-label-mono uppercase text-on-surface-variant">
+            {formatPeriodLabel(period)}
+          </span>
           <button
             type="button"
             aria-label="Periodo siguiente"
@@ -2895,13 +3413,22 @@ export function HistoryView({ initialPeriod }: { initialPeriod?: Period } = {}) 
       </div>
 
       {projectTotals.length === 0 ? (
-        <p className="text-body-lg text-on-surface-variant">No hay registros para este periodo.</p>
+        <p className="text-body-lg text-on-surface-variant">
+          No hay registros para este periodo.
+        </p>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projectTotals.map(({ project, totalSeconds: projectSeconds }) => (
-            <article key={project.id} className="rounded-lg border border-outline-variant p-6">
-              <p className="text-body-lg font-semibold text-on-surface">{project.name}</p>
-              <p className="font-mono text-headline-md text-on-surface">{formatDurationShort(projectSeconds)}</p>
+            <article
+              key={project.id}
+              className="rounded-lg border border-outline-variant p-6"
+            >
+              <p className="text-body-lg font-semibold text-on-surface">
+                {project.name}
+              </p>
+              <p className="font-mono text-headline-md text-on-surface">
+                {formatDurationShort(projectSeconds)}
+              </p>
             </article>
           ))}
         </div>
@@ -2910,10 +3437,18 @@ export function HistoryView({ initialPeriod }: { initialPeriod?: Period } = {}) 
       <table className="w-full text-left">
         <thead>
           <tr>
-            <th className="text-label-mono uppercase text-on-surface-variant">Fecha</th>
-            <th className="text-label-mono uppercase text-on-surface-variant">Proyecto</th>
-            <th className="text-label-mono uppercase text-on-surface-variant">Tarea</th>
-            <th className="text-label-mono uppercase text-on-surface-variant">Duración</th>
+            <th className="text-label-mono uppercase text-on-surface-variant">
+              Fecha
+            </th>
+            <th className="text-label-mono uppercase text-on-surface-variant">
+              Proyecto
+            </th>
+            <th className="text-label-mono uppercase text-on-surface-variant">
+              Tarea
+            </th>
+            <th className="text-label-mono uppercase text-on-surface-variant">
+              Duración
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -2925,7 +3460,9 @@ export function HistoryView({ initialPeriod }: { initialPeriod?: Period } = {}) 
                 <td className="py-3">{entry.date}</td>
                 <td className="py-3">{project?.name ?? ""}</td>
                 <td className="py-3">{task?.name ?? ""}</td>
-                <td className="py-3 font-mono">{formatDurationClock(entry.durationSeconds)}</td>
+                <td className="py-3 font-mono">
+                  {formatDurationClock(entry.durationSeconds)}
+                </td>
               </tr>
             );
           })}
@@ -2933,9 +3470,15 @@ export function HistoryView({ initialPeriod }: { initialPeriod?: Period } = {}) 
       </table>
 
       <div className="flex items-center justify-between rounded-lg border border-outline-variant px-6 py-4">
-        <span className="text-body-md text-on-surface-variant">{entries.length} registros</span>
-        <span className="text-body-md text-on-surface-variant">{distinctProjectCount} proyectos</span>
-        <span className="font-mono text-headline-md text-on-surface">{formatDurationClock(totalSeconds)}</span>
+        <span className="text-body-md text-on-surface-variant">
+          {entries.length} registros
+        </span>
+        <span className="text-body-md text-on-surface-variant">
+          {distinctProjectCount} proyectos
+        </span>
+        <span className="font-mono text-headline-md text-on-surface">
+          {formatDurationClock(totalSeconds)}
+        </span>
       </div>
     </div>
   );
