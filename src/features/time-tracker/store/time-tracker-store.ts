@@ -72,11 +72,41 @@ export const useTimeTrackerStore = create<
         return task;
       },
 
-      startTimer: () => {
-        throw new Error("Not implemented yet");
+      startTimer: (taskId, now = new Date()) => {
+        if (!get().tasks[taskId]) {
+          throw new Error("La tarea no existe.");
+        }
+        if (get().activeTimer) {
+          get().stopTimer(now);
+        }
+        set({ activeTimer: { taskId, startedAt: now.toISOString() } });
       },
-      stopTimer: () => {
-        throw new Error("Not implemented yet");
+
+      stopTimer: (now = new Date()) => {
+        const active = get().activeTimer;
+        if (!active) {
+          return;
+        }
+        const startedAt = new Date(active.startedAt);
+        const durationSeconds = Math.floor(
+          (now.getTime() - startedAt.getTime()) / 1000,
+        );
+        if (durationSeconds > 0) {
+          const entry: TimeEntry = {
+            id: generateId(),
+            taskId: active.taskId,
+            date: active.startedAt.slice(0, 10),
+            startTime: active.startedAt,
+            endTime: now.toISOString(),
+            durationSeconds,
+            source: "timer",
+            createdAt: now.toISOString(),
+          };
+          set((state) => ({
+            timeEntries: { ...state.timeEntries, [entry.id]: entry },
+          }));
+        }
+        set({ activeTimer: null });
       },
       addManualEntry: () => {
         throw new Error("Not implemented yet");
