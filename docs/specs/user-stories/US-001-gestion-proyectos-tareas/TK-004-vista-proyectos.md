@@ -35,12 +35,12 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Implementar `projectTotalSeconds` en `totals.ts`: suma la duración de los `TimeEntry` de todas las Tareas de un Proyecto (0 si no hay registros).
-- [ ] Implementar `ProjectGrid` (Client Component): lee `projects` del store, muestra cada proyecto como tarjeta (nombre, descripción, tiempo total formateado) y una tarjeta final para abrir el modal de creación.
-- [ ] Implementar `NewProjectModal`: campos Nombre (obligatorio) y Descripción (opcional), validación de nombre no vacío antes de habilitar "Crear Proyecto", llamada a `createProject` del store al confirmar, cierre del modal tras crear.
-- [ ] Ensamblar `app/projects/page.tsx` componiendo `ProjectGrid` (que internamente gestiona la apertura del modal).
-- [ ] Documentar con TSDoc en español las funciones/componentes exportados.
-- [ ] Escribir tests: unitario para `projectTotalSeconds` (proyecto sin tareas, con tareas sin registros, con registros de varias tareas) y de componente para el flujo de creación de proyecto (nombre vacío bloquea el envío; nombre válido crea y cierra el modal).
+- [x] Implementar `projectTotalSeconds` en `totals.ts`: suma la duración de los `TimeEntry` de todas las Tareas de un Proyecto (0 si no hay registros).
+- [x] Implementar `ProjectGrid` (Client Component): lee `projects` del store, muestra cada proyecto como tarjeta (nombre, descripción, tiempo total formateado) y una tarjeta final para abrir el modal de creación.
+- [x] Implementar `NewProjectModal`: campos Nombre (obligatorio) y Descripción (opcional), validación de nombre no vacío antes de habilitar "Crear Proyecto", llamada a `createProject` del store al confirmar, cierre del modal tras crear.
+- [x] Ensamblar `app/projects/page.tsx` componiendo `ProjectGrid` (que internamente gestiona la apertura del modal).
+- [x] Documentar con TSDoc en español las funciones/componentes exportados.
+- [x] Escribir tests: unitario para `projectTotalSeconds` (proyecto sin tareas, con tareas sin registros, con registros de varias tareas) y de componente para el flujo de creación de proyecto (nombre vacío bloquea el envío; nombre válido crea y cierra el modal).
 
 ## Observaciones
 

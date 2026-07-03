@@ -58,11 +58,19 @@
   - Ancho del sidebar aplicado como valor arbitrario `w-[280px]` (no hay step de espaciado Tailwind exacto para 280px).
 
 - TK-004 Vista "Proyectos" y modal "Nuevo Proyecto"
-  Estado: Pending
+  Estado: Done
   Implementador: "juanca202"
-  Archivos: []
-  Notas: []
-  Decisiones adicionales: []
+  Archivos:
+  - src/features/time-tracking/lib/totals.ts
+  - src/features/time-tracking/lib/totals.test.ts
+  - src/features/time-tracking/components/new-project-modal.tsx
+  - src/features/time-tracking/components/project-grid.tsx
+  - src/features/time-tracking/components/project-grid.test.tsx
+  - src/app/projects/page.tsx
+    Notas:
+  - `npm run build` en verde; ruta `/projects` generada como estática.
+    Decisiones adicionales:
+  - Se añadió `formatHoursAndMinutes(seconds)` a `totals.ts` (formato "Nh MMm") para las tarjetas de tiempo total; es un formato distinto del `formatDuration` HH:MM:SS que introducirá TK-002 de US-002 para el temporizador en vivo. Se reutilizará en la vista de Historial (US-003).
 
 - TK-005 Vista "Tareas" (esqueleto) y modal "Nueva Tarea"
   Estado: Pending
