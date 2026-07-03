@@ -27,6 +27,9 @@ describe("TasksView", () => {
       screen.getByRole("region", { name: "Entrada Manual" }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("region", { name: "Todas las Tareas" }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("region", { name: "Tareas Recientes" }),
     ).toBeInTheDocument();
   });

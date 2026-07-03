@@ -3,6 +3,7 @@
 import { ManualEntryForm } from "./manual-entry-form/manual-entry-form";
 import { NewTaskModal } from "./new-task-modal/new-task-modal";
 import { RecentEntriesList } from "./recent-entries-list/recent-entries-list";
+import { TaskList } from "./task-list/task-list";
 import { TimerPanel } from "./timer-panel/timer-panel";
 
 export function TasksView() {
@@ -18,6 +19,7 @@ export function TasksView() {
         <TimerPanel />
         <ManualEntryForm />
       </div>
+      <TaskList />
       <RecentEntriesList />
     </div>
   );
