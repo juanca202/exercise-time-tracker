@@ -175,3 +175,70 @@ describe("startTimer / stopTimer", () => {
     });
   });
 });
+
+describe("addManualEntry", () => {
+  it("adds a manual entry for an existing task", () => {
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
+
+    const entry = useTimeTrackerStore.getState().addManualEntry({
+      taskId: task.id,
+      date: "2026-07-02",
+      durationSeconds: 9000,
+    });
+
+    expect(entry).toMatchObject({
+      taskId: task.id,
+      date: "2026-07-02",
+      durationSeconds: 9000,
+      source: "manual",
+    });
+    expect(useTimeTrackerStore.getState().timeEntries[entry.id]).toEqual(entry);
+  });
+
+  it("throws when the task does not exist", () => {
+    expect(() =>
+      useTimeTrackerStore.getState().addManualEntry({
+        taskId: "missing",
+        date: "2026-07-02",
+        durationSeconds: 60,
+      }),
+    ).toThrow("La tarea no existe.");
+  });
+
+  it("throws when the date is empty", () => {
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
+
+    expect(() =>
+      useTimeTrackerStore
+        .getState()
+        .addManualEntry({ taskId: task.id, date: "", durationSeconds: 60 }),
+    ).toThrow("La fecha es obligatoria.");
+  });
+
+  it("throws when the duration is not greater than zero", () => {
+    const project = useTimeTrackerStore
+      .getState()
+      .createProject({ name: "Rebranding" });
+    const task = useTimeTrackerStore
+      .getState()
+      .createTask({ projectId: project.id, name: "Wireframes" });
+
+    expect(() =>
+      useTimeTrackerStore.getState().addManualEntry({
+        taskId: task.id,
+        date: "2026-07-02",
+        durationSeconds: 0,
+      }),
+    ).toThrow("La duración debe ser mayor a cero.");
+  });
+});

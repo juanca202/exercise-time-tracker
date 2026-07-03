@@ -108,8 +108,28 @@ export const useTimeTrackerStore = create<
         }
         set({ activeTimer: null });
       },
-      addManualEntry: () => {
-        throw new Error("Not implemented yet");
+      addManualEntry: ({ taskId, date, durationSeconds, now = new Date() }) => {
+        if (!get().tasks[taskId]) {
+          throw new Error("La tarea no existe.");
+        }
+        if (!date) {
+          throw new Error("La fecha es obligatoria.");
+        }
+        if (durationSeconds <= 0) {
+          throw new Error("La duración debe ser mayor a cero.");
+        }
+        const entry: TimeEntry = {
+          id: generateId(),
+          taskId,
+          date,
+          durationSeconds,
+          source: "manual",
+          createdAt: now.toISOString(),
+        };
+        set((state) => ({
+          timeEntries: { ...state.timeEntries, [entry.id]: entry },
+        }));
+        return entry;
       },
     }),
     {
