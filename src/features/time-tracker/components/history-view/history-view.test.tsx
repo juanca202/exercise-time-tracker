@@ -50,7 +50,9 @@ describe("HistoryView", () => {
     expect(screen.getByText("Octubre 2026")).toBeInTheDocument();
     expect(screen.getByText("2026-10-15")).toBeInTheDocument();
     expect(screen.queryByText("2026-11-02")).not.toBeInTheDocument();
-    expect(screen.getByText("1h 00m")).toBeInTheDocument();
+    // "1h 00m" appears twice: once in the project card total and once in
+    // the footer grand total, since there is a single project in this period.
+    expect(screen.getAllByText("1h 00m")).toHaveLength(2);
   });
 
   it("navigates to the next period and shows its entries", async () => {

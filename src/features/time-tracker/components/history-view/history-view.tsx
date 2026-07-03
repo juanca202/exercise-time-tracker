@@ -131,7 +131,7 @@ export function HistoryView({
           {distinctProjectCount} proyectos
         </span>
         <span className="font-mono text-headline-md text-on-surface">
-          {formatDurationClock(totalSeconds)}
+          {formatDurationShort(totalSeconds)}
         </span>
       </div>
     </div>
