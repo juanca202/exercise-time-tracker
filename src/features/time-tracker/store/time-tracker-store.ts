@@ -92,10 +92,13 @@ export const useTimeTrackerStore = create<
           (now.getTime() - startedAt.getTime()) / 1000,
         );
         if (durationSeconds > 0) {
+          const startedAtDate = new Date(active.startedAt);
+          const pad = (value: number) => String(value).padStart(2, "0");
+          const date = `${startedAtDate.getFullYear()}-${pad(startedAtDate.getMonth() + 1)}-${pad(startedAtDate.getDate())}`;
           const entry: TimeEntry = {
             id: generateId(),
             taskId: active.taskId,
-            date: active.startedAt.slice(0, 10),
+            date,
             startTime: active.startedAt,
             endTime: now.toISOString(),
             durationSeconds,
