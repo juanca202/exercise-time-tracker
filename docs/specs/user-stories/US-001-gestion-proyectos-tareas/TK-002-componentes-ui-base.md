@@ -36,13 +36,13 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Añadir tokens de color (`--color-primary`, `--color-secondary`, `--color-tertiary`, superficies, bordes), radios (`--radius-sm/md/pill`) y fuente mono en `@theme inline` de `globals.css`, alineados a los valores de `DESIGN.md`.
-- [ ] Cargar `Inter` y `JetBrains Mono` con `next/font/google` en `layout.tsx`, reemplazando `Geist`/`Geist_Mono`.
-- [ ] Implementar `Button` con variantes visuales (primaria: fondo Indigo; secundaria: borde) y estado `disabled`.
-- [ ] Implementar `Modal` sobre `@base-ui/react` Dialog: trigger externo controlado por props (`open`, `onOpenChange`), título, botón de cierre, contenido vía `children`.
-- [ ] Implementar `Field`, `TextareaField` y `SelectField` sobre las primitivas `Field`/`Input`/`Select` de Base UI, mostrando mensaje de error cuando se provea.
-- [ ] Documentar cada componente exportado con TSDoc en español (props y ejemplo de uso básico).
-- [ ] Escribir tests de componente (Testing Library) para `Button` (estados) y `Modal` (abre/cierra, foco visible en el contenido) verificando comportamiento observable, no detalles de implementación.
+- [x] Añadir tokens de color (`--color-primary`, `--color-secondary`, `--color-tertiary`, superficies, bordes), radios (`--radius-sm/md/pill`) y fuente mono en `@theme inline` de `globals.css`, alineados a los valores de `DESIGN.md`.
+- [x] Cargar `Inter` y `JetBrains Mono` con `next/font/google` en `layout.tsx`, reemplazando `Geist`/`Geist_Mono`.
+- [x] Implementar `Button` con variantes visuales (primaria: fondo Indigo; secundaria: borde) y estado `disabled`.
+- [x] Implementar `Modal` sobre `@base-ui/react` Dialog: trigger externo controlado por props (`open`, `onOpenChange`), título, botón de cierre, contenido vía `children`.
+- [x] Implementar `Field`, `TextareaField` y `SelectField` sobre las primitivas `Field`/`Input`/`Select` de Base UI, mostrando mensaje de error cuando se provea.
+- [x] Documentar cada componente exportado con TSDoc en español (props y ejemplo de uso básico).
+- [x] Escribir tests de componente (Testing Library) para `Button` (estados) y `Modal` (abre/cierra, foco visible en el contenido) verificando comportamiento observable, no detalles de implementación.
 
 ## Observaciones
 

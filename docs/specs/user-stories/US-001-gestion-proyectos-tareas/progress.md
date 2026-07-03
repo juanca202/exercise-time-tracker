@@ -24,11 +24,25 @@
   - Se instaló `@vitest/coverage-v8` (no estaba en package.json) y se configuró `coverage.thresholds.branches: 80` en `vitest.config.ts`, acotado a `src/features/**/lib/**` y `src/features/**/store/**` (lógica crítica) conforme a ADR-005.
 
 - TK-002 Componentes UI base y tokens de diseño
-  Estado: Pending
+  Estado: Done
   Implementador: "juanca202"
-  Archivos: []
-  Notas: []
-  Decisiones adicionales: []
+  Archivos:
+  - src/app/globals.css
+  - src/app/layout.tsx
+  - src/components/button.tsx
+  - src/components/modal.tsx
+  - src/components/field.tsx
+  - src/components/textarea-field.tsx
+  - src/components/select-field.tsx
+  - src/components/button.test.tsx
+  - src/components/modal.test.tsx
+  - src/components/select-field.test.tsx
+    Notas:
+  - Se agregó también un test de `SelectField` (no listado explícitamente en el plan) por ser el componente más complejo (Base UI Select + portal); confirma que renderiza, selecciona opción y se deshabilita sin opciones.
+    Decisiones adicionales:
+  - `TextareaField` usa `<textarea>` nativo (Base UI no expone un primitivo de textarea), conforme al orden de prioridad de ADR-006.
+  - `Field`/`TextareaField`/`SelectField` implementan su propio mensaje de error controlado (prop `error`) en lugar de la validación nativa de `Field.Root`/`Field.Error`, porque la validación del dominio es síncrona y controlada desde los componentes de historia (no basada en `ValidityState`).
+  - Se eliminó el soporte de `prefers-color-scheme: dark` de `globals.css`: `DESIGN.md` (Precision Focus) no define paleta oscura.
 
 - TK-003 Layout de aplicación y navegación lateral
   Estado: Pending
