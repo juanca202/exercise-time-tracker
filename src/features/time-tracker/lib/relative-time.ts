@@ -5,7 +5,7 @@ export function formatRelativeTime(isoDate: string, now: Date): string {
   if (diffMinutes < 1) {
     return "hace un momento";
   }
-  if (diffMinutes < 120) {
+  if (diffMinutes < 60) {
     return `hace ${diffMinutes}m`;
   }
 

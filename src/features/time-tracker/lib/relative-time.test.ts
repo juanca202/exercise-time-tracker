@@ -11,9 +11,13 @@ describe("formatRelativeTime", () => {
   });
 
   it("returns minutes ago under an hour", () => {
-    expect(formatRelativeTime("2026-07-02T10:30:00.000Z", NOW)).toBe(
-      "hace 90m",
+    expect(formatRelativeTime("2026-07-02T11:15:00.000Z", NOW)).toBe(
+      "hace 45m",
     );
+  });
+
+  it("returns hours ago for 90 minutes (over an hour)", () => {
+    expect(formatRelativeTime("2026-07-02T10:30:00.000Z", NOW)).toBe("hace 1h");
   });
 
   it("returns hours ago under a day", () => {
