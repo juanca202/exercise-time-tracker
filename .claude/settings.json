@@ -2,5 +2,20 @@
   "enabledPlugins": {
     "langfuse@claude-plugins-official": true,
     "langfuse-observability@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": ["mcp__codegraph__*"]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codegraph prompt-hook"
+          }
+        ]
+      }
+    ]
   }
 }
