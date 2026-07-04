@@ -66,6 +66,24 @@ describe("time-tracking-store", () => {
       expect(created).toMatchObject({ projectId: project.id, name: "Tarea 1" });
     });
 
+    it("should_persist_the_created_task_to_local_storage_with_its_project_association", () => {
+      // Arrange
+      const store = createTimeTrackingStore();
+      const project = store.getState().createProject({ name: "Proyecto" });
+
+      // Act
+      store
+        .getState()
+        .createTask({ projectId: project.id, name: "Tarea persistida" });
+
+      // Assert
+      expect(loadState()?.tasks).toHaveLength(1);
+      expect(loadState()?.tasks[0]).toMatchObject({
+        name: "Tarea persistida",
+        projectId: project.id,
+      });
+    });
+
     it("should_throw_when_project_does_not_exist", () => {
       // Arrange
       const store = createTimeTrackingStore();
