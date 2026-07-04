@@ -1,10 +1,10 @@
-# ADR-005: Estrategia de pruebas unitarias
+# ADR-005: Estrategia de pruebas unitarias y E2E
 
 - Estado: Accepted
 - Fecha de creación: 2026-05-28
-- Última actualización: 2026-05-28
+- Última actualización: 2026-07-04
 - Decisores: Tech lead
-- Etiquetas: testing, vitest, cobertura, calidad, arquitectura
+- Etiquetas: testing, vitest, playwright, e2e, cobertura, calidad, arquitectura
 
 ## Contexto
 
@@ -60,11 +60,22 @@ El proyecto adoptará la siguiente **estrategia estándar de pruebas unitarias**
 
 ### Stack y alcance
 
-- **Runner y aserciones:** Vitest.
+- **Runner y aserciones (unitario/componente):** Vitest.
 - **UI / hooks React:** `@testing-library/react` y `@testing-library/user-event`; entorno `jsdom` según configuración actual.
-- **Alcance de este ADR:** convenciones de pruebas unitarias y de componente en el cliente; no define estrategia E2E ni contract tests (decisiones futuras si se requieren).
+- **Alcance de este ADR:** convenciones de pruebas unitarias y de componente en el cliente, y la estrategia E2E (ver sección siguiente). No define contract tests (decisión futura si se requiere).
 
 Queda **fuera de alcance** como estrategia principal: carpetas globales `tests/` solo por conveniencia histórica, snapshots masivos sin aserción de comportamiento, y cobertura medida solo por líneas sin considerar ramas en código con lógica condicional.
+
+### Estrategia E2E: Playwright
+
+- **Herramienta:** [Playwright](https://playwright.dev/) (`@playwright/test`), ejecutado contra la app Next.js construida/servida (`next build && next start`, o `next dev` en modo local) — no contra código fuente aislado, por lo que **no aplica** la convención co-located de la sección anterior.
+- **Ubicación:** carpeta dedicada `e2e/` en la raíz del repo (paralela a `src/`), no junto a cada feature. Justificación: un spec E2E ejercita flujos de usuario que cruzan varias features y rutas del App Router ([ADR-001](ADR-001-app-router-only.md)); anclarlo a una sola carpeta de `src/features/**` ([ADR-004](ADR-004-feature-based-architecture.md)) sería arbitrario y dificultaría ubicar specs que abarcan múltiples pantallas.
+  - Subcarpetas opcionales por flujo/feature dentro de `e2e/` (p. ej. `e2e/todos/`, `e2e/auth/`) cuando el número de specs lo justifique.
+  - Convención de nombre: `*.spec.ts` (convención por defecto de Playwright Test), para distinguir visualmente de los `*.test.ts(x)` unitarios/componente co-located.
+- **Configuración:** `playwright.config.ts` en la raíz del repo, con `webServer` apuntando al comando de arranque de la app (`npm run build && npm run start` o `npm run dev` según entorno) para que la suite levante el servidor automáticamente antes de correr.
+- **Navegadores objetivo:** **Chromium únicamente** por defecto (`projects: [{ name: 'chromium' }]`). Prioriza velocidad en CI y cobertura del motor más usado; ampliar a Firefox/WebKit es una decisión posterior si surge necesidad de cobertura cross-browser.
+- **Alcance de las pruebas:** flujos críticos de usuario end-to-end (camino feliz + variantes de negocio relevantes), no sustituye la cobertura de casos límite que ya dan los tests unitarios/de componente de la sección anterior.
+- **Aislamiento y determinismo:** mismos principios que la sección de aislamiento anterior — specs independientes entre sí, sin depender de estado dejado por otro spec; usar fixtures/`test.beforeEach` de Playwright para preparar estado (ej. `localStorage`, rutas) en vez de depender de ejecución previa.
 
 ## Alternativas consideradas
 
@@ -80,6 +91,8 @@ Queda **fuera de alcance** como estrategia principal: carpetas globales `tests/`
 - AAA y Object Mothers mejoran legibilidad y reducen duplicación de datos de prueba.
 - Umbral de ramas alinea calidad con lógica condicional real (validaciones, estados, errores).
 - Tests aislados y deterministas facilitan CI estable y depuración local.
+- Playwright cubre flujos completos de usuario que los tests unitarios/componente no pueden validar (integración real entre rutas, estado persistido, navegación).
+- Un único navegador (Chromium) en CI mantiene la suite E2E rápida y evita flakiness cross-browser en una etapa temprana del proyecto.
 
 ### Negativas / trade-offs
 
@@ -87,6 +100,8 @@ Queda **fuera de alcance** como estrategia principal: carpetas globales `tests/`
 - Object Mothers añaden archivos auxiliares; mal usados pueden ocultar datos relevantes del caso si los defaults no son explícitos.
 - Co-located aumenta archivos por carpeta; algunos equipos prefieren un único árbol `tests/` por hábito.
 - Migración del código legado: tests existentes deben moverse al lado del módulo al refactorizar hacia `src/`.
+- La carpeta `e2e/` es una excepción deliberada a la convención co-located; requiere que el equipo recuerde que solo aplica a specs E2E, no a unit/componente.
+- Cobertura mono-navegador (Chromium) no detecta regresiones específicas de Firefox/WebKit; riesgo aceptado hasta que se justifique ampliar.
 
 ## Referencias
 
@@ -96,4 +111,6 @@ Queda **fuera de alcance** como estrategia principal: carpetas globales `tests/`
 - [Vitest — Coverage](https://vitest.dev/guide/coverage.html)
 - [Testing Library — Guiding Principles](https://testing-library.com/docs/guiding-principles/)
 - [Object Mother — Martin Fowler (wiki)](https://wiki.cunningham.app/display/docs/Object+Mother)
+- [Playwright — Test configuration](https://playwright.dev/docs/test-configuration)
+- [Playwright — Best practices](https://playwright.dev/docs/best-practices)
 - [Documenting Architecture Decisions — Cognitect](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
