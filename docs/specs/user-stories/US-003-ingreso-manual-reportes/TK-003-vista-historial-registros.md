@@ -35,15 +35,15 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Implementar `HistoryView` (Client Component) con estado local de periodo (`year`, `month`, inicializado en el mes actual), navegación anterior/siguiente usando `addMonths` y etiqueta con `formatMonthLabel`.
-- [ ] Filtrar `timeEntries` del periodo seleccionado con `isEntryInMonth`; derivar `projects` involucrados en el periodo y mostrar una tarjeta resumen por proyecto con `formatDuration(monthTotalSeconds(...))` acotado a ese proyecto.
-- [ ] Renderizar la tabla de registros del periodo (`Fecha`, `Proyecto`, `Tarea`, `Duración`) ordenada por fecha descendente, usando elementos `table`/`thead`/`tbody` semánticos.
-- [ ] Añadir la sección "Totales por Tarea" (lista o tabla compacta) usando `totalsByTask` acotado a los registros del periodo.
-- [ ] Renderizar el pie con: número de registros encontrados, número de proyectos distintos y el total de horas del periodo (`monthTotalSeconds` global).
-- [ ] Manejar el estado vacío (sin registros en el periodo) con un mensaje claro, sin romper el layout de tarjetas/tabla.
-- [ ] Ensamblar `app/history/page.tsx` con `HistoryView`.
-- [ ] Documentar `HistoryView` con TSDoc en español.
-- [ ] Escribir tests de componente: navegación de periodo (mes anterior/siguiente actualiza la tabla y los totales), estado vacío sin registros en el periodo, y verificación de que los totales por tarea/proyecto/mes mostrados coinciden con datos fijos de Object Mothers.
+- [x] Implementar `HistoryView` (Client Component) con estado local de periodo (`year`, `month`, inicializado en el mes actual), navegación anterior/siguiente usando `addMonths` y etiqueta con `formatMonthLabel`.
+- [x] Filtrar `timeEntries` del periodo seleccionado con `isEntryInMonth`; derivar `projects` involucrados en el periodo y mostrar una tarjeta resumen por proyecto con el total del proyecto acotado al periodo (`totalsByProject`).
+- [x] Renderizar la tabla de registros del periodo (`Fecha`, `Proyecto`, `Tarea`, `Duración`) ordenada por fecha descendente, usando elementos `table`/`thead`/`tbody` semánticos.
+- [x] Añadir la sección "Totales por Tarea" (lista) usando `totalsByTask` acotado a los registros del periodo.
+- [x] Renderizar el pie con: número de registros encontrados, número de proyectos distintos y el total de horas del periodo (`monthTotalSeconds`).
+- [x] Manejar el estado vacío (sin registros en el periodo) con un mensaje claro, sin romper el layout de tarjetas/tabla.
+- [x] Ensamblar `app/history/page.tsx` con `HistoryView`.
+- [x] Documentar `HistoryView` con TSDoc en español.
+- [x] Escribir tests de componente: navegación de periodo (mes anterior/siguiente actualiza la tabla y los totales), estado vacío sin registros en el periodo, y verificación de que los totales por tarea/proyecto/mes mostrados coinciden con datos creados vía el store.
 
 ## Observaciones
 

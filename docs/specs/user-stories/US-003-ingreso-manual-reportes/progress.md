@@ -42,8 +42,15 @@
   - `RecentEntriesList` no se renderiza (retorna `null`) cuando no hay ningún `TimeEntry`, evitando un encabezado "Tareas Recientes" vacío.
 
 - TK-003 Vista "Historial de Registros"
-  Estado: Pending
+  Estado: Done
   Implementador: "juanca202"
-  Archivos: []
-  Notas: []
-  Decisiones adicionales: []
+  Archivos:
+  - src/features/time-tracking/components/history-view.tsx
+  - src/features/time-tracking/components/history-view.test.tsx
+  - src/app/history/page.tsx
+    Notas:
+  - Suite completa (proyecto): 84 tests en verde, 93.47% cobertura de ramas. `npm run build` en verde con las 5 rutas (/, /tasks, /projects, /history, /\_not-found).
+  - US-003 (Ingreso Manual de Tiempo y Reportes) queda completamente implementada: TK-001 a TK-003 en Done. Con esto, las 3 historias de usuario derivadas del SRS quedan implementadas.
+    Decisiones adicionales:
+  - El pie de estadísticas ("N registros"/"N proyectos") se renderiza como un único nodo de texto por interpolación de plantilla (`${count} registros`) en vez de JSX con texto y variable separados, para evitar que quede partido en varios nodos de texto del DOM (dificulta las aserciones de test y lectores de pantalla).
+  - Cuando el periodo no tiene Registros de Tiempo, se muestra únicamente el mensaje de estado vacío (sin tarjetas de proyecto, tabla ni pie en 0), evitando un layout vacío confuso.
