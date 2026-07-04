@@ -25,6 +25,15 @@ export interface TimeTrackingStore extends TimeTrackingState {
    * No hace nada si no hay ningún temporizador activo.
    */
   stopTimer(): void;
+  /**
+   * Crea un Registro de Tiempo manual para una Tarea existente. Lanza si la
+   * Tarea no existe o si la Duración no es mayor que cero.
+   */
+  createManualTimeEntry(input: {
+    taskId: string;
+    date: string;
+    durationSeconds: number;
+  }): TimeEntry;
 }
 
 function persist(state: TimeTrackingState): void {
@@ -146,6 +155,30 @@ export function createTimeTrackingStore() {
       }
 
       persist(get());
+    },
+
+    createManualTimeEntry({ taskId, date, durationSeconds }) {
+      const taskExists = get().tasks.some((task) => task.id === taskId);
+      if (!taskExists) {
+        throw new Error("Debe seleccionar una Tarea existente.");
+      }
+
+      if (durationSeconds <= 0) {
+        throw new Error("La duración debe ser mayor que cero.");
+      }
+
+      const entry: TimeEntry = {
+        id: generateId(),
+        taskId,
+        date,
+        durationSeconds,
+        source: "manual",
+        createdAt: new Date().toISOString(),
+      };
+
+      set((state) => ({ timeEntries: [...state.timeEntries, entry] }));
+      persist(get());
+      return entry;
     },
   }));
 }

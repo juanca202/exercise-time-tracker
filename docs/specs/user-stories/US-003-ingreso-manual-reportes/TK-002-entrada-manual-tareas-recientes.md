@@ -38,13 +38,13 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Implementar `parseDurationInput("HH:MM")` devolviendo segundos totales o `null` si el formato es inválido o el resultado no es mayor que cero.
-- [ ] Implementar `createManualTimeEntry` en el store: valida `durationSeconds > 0` (usando `parseDurationInput` desde el componente antes de invocar la acción), crea el `TimeEntry` con `source: 'manual'` y persiste.
-- [ ] Implementar `ManualEntryPanel`: campo Fecha (input `date`), `SelectField` de Proyecto/Tarea (agrupado por proyecto), campo de Duración en formato `HH:MM`; botón "Guardar Registro" deshabilitado hasta que los tres campos sean válidos; muestra mensaje de error si la duración es inválida o `<= 0`.
-- [ ] Implementar `RecentEntriesList`: ordena `timeEntries` por fecha de creación descendente, muestra un máximo razonable de filas (p. ej. 5) con nombre de Tarea, Proyecto, duración formateada y tiempo relativo de creación; cada fila incluye un botón que llama a `startTimer(taskId)` para reiniciar el temporizador de esa Tarea.
-- [ ] Integrar ambos componentes en `app/tasks/page.tsx`.
-- [ ] Documentar con TSDoc en español las funciones y componentes exportados.
-- [ ] Escribir tests: unitario de `parseDurationInput` (formato válido, inválido, cero, negativo); de componente para `ManualEntryPanel` (creación válida, bloqueo con duración inválida) y `RecentEntriesList` (reiniciar temporizador desde una fila llama a `startTimer` con el `taskId` correcto).
+- [x] Implementar `parseDurationInput("HH:MM")` devolviendo segundos totales o `null` si el formato es inválido o el resultado no es mayor que cero.
+- [x] Implementar `createManualTimeEntry` en el store: valida `durationSeconds > 0` (usando `parseDurationInput` desde el componente antes de invocar la acción), crea el `TimeEntry` con `source: 'manual'` y persiste.
+- [x] Implementar `ManualEntryPanel`: campo Fecha (input `date`), `SelectField` de Proyecto/Tarea (agrupado por proyecto), campo de Duración en formato `HH:MM`; botón "Guardar Registro" valida los campos al confirmar y muestra el error correspondiente si falta alguno o la duración es inválida.
+- [x] Implementar `RecentEntriesList`: ordena `timeEntries` por fecha de creación descendente, muestra un máximo razonable de filas (5) con nombre de Tarea, Proyecto, duración formateada y tiempo relativo de creación; cada fila incluye un botón que llama a `startTimer(taskId)` para reiniciar el temporizador de esa Tarea.
+- [x] Integrar ambos componentes en `app/tasks/page.tsx`.
+- [x] Documentar con TSDoc en español las funciones y componentes exportados.
+- [x] Escribir tests: unitario de `parseDurationInput` (formato válido, inválido, cero, negativo); de componente para `ManualEntryPanel` (creación válida, bloqueo con duración inválida) y `RecentEntriesList` (reiniciar temporizador desde una fila llama a `startTimer` con el `taskId` correcto).
 
 ## Observaciones
 
