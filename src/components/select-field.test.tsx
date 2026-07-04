@@ -48,6 +48,29 @@ describe("SelectField", () => {
     expect(onValueChange).toHaveBeenCalledWith("p2");
   });
 
+  it("should_display_the_option_label_instead_of_its_raw_value_when_selected", () => {
+    // Arrange & Act
+    render(
+      <SelectField
+        label="Proyecto"
+        value="p2"
+        onValueChange={vi.fn()}
+        groups={[
+          {
+            options: [
+              { value: "p1", label: "Proyecto 1" },
+              { value: "p2", label: "Proyecto 2" },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    // Assert
+    expect(screen.getByText("Proyecto 2")).toBeInTheDocument();
+    expect(screen.queryByText("p2")).not.toBeInTheDocument();
+  });
+
   it("should_be_disabled_when_there_are_no_options", () => {
     // Arrange & Act
     render(
