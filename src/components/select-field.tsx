@@ -52,6 +52,12 @@ export function SelectField({
   const fieldId = id ?? generatedId;
   const errorId = `${fieldId}-error`;
   const isEmpty = groups.every((group) => group.options.length === 0);
+  const items = groups.flatMap((group) =>
+    group.options.map((option) => ({
+      value: option.value,
+      label: option.label,
+    })),
+  );
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -62,6 +68,7 @@ export function SelectField({
         {label}
       </label>
       <Select.Root
+        items={items}
         value={value}
         onValueChange={(next) => onValueChange(next)}
         disabled={disabled || isEmpty}

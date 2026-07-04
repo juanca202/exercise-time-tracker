@@ -34,6 +34,15 @@ export interface TimeTrackingStore extends TimeTrackingState {
     date: string;
     durationSeconds: number;
   }): TimeEntry;
+  /**
+   * Carga el estado persistido en `localStorage` (si existe) reemplazando el
+   * estado actual del dominio. No hace nada si no hay nada persistido.
+   *
+   * Se llama explícitamente desde un efecto de cliente (nunca durante el
+   * render inicial) para que el primer render coincida entre servidor y
+   * cliente y evitar errores de hidratación de Next.js.
+   */
+  hydrate(): void;
 }
 
 function persist(state: TimeTrackingState): void {
@@ -45,28 +54,30 @@ function persist(state: TimeTrackingState): void {
   });
 }
 
-function initialState(): TimeTrackingState {
-  return (
-    loadState() ?? {
-      projects: [],
-      tasks: [],
-      timeEntries: [],
-      activeTimer: null,
-    }
-  );
+function emptyState(): TimeTrackingState {
+  return {
+    projects: [],
+    tasks: [],
+    timeEntries: [],
+    activeTimer: null,
+  };
 }
 
 /**
- * Crea una instancia independiente del store de dominio de Time Tracking,
- * hidratada desde el almacenamiento local vigente en el momento de la llamada.
+ * Crea una instancia independiente del store de dominio de Time Tracking.
+ *
+ * El estado inicial es siempre el mismo (vacío), tanto en servidor como en
+ * cliente; el estado persistido en `localStorage` solo se carga al llamar a
+ * `hydrate()` explícitamente.
  *
  * @example
  * const store = createTimeTrackingStore();
+ * store.getState().hydrate();
  * store.getState().createProject({ name: "Mi proyecto" });
  */
 export function createTimeTrackingStore() {
   return create<TimeTrackingStore>()((set, get) => ({
-    ...initialState(),
+    ...emptyState(),
 
     createProject({ name, description }) {
       const trimmedName = name.trim();
@@ -179,6 +190,13 @@ export function createTimeTrackingStore() {
       set((state) => ({ timeEntries: [...state.timeEntries, entry] }));
       persist(get());
       return entry;
+    },
+
+    hydrate() {
+      const persisted = loadState();
+      if (persisted) {
+        set(persisted);
+      }
     },
   }));
 }

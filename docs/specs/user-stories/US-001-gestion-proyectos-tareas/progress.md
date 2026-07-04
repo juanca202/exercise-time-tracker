@@ -72,6 +72,9 @@
     Decisiones adicionales:
   - Se añadió `formatHoursAndMinutes(seconds)` a `totals.ts` (formato "Nh MMm") para las tarjetas de tiempo total; es un formato distinto del `formatDuration` HH:MM:SS que introducirá TK-002 de US-002 para el temporizador en vivo. Se reutilizará en la vista de Historial (US-003).
 
+- (Post-verificación) Corrección de bug encontrado en smoke test manual: el store leía `localStorage` de forma síncrona al crearse, lo que producía un mismatch de hidratación de Next.js (HTML del servidor con estado vacío vs. primer render de cliente ya hidratado) y, como síntoma visible, el `SelectField` mostraba el `id` crudo en vez de la etiqueta de la tarea seleccionada tras elegirla. Fix aplicado en `time-tracking-store.ts`: el estado inicial es ahora siempre vacío (igual en servidor y cliente); se añadió la acción `hydrate()` y el componente `StoreHydrator` (montado una vez en `app/layout.tsx`) que hidrata desde `localStorage` en un `useEffect` posterior al montaje. Se corrigió además `SelectField` (`src/components/select-field.tsx`) pasando `items` a `Select.Root` de Base UI, requerido para que `Select.Value` resuelva la etiqueta en vez del valor crudo. Verificado manualmente en navegador (Chrome DevTools): sin errores de hidratación, temporizador persiste correctamente tras recarga, y los selectores muestran las etiquetas correctas.
+  Archivos: src/features/time-tracking/store/time-tracking-store.ts, src/features/time-tracking/store/time-tracking-store.test.ts, src/features/time-tracking/components/store-hydrator.tsx, src/features/time-tracking/components/store-hydrator.test.tsx, src/app/layout.tsx, src/components/select-field.tsx.
+
 - TK-005 Vista "Tareas" (esqueleto) y modal "Nueva Tarea"
   Estado: Done
   Implementador: "juanca202"

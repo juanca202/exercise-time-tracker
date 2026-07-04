@@ -88,8 +88,29 @@ describe("time-tracking-store", () => {
     });
   });
 
-  describe("hydration", () => {
-    it("should_hydrate_initial_state_from_previously_persisted_data", () => {
+  describe("initial state", () => {
+    it("should_always_start_empty_regardless_of_previously_persisted_data", () => {
+      // Arrange
+      saveState({
+        projects: [aProject()],
+        tasks: [aTask()],
+        timeEntries: [],
+        activeTimer: null,
+      });
+
+      // Act
+      const store = createTimeTrackingStore();
+
+      // Assert: el estado inicial nunca lee localStorage (evita mismatches de hidratación SSR)
+      expect(store.getState().projects).toEqual([]);
+      expect(store.getState().tasks).toEqual([]);
+      expect(store.getState().timeEntries).toEqual([]);
+      expect(store.getState().activeTimer).toBeNull();
+    });
+  });
+
+  describe("hydrate", () => {
+    it("should_load_previously_persisted_data_into_the_store", () => {
       // Arrange
       const project = aProject();
       const task = aTask();
@@ -99,21 +120,22 @@ describe("time-tracking-store", () => {
         timeEntries: [],
         activeTimer: null,
       });
+      const store = createTimeTrackingStore();
 
       // Act
-      const store = createTimeTrackingStore();
+      store.getState().hydrate();
 
       // Assert
       expect(store.getState().projects).toEqual([project]);
       expect(store.getState().tasks).toEqual([task]);
     });
 
-    it("should_start_empty_when_nothing_was_persisted", () => {
+    it("should_be_a_no_op_when_nothing_was_persisted", () => {
       // Arrange
-      // (localStorage cleared in beforeEach)
+      const store = createTimeTrackingStore();
 
       // Act
-      const store = createTimeTrackingStore();
+      store.getState().hydrate();
 
       // Assert
       expect(store.getState().projects).toEqual([]);
