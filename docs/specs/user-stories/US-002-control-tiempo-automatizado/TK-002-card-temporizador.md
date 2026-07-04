@@ -35,12 +35,12 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Implementar `formatDuration(seconds)` devolviendo `HH:MM:SS` con ceros a la izquierda.
-- [ ] Implementar `TimerCard` (Client Component): si `activeTimer` es `null`, mostrar `SelectField` de Tarea (agrupado por Proyecto) y botón "Iniciar"; si hay `activeTimer`, mostrar el breadcrumb Proyecto — Tarea, "Iniciado a las {hora}", el tiempo transcurrido recalculado cada segundo (`setInterval` limpiado en `useEffect`) formateado con `formatDuration`, y el botón "Detener Sesión" que llama a `stopTimer`.
-- [ ] Deshabilitar el botón "Iniciar" si no hay ninguna Tarea seleccionada o no existen Tareas creadas (mostrar mensaje indicando que se debe crear una tarea primero).
-- [ ] Integrar `TimerCard` en `app/tasks/page.tsx`.
-- [ ] Documentar `TimerCard` y `formatDuration` con TSDoc en español.
-- [ ] Escribir tests: unitario de `formatDuration` (0s, <1min, >1h, valores con padding); de componente para `TimerCard` verificando que iniciar muestra el estado activo, que el tiempo transcurrido se actualiza, y que detener vuelve al estado inactivo (usar temporizadores simulados de Vitest).
+- [x] Implementar `formatDuration(seconds)` devolviendo `HH:MM:SS` con ceros a la izquierda.
+- [x] Implementar `TimerCard` (Client Component): si `activeTimer` es `null`, mostrar `SelectField` de Tarea (agrupado por Proyecto) y botón "Iniciar"; si hay `activeTimer`, mostrar el breadcrumb Proyecto — Tarea, "Iniciado a las {hora}", el tiempo transcurrido recalculado cada segundo (`setInterval` limpiado en `useEffect`) formateado con `formatDuration`, y el botón "Detener Sesión" que llama a `stopTimer`.
+- [x] Deshabilitar el botón "Iniciar" si no hay ninguna Tarea seleccionada o no existen Tareas creadas (mostrar mensaje indicando que se debe crear una tarea primero).
+- [x] Integrar `TimerCard` en `app/tasks/page.tsx`.
+- [x] Documentar `TimerCard` y `formatDuration` con TSDoc en español.
+- [x] Escribir tests: unitario de `formatDuration` (0s, <1min, >1h, valores con padding); de componente para `TimerCard` verificando que iniciar muestra el estado activo, que el tiempo transcurrido se actualiza, y que detener vuelve al estado inactivo.
 
 ## Observaciones
 
