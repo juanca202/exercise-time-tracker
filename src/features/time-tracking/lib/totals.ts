@@ -1,4 +1,11 @@
-import type { Task, TimeEntry } from "../types/domain";
+import type { Project, Task, TimeEntry } from "../types/domain";
+import { isEntryInMonth } from "./period";
+
+export interface EntityTotal {
+  id: string;
+  name: string;
+  totalSeconds: number;
+}
 
 /**
  * Formatea segundos como horas y minutos redondeados hacia abajo
@@ -30,4 +37,68 @@ export function projectTotalSeconds(
   return timeEntries
     .filter((entry) => taskIds.has(entry.taskId))
     .reduce((total, entry) => total + entry.durationSeconds, 0);
+}
+
+/**
+ * Suma la duración de todos los {@link TimeEntry} de una Tarea.
+ *
+ * @returns El total en segundos; `0` si la Tarea no tiene Registros de Tiempo.
+ */
+export function taskTotalSeconds(
+  taskId: string,
+  timeEntries: TimeEntry[],
+): number {
+  return timeEntries
+    .filter((entry) => entry.taskId === taskId)
+    .reduce((total, entry) => total + entry.durationSeconds, 0);
+}
+
+/**
+ * Suma la duración de los {@link TimeEntry} cuya fecha cae dentro del
+ * mes/año indicado.
+ *
+ * @returns El total en segundos; `0` si ningún registro cae en ese periodo.
+ */
+export function monthTotalSeconds(
+  timeEntries: TimeEntry[],
+  year: number,
+  month: number,
+): number {
+  return timeEntries
+    .filter((entry) => isEntryInMonth(entry, year, month))
+    .reduce((total, entry) => total + entry.durationSeconds, 0);
+}
+
+/**
+ * Calcula el tiempo total acumulado por Tarea, ordenado de mayor a menor.
+ */
+export function totalsByTask(
+  tasks: Task[],
+  timeEntries: TimeEntry[],
+): EntityTotal[] {
+  return tasks
+    .map((task) => ({
+      id: task.id,
+      name: task.name,
+      totalSeconds: taskTotalSeconds(task.id, timeEntries),
+    }))
+    .sort((a, b) => b.totalSeconds - a.totalSeconds);
+}
+
+/**
+ * Calcula el tiempo total acumulado por Proyecto (suma de sus Tareas),
+ * ordenado de mayor a menor.
+ */
+export function totalsByProject(
+  projects: Project[],
+  tasks: Task[],
+  timeEntries: TimeEntry[],
+): EntityTotal[] {
+  return projects
+    .map((project) => ({
+      id: project.id,
+      name: project.name,
+      totalSeconds: projectTotalSeconds(project.id, tasks, timeEntries),
+    }))
+    .sort((a, b) => b.totalSeconds - a.totalSeconds);
 }

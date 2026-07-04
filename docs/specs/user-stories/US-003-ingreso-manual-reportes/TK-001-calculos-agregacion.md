@@ -31,12 +31,12 @@ exercise-time-tracker/
 
 ### Subtareas
 
-- [ ] Implementar `taskTotalSeconds(taskId, timeEntries)`: suma de `durationSeconds` de los registros de una Tarea.
-- [ ] Implementar `totalsByTask(tasks, timeEntries)` y `totalsByProject(projects, tasks, timeEntries)`: mapas `{ id, name, totalSeconds }` ordenados de mayor a menor tiempo.
-- [ ] Implementar `monthTotalSeconds(timeEntries, year, month)`: suma de duraciones cuyos registros caen en el mes/año indicado (usar `date` del `TimeEntry`).
-- [ ] Implementar `period.ts`: `isEntryInMonth(entry, year, month)`, `formatMonthLabel(year, month)` (p. ej. "Octubre 2023" en español) y `addMonths(year, month, delta)` para la navegación de periodo.
-- [ ] Documentar cada función exportada con TSDoc en español.
-- [ ] Escribir tests unitarios con datos fijos (Object Mothers de `TimeEntry` con fechas controladas) cubriendo: proyecto/tarea sin registros (total 0), registros repartidos entre varias tareas/proyectos, registros de distintos meses (el filtro de mes excluye los que no correspondan), y el cambio de mes con `addMonths` en los bordes de año (diciembre → enero, enero → diciembre).
+- [x] Implementar `taskTotalSeconds(taskId, timeEntries)`: suma de `durationSeconds` de los registros de una Tarea.
+- [x] Implementar `totalsByTask(tasks, timeEntries)` y `totalsByProject(projects, tasks, timeEntries)`: mapas `{ id, name, totalSeconds }` ordenados de mayor a menor tiempo.
+- [x] Implementar `monthTotalSeconds(timeEntries, year, month)`: suma de duraciones cuyos registros caen en el mes/año indicado (usar `date` del `TimeEntry`).
+- [x] Implementar `period.ts`: `isEntryInMonth(entry, year, month)`, `formatMonthLabel(year, month)` (p. ej. "Octubre 2023" en español) y `addMonths(year, month, delta)` para la navegación de periodo.
+- [x] Documentar cada función exportada con TSDoc en español.
+- [x] Escribir tests unitarios con datos fijos (Object Mothers de `TimeEntry` con fechas controladas) cubriendo: proyecto/tarea sin registros (total 0), registros repartidos entre varias tareas/proyectos, registros de distintos meses (el filtro de mes excluye los que no correspondan), y el cambio de mes con `addMonths` en los bordes de año (diciembre → enero, enero → diciembre).
 
 ## Observaciones
 
