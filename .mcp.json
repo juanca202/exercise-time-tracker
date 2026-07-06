@@ -4,6 +4,19 @@
       "type": "stdio",
       "command": "codegraph",
       "args": ["serve", "--mcp"]
+    },
+    "ado-bay-jua": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure-devops/mcp",
+        "BayteqDev",
+        "--authentication",
+        "pat"
+      ],
+      "env": {
+        "PERSONAL_ACCESS_TOKEN": "${ADO_PAT_BAYTEQ_JUANCA_ALTAMIRANO}"
+      }
     }
   }
 }
