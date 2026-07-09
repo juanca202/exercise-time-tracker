@@ -21,6 +21,10 @@
       "env": {
         "PERSONAL_ACCESS_TOKEN": "${ADO_PAT_BAYTEQ_JUANCA_ALTAMIRANO}"
       }
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
     }
   }
 }
