@@ -1,7 +1,8 @@
 {
   "enabledPlugins": {
     "langfuse@claude-plugins-official": true,
-    "langfuse-observability@claude-plugins-official": true
+    "langfuse-observability@claude-plugins-official": true,
+    "figma@claude-plugins-official": true
   },
   "permissions": {
     "allow": ["mcp__codegraph__*"]

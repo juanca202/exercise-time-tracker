@@ -1,13 +1,14 @@
-# ADRs (Architecture Decision Records)
+# Architecture Decision Records
 
-Registro de decisiones arquitectónicas del proyecto.
+Índice de decisiones arquitectónicas del proyecto.
 
-## Índice
-
-- [ADR-001: Enrutamiento exclusivo con App Router](ADR-001-app-router-only.md)
-- [ADR-002: Estrategia de estilos UI con Tailwind CSS](ADR-002-tailwind-ui-styling.md)
-- [ADR-003: Manejo de estado cliente con Zustand](ADR-003-zustand-state-management.md)
-- [ADR-004: Estructura del proyecto con arquitectura por features](ADR-004-feature-based-architecture.md)
-- [ADR-005: Estrategia de pruebas unitarias y E2E](ADR-005-unit-testing-strategy.md)
-- [ADR-006: Librería de componentes UI con Base UI](ADR-006-base-ui-component-library.md)
-- [ADR-007: Documentación de código con TSDoc](ADR-007-tsdoc-api-documentation.md)
+- [ADR-001: Adopción exclusiva de App Router](ADR-001-adopcion-exclusiva-app-router.md)
+- [ADR-002: Uso de Tailwind CSS como framework de presentación](ADR-002-uso-de-tailwind-css.md)
+- [ADR-003: Uso de Base UI como librería de componentes](ADR-003-uso-de-base-ui.md)
+- [ADR-004: Uso de Zustand para manejo de estado](ADR-004-uso-de-zustand.md)
+- [ADR-005: Arquitectura del proyecto basada en features (feature-based)](ADR-005-arquitectura-feature-based.md)
+- [ADR-006: Documentación de código con TSDoc](ADR-006-documentacion-con-tsdoc.md)
+- [ADR-007: Estrategia de pruebas unitarias](ADR-007-estrategia-pruebas-unitarias.md)
+- [ADR-008: Uso de Playwright para las pruebas E2E](ADR-008-uso-de-playwright-para-e2e.md)
+- [ADR-009: Adopción de un Quality Gate shift-left](ADR-009-quality-gate-shift-left.md)
+- [ADR-010: Estrategia de branching GitFlow con Conventional Commits](ADR-010-branching-gitflow-conventional-commits.md)
