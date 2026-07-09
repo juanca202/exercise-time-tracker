@@ -93,6 +93,30 @@ describe("NewTaskModal", () => {
     expect(useTasksStore.getState().tasks).toHaveLength(0);
   });
 
+  it("limpia el error de Proyecto y el de Nombre en cuanto el usuario los corrige", async () => {
+    const user = userEvent.setup();
+    renderModal();
+
+    await user.click(screen.getByRole("button", { name: "Nueva Tarea" }));
+    await user.click(screen.getByRole("button", { name: "Crear Tarea" }));
+    expect(screen.getByText("Seleccioná un Proyecto.")).toBeVisible();
+    expect(screen.getByText("El Nombre es obligatorio.")).toBeVisible();
+
+    await user.click(screen.getByLabelText("Proyecto", { exact: true }));
+    await user.click(
+      await screen.findByRole("option", { name: "Proyecto Alfa" }),
+    );
+    expect(
+      screen.queryByText("Seleccioná un Proyecto."),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("El Nombre es obligatorio.")).toBeVisible();
+
+    await user.type(screen.getByLabelText("Nombre"), "D");
+    expect(
+      screen.queryByText("El Nombre es obligatorio."),
+    ).not.toBeInTheDocument();
+  });
+
   it('cierra el modal sin crear nada al hacer clic en "Cancelar" (TC-006)', async () => {
     const user = userEvent.setup();
     renderModal();

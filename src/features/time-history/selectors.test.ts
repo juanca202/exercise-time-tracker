@@ -142,4 +142,25 @@ describe("time-history selectors", () => {
     });
     expect(selectTaskRowsForMonth(2026, JULY + 2)).toEqual([]);
   });
+
+  it("un Registro de Tiempo huérfano (sin Tarea asociada) no genera una fila ni rompe el cálculo", () => {
+    useTasksStore.setState((state) => ({
+      timeEntries: [
+        ...state.timeEntries,
+        {
+          id: "e-orphan",
+          taskId: "task-inexistente",
+          startedAt: new Date(2026, JULY, 10).toISOString(),
+          endedAt: new Date(2026, JULY, 10, 1).toISOString(),
+          durationMs: 60 * 60 * 1000,
+          source: "manual",
+        },
+      ],
+    }));
+
+    const rows = selectTaskRowsForMonth(2026, JULY);
+
+    expect(rows).toHaveLength(2);
+    expect(rows.some((row) => row.taskId === "task-inexistente")).toBe(false);
+  });
 });

@@ -4,6 +4,7 @@ import { useProjectsStore } from "@/features/projects";
 import { Select } from "@base-ui/react/select";
 import { useState } from "react";
 import { useTasksStore } from "../store/tasksStore";
+import type { Task } from "../types";
 import { parseHoursMinutes } from "../utils/parseHoursMinutes";
 import { ChevronIcon } from "./icons";
 
@@ -22,11 +23,7 @@ export function ManualEntryForm() {
   const [duration, setDuration] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  function taskLabel(id: string): string {
-    const task = tasks.find((candidate) => candidate.id === id);
-    if (!task) {
-      return "";
-    }
+  function taskLabel(task: Task): string {
     const project = projects.find(
       (candidate) => candidate.id === task.projectId,
     );
@@ -81,7 +78,7 @@ export function ManualEntryForm() {
           <Select.Root
             items={tasks.map((task) => ({
               value: task.id,
-              label: taskLabel(task.id),
+              label: taskLabel(task),
             }))}
             value={taskId}
             onValueChange={setTaskId}
@@ -105,7 +102,7 @@ export function ManualEntryForm() {
                         value={task.id}
                         className="cursor-pointer px-3.5 py-2 text-sm text-on-surface data-[highlighted]:bg-surface-container-low"
                       >
-                        <Select.ItemText>{taskLabel(task.id)}</Select.ItemText>
+                        <Select.ItemText>{taskLabel(task)}</Select.ItemText>
                       </Select.Item>
                     ))}
                   </Select.List>

@@ -6,7 +6,7 @@ type NavItemId = "tasks" | "projects" | "history";
 interface NavItem {
   id: NavItemId;
   label: string;
-  href: string | null;
+  href: string;
   icon: ReactNode;
 }
 
@@ -105,20 +105,11 @@ export function AppShell({ activeNav, headerAction, children }: AppShellProps) {
               ? "flex items-center gap-3 rounded border-l-2 border-secondary bg-surface-container-low py-3 pl-[14px] pr-4 text-sm font-bold text-primary"
               : "flex items-center gap-3 rounded py-3 px-4 text-sm text-on-surface-variant";
 
-            if (item.href) {
-              return (
-                <Link key={item.id} href={item.href} className={className}>
-                  {item.icon}
-                  {item.label}
-                </Link>
-              );
-            }
-
             return (
-              <div key={item.id} className={className}>
+              <Link key={item.id} href={item.href} className={className}>
                 {item.icon}
                 {item.label}
-              </div>
+              </Link>
             );
           })}
         </nav>

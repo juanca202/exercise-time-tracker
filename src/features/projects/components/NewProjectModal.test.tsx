@@ -93,6 +93,21 @@ describe("NewProjectModal", () => {
     expect(useProjectsStore.getState().projects).toHaveLength(0);
   });
 
+  it("limpia el error de Nombre en cuanto el usuario retoma el tipeo", async () => {
+    const user = userEvent.setup();
+    renderModal();
+
+    await user.click(screen.getByRole("button", { name: "Nuevo Proyecto" }));
+    await user.click(screen.getByRole("button", { name: "Crear Proyecto" }));
+    expect(screen.getByText("El Nombre es obligatorio.")).toBeVisible();
+
+    await user.type(screen.getByLabelText("Nombre del Proyecto"), "R");
+
+    expect(
+      screen.queryByText("El Nombre es obligatorio."),
+    ).not.toBeInTheDocument();
+  });
+
   it('cierra el modal sin crear nada al hacer clic en "Cancelar" (TC-006)', async () => {
     const user = userEvent.setup();
     renderModal();

@@ -125,4 +125,25 @@ describe("ManualEntryForm", () => {
       { taskId: "task-1", durationMs: 60_000 },
     ]);
   });
+
+  it("muestra solo el Nombre de la Tarea cuando no tiene un Proyecto asociado existente", async () => {
+    const user = userEvent.setup();
+    useTasksStore.setState({
+      tasks: [
+        {
+          id: "task-huerfana",
+          projectId: "project-inexistente",
+          name: "Tarea sin Proyecto",
+          createdAt: new Date(2026, 6, 1).toISOString(),
+        },
+      ],
+    });
+    render(<ManualEntryForm />);
+
+    await user.click(screen.getByLabelText("Proyecto / Tarea"));
+
+    expect(
+      await screen.findByRole("option", { name: "Tarea sin Proyecto" }),
+    ).toBeVisible();
+  });
 });
