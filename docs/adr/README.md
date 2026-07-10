@@ -12,3 +12,4 @@
 - [ADR-008: Uso de Playwright para las pruebas E2E](ADR-008-uso-de-playwright-para-e2e.md)
 - [ADR-009: Adopción de un Quality Gate shift-left](ADR-009-quality-gate-shift-left.md)
 - [ADR-010: Estrategia de branching GitFlow con Conventional Commits](ADR-010-branching-gitflow-conventional-commits.md)
+- [ADR-011: Uso de localStorage para la persistencia local](ADR-011-uso-de-localstorage-para-persistencia.md)
