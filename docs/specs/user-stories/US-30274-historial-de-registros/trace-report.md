@@ -1,0 +1,47 @@
+# Reporte de trazabilidad — US-30274-historial-de-registros
+
+Fecha: 2026-07-10 03:42
+Trabajo: US-30274 · Documento: docs/specs/user-stories/US-30274-historial-de-registros/README.md
+Tipo: historia de usuario
+Rama: loop/open-spec
+Cobertura: 7 de 7 criterios cubiertos (100%)
+Veredicto: ⚠️ Aprobado con observaciones
+
+## Resumen
+
+Los siete criterios de aceptación (AC-001 a AC-007) quedan cubiertos por pruebas unitarias de la función de agregación y pruebas de componente (Vitest + Testing Library), todas ejecutadas y en verde, incluyendo una prueba con 1000 Registros de Tiempo para AC-007. Igual que en los dos changes anteriores, los TC documentados como "E2E" se automatizaron como componente (no hay e2e/Playwright real), y varios TC declaran ellos mismos automatización parcial por depender del reloj real del sistema ("mes actual") — mitigado aquí con `Date` simulado (`vi.setSystemTime`) en las pruebas.
+
+## Matriz de trazabilidad
+
+| Criterio | Descripción                                                                                  | Caso(s) de prueba      | Artefactos                                                                                                                                                           | Estado   | Automática | Resultado | Observaciones                                                                                                                                                                                                                                           |
+| -------- | -------------------------------------------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AC-001   | Leer y mostrar el historial de todos los Registros de Tiempo                                 | TC-001, TC-002         | `src/features/time-history/ui/history-page.test.tsx` (unit/componente)                                                                                               | Cubierto | Sí         | Paso      | —                                                                                                                                                                                                                                                       |
+| AC-002   | Calcular y mostrar el total de tiempo acumulado por Tarea                                    | TC-003, TC-004         | `src/features/time-history/model/aggregate-time-history.test.ts` (unit)                                                                                              | Cubierto | Sí         | Paso      | Implementado como total acotado al periodo seleccionado (ver Observaciones del code-review: `spec.md` no repite "dentro del periodo" para Tarea como sí lo hace para Proyecto; se siguió `design.md`, que fija el filtrado antes de cualquier cálculo). |
+| AC-003   | Calcular y mostrar el total de tiempo acumulado por Proyecto dentro del periodo seleccionado | TC-005, TC-006         | `aggregate-time-history.test.ts` (unit)                                                                                                                              | Cubierto | Sí         | Paso      | —                                                                                                                                                                                                                                                       |
+| AC-004   | Calcular el total por mes y navegar entre periodos (mes anterior/siguiente)                  | TC-007, TC-008, TC-009 | `history-page.test.tsx` (unit/componente, con `Date` simulado)                                                                                                       | Cubierto | Sí         | Paso      | TC-007/008/009 etiquetados "E2E"; automatizados como componente con reloj fijo, evitando la flakiness que los propios TC anticipan.                                                                                                                     |
+| AC-005   | Listar cada Registro con Fecha, Proyecto, Tarea y Duración                                   | TC-010, TC-011         | `history-page.test.tsx`; `aggregate-time-history.test.ts`                                                                                                            | Cubierto | Sí         | Paso      | TC-010 etiquetado "E2E" y TC-011 "Visual Test"; la fidelidad visual exacta al prototipo Figma queda fuera de alcance automatizado (ya declarado por ambos TC).                                                                                          |
+| AC-006   | Mostrar resumen del periodo (registros, proyectos involucrados, horas)                       | TC-012, TC-013         | `aggregate-time-history.test.ts` (unit)                                                                                                                              | Cubierto | Sí         | Paso      | —                                                                                                                                                                                                                                                       |
+| AC-007   | Cargar el historial en menos de 2 segundos hasta 1000 Registros                              | TC-014, TC-015         | `history-page.test.tsx` (prueba con 1000 Registros de Tiempo distribuidos en 6 meses, 5 Proyectos y 20 Tareas, midiendo `performance.now()` alrededor de `render()`) | Cubierto | Sí         | Paso      | TC-014/015 declaran automatización parcial (medición sensible a flakiness en CI); la prueba mide el costo real de filtrar+agregar+renderizar 1000 registros en el entorno de test, no una medición end-to-end instrumentada con tolerancia estadística. |
+
+## Artefactos de prueba automatizada disponibles
+
+| Tipo        | Presente | Artefactos                                                                                                                                                                                                                                                                              |
+| ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unit        | Sí       | `src/features/time-history/model/aggregate-time-history.test.ts`, `src/features/time-history/model/period.test.ts`, `src/features/time-history/model/filter-time-entries-by-period.test.ts`, `src/features/time-history/ui/history-page.test.tsx`, `src/shared/lib/format-date.test.ts` |
+| Integración | No       | —                                                                                                                                                                                                                                                                                       |
+| E2E         | No       | — (`e2e/` sigue vacío)                                                                                                                                                                                                                                                                  |
+
+## Ejecución automática
+
+|                       |                                                      |
+| --------------------- | ---------------------------------------------------- |
+| **Runner detectado**  | Vitest 4.1.7 (`npm run test:run` / `npx vitest run`) |
+| **Comando ejecutado** | `npx vitest run src/features/time-history`           |
+| **Resultado global**  | 22 pruebas pasaron, 0 fallaron (4 archivos de test)  |
+
+## Observaciones y pendientes
+
+- AC-002: el total por Tarea se implementó acotado al periodo seleccionado (no histórico total), siguiendo la decisión explícita de `design.md` de una única agregación sobre los Registros ya filtrados. `spec.md` no contradice esta interpretación, pero tampoco la hace tan explícita como para AC-003; si se quisiera un total histórico de Tarea sin filtro (análogo al total sin filtro de Proyecto en `project-management`), habría que documentarlo como un AC/capability adicional.
+- AC-004/AC-005: la fidelidad visual exacta contra el prototipo de Figma no está cubierta por ninguna prueba automatizada, consistente con lo que los propios TC ya declaran.
+- AC-007: la medición de "< 2 segundos" se hizo dentro del entorno de test (jsdom + Vitest), no en un navegador real instrumentado; si se requiere esa medición end-to-end con tolerancia estadística, ambos TC ya sugieren un harness de Performance API dedicado — no implementado en este change.
+- No existe todavía suite e2e (Playwright) en el repo pese a que varios TC están documentados como "Automatizable (E2E)"; se mantiene la misma limitación documentada en los dos changes anteriores.
