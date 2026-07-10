@@ -21,8 +21,13 @@
   - Para simular una recarga real sin falsos negativos, el test de integración usa `vi.resetModules()` + reimport (instancia de store nueva) en lugar de `useTasksStore.setState(...)`, que reescribe `localStorage` al pasar por el wrapper de `persist`.
 
 - TK-30304 Harness de rendimiento para iniciar/detener el temporizador (AC-012, AC-013)
-  Estado: Pending
+  Estado: Done
   Implementador: "juanca202"
-  Archivos: []
-  Notas: []
-  Decisiones adicionales: []
+  Archivos:
+  - e2e/tasks-performance.spec.ts
+  - docs/specs/user-stories/US-30272-gestion-de-tareas/trace-report.md
+    Notas:
+  - No hizo falta cambiar código de producción: la latencia real ya cumplía el umbral de 1s; el gap era de cobertura de pruebas, no de implementación.
+    Decisiones adicionales:
+  - Margen de tolerancia de 250ms sobre el umbral de 1s, medido con `performance.now()` sobre la mediana de 3 repeticiones, para absorber variabilidad de CI sin afirmar un umbral exacto.
+  - Para "Detener Sesión" se descartó verificar que el texto de duración deje de mostrar `00:00:00`: en ciclos de arranque/parada de milisegundos el formato `HH:MM:SS` redondea a cero. Se usa en su lugar la desaparición de "En Ejecución", que ocurre en el mismo re-render en que se calcula y persiste el Registro de Tiempo.

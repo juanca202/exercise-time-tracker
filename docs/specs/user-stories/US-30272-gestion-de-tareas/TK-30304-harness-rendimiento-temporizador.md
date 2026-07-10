@@ -31,10 +31,11 @@ exercise-time-tracker/
 
 ## Plan de implementación
 
-- [ ] **IT-01** — Escribir el test que falla (Red): crear `e2e/tasks-performance.spec.ts` con un escenario que cree una Tarea, mida (vía `page.evaluate(() => performance.now())` antes y después del clic, esperando a que el locator del estado "En Ejecución" sea visible) el tiempo transcurrido al iniciar el temporizador, repitiendo la medición 3 veces y afirmando que la mediana es menor a 1 segundo más un margen de tolerancia acordado (p. ej. 250 ms) para absorber la variabilidad del entorno de CI.
-- [ ] **IT-02** — Añadir el escenario equivalente para "Detener Sesión": medir el tiempo hasta que el Registro de Tiempo persistido aparece en el panel de Tareas tras el clic.
-- [ ] **IT-03** — Ejecutar `npm run test:e2e -- tasks-performance.spec.ts` y confirmar que ambos escenarios pasan en verde (Green) sin cambios en el código de producción, dado que la latencia real ya cumple el umbral; documentar el margen de tolerancia elegido en el propio test.
-- [ ] **IT-04** — Actualizar `trace-report.md` de US-30272: mover AC-012 y AC-013 de `No cubierto` a `Cubierto` con el nuevo artefacto y resultado de ejecución.
+- [x] **IT-01** — Escribir el test que falla (Red): crear `e2e/tasks-performance.spec.ts` con un escenario que cree una Tarea, mida (vía `page.evaluate(() => performance.now())` antes y después del clic, esperando a que el locator del estado "En Ejecución" sea visible) el tiempo transcurrido al iniciar el temporizador, repitiendo la medición 3 veces y afirmando que la mediana es menor a 1 segundo más un margen de tolerancia acordado (p. ej. 250 ms) para absorber la variabilidad del entorno de CI.
+- [x] **IT-02** — Añadir el escenario equivalente para "Detener Sesión": medir el tiempo hasta que la acción de "Detener Sesión" surte efecto (desaparición del estado "En Ejecución"), que ocurre en el mismo re-render en que `stopTimer` calcula y persiste el Registro de Tiempo.
+      Nota: se descartó verificar además que el texto de duración del ítem ya no muestre `00:00:00`, porque en ciclos de arranque/parada tan rápidos (milisegundos) el formato `HH:MM:SS` redondea a cero — no era un problema funcional, solo un artefacto de visualización con precisión de segundos.
+- [x] **IT-03** — Ejecutar `npm run test:e2e -- tasks-performance.spec.ts` y confirmar que ambos escenarios pasan en verde (Green) sin cambios en el código de producción, dado que la latencia real ya cumple el umbral; documentar el margen de tolerancia elegido en el propio test.
+- [x] **IT-04** — Actualizar `trace-report.md` de US-30272: mover AC-012 y AC-013 de `No cubierto` a `Cubierto` con el nuevo artefacto y resultado de ejecución.
 
 ## Observaciones
 
