@@ -1,16 +1,13 @@
-# TC-003 — Intentar crear tarea sin asociar un proyecto (BR-01)
+# TC-003 — Dado que el modal "Nueva Tarea" está abierto con el campo Proyecto sin seleccionar, Cuando el usuario ingresa un Nombre y hace clic en "Crear Tarea", Entonces el sistema no crea la Tarea, en cumplimiento de BR-01
 
-Tipo: Error
+Perspectiva: Error
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-001 (Casos de uso) — Crear Tarea con Nombre y Proyecto existente
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema no permite crear una Tarea sin asociarla a un Proyecto existente, en cumplimiento de BR-01 (una Tarea DEBE pertenecer obligatoriamente a un único Proyecto).
 
 ## Precondiciones
 

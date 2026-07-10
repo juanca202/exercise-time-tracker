@@ -1,16 +1,13 @@
-# TC-018 — Ingresar una Duración manual negativa (BR-03)
+# TC-018 — Dado que el formulario "Entrada Manual" está abierto con Fecha y Proyecto/Tarea válidos, Cuando el usuario ingresa una Duración negativa y hace clic en "Guardar Registro", Entonces el sistema no crea el Registro de Tiempo, en cumplimiento de BR-03
 
-Tipo: Error
+Perspectiva: Error
+Automatización: Automatizable (Unit)
 Prioridad: Alta
 Criterio de aceptación: AC-011 (Reglas de negocio) — Validar Duración manual mayor que cero
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que, en cumplimiento de BR-03, el sistema no acepta un Registro de Tiempo manual con una Duración negativa.
 
 ## Precondiciones
 

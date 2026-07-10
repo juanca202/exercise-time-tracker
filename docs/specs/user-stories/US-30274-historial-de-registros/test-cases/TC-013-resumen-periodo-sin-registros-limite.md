@@ -1,16 +1,13 @@
-# TC-013 — Resumen de un periodo sin Registros de Tiempo
+# TC-013 — Dado que el mes seleccionado no tiene ningún Registro de Tiempo, Cuando el sistema calcula el resumen del periodo, Entonces muestra "0 registros", "0 proyectos" y "0h" de forma consistente
 
-Tipo: Límite
+Perspectiva: Límite
+Automatización: Automatizable (Unit)
 Prioridad: Baja
 Criterio de aceptación: AC-006 (Interacción de usuario) — Resumen del periodo seleccionado
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar el caso límite del resumen del periodo cuando el mes seleccionado no tiene ningún Registro de Tiempo, confirmando que los tres valores del resumen se muestran en cero de forma consistente.
 
 ## Precondiciones
 

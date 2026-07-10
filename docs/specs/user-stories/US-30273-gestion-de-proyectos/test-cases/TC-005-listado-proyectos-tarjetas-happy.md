@@ -1,16 +1,13 @@
-# TC-005 — Listado de Proyectos en tarjetas con Nombre, Descripción y Tiempo Registrado
+# TC-005 — Dado que existe el Proyecto "Rediseño Web" con Tareas y tiempo registrado, Cuando el usuario navega a la sección "Proyectos", Entonces la tarjeta del Proyecto muestra su Nombre, Descripción y Tiempo Registrado conforme al prototipo
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-003 (Interacción de usuario) — Listado de Proyectos en tarjetas con Nombre, Descripción y Tiempo Registrado, conforme al prototipo
 Artefacto padre: US-30273
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que la interfaz lista los Proyectos existentes en tarjetas que muestran correctamente el Nombre, la Descripción y el Tiempo Registrado, conforme al prototipo de alta fidelidad.
 
 ## Precondiciones
 

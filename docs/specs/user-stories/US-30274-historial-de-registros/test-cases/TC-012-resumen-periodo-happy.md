@@ -1,16 +1,13 @@
-# TC-012 — Resumen del periodo seleccionado con registros, proyectos y horas totales
+# TC-012 — Dado que el mes actual tiene 3 Registros de Tiempo distribuidos en 2 Proyectos, Cuando el sistema calcula el resumen del periodo, Entonces muestra "3 registros", "2 proyectos" y "4h 15m" coincidiendo con los datos reales
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (Unit)
 Prioridad: Media
 Criterio de aceptación: AC-006 (Interacción de usuario) — Resumen del periodo seleccionado
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que la interfaz muestra un resumen del periodo seleccionado con el total de registros encontrados, la cantidad de proyectos involucrados y el total de horas, coincidiendo con los datos reales del periodo.
 
 ## Precondiciones
 

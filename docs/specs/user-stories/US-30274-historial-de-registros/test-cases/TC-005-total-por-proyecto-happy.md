@@ -1,16 +1,13 @@
-# TC-005 — Cálculo del total de tiempo acumulado por Proyecto en el periodo seleccionado
+# TC-005 — Dado que el Proyecto "Website" tiene Tareas con Registros de Tiempo dentro del mes seleccionado, Cuando el sistema calcula el total acumulado por Proyecto, Entonces muestra "2h 15m" como total del Proyecto "Website" en ese periodo
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (Unit)
 Prioridad: Media
 Criterio de aceptación: AC-003 (Salidas del sistema) — Total de tiempo acumulado por Proyecto dentro del periodo seleccionado
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema calcula y muestra correctamente el total de tiempo acumulado por Proyecto, sumando los tiempos de todas sus Tareas dentro del periodo (mes) seleccionado.
 
 ## Precondiciones
 

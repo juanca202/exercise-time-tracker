@@ -1,16 +1,13 @@
-# TC-001 — Crear tarea con nombre válido asociada a un proyecto existente
+# TC-001 — Dado que existe un Proyecto creado y el usuario está en la pantalla "Tareas", Cuando crea una nueva Tarea con Nombre y Proyecto seleccionados, Entonces la Tarea queda listada y asociada al Proyecto
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-001 (Casos de uso) — Crear Tarea con Nombre y Proyecto existente
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el usuario puede crear una nueva Tarea ingresando un Nombre y asociándola a un Proyecto existente mediante el modal "Nueva Tarea".
 
 ## Precondiciones
 

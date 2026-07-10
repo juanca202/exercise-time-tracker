@@ -1,16 +1,13 @@
-# TC-017 — Persistencia del Registro de Tiempo manual al confirmar "Guardar Registro"
+# TC-017 — Dado que existe un Registro de Tiempo manual de 2 horas creado para "Diseñar wireframes", Cuando se recarga la aplicación, Entonces el Registro de Tiempo persiste y sigue visible en el historial de la Tarea
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (Integration)
 Prioridad: Alta
 Criterio de aceptación: AC-010 (Procesamiento de datos) — Persistencia del Registro de Tiempo manual
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema persiste el Registro de Tiempo manual en el almacenamiento local al confirmar la acción "Guardar Registro", y que dicho registro permanece disponible tras recargar la aplicación.
 
 ## Precondiciones
 

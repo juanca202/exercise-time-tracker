@@ -1,16 +1,13 @@
-# TC-001 — Visualización del historial completo de Registros de Tiempo
+# TC-001 — Dado que existen Registros de Tiempo previamente creados, Cuando el usuario abre la pantalla de Historial, Entonces el sistema muestra todos los registros sin omisiones ni duplicados
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-001 (Casos de uso) — Lectura y visualización del historial de Registros de Tiempo
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema lee y muestra en la interfaz el historial completo de Registros de Tiempo existentes, ya que es la base de toda la funcionalidad de historial.
 
 ## Precondiciones
 

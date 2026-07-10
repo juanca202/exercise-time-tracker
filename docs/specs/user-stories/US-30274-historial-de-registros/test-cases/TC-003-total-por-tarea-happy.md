@@ -1,16 +1,13 @@
-# TC-003 — Cálculo del total de tiempo acumulado por Tarea
+# TC-003 — Dado que la Tarea "Diseño" tiene 2 Registros de Tiempo previos, Cuando el sistema calcula el total acumulado por Tarea, Entonces muestra "2h 15m" como total de la Tarea "Diseño"
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (Unit)
 Prioridad: Media
 Criterio de aceptación: AC-002 (Salidas del sistema) — Total de tiempo acumulado por Tarea
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema calcula y muestra correctamente el total de tiempo acumulado por Tarea cuando existen múltiples Registros de Tiempo para la misma Tarea.
 
 ## Precondiciones
 

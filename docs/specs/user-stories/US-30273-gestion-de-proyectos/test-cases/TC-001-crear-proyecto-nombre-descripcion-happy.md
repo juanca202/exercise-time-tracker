@@ -1,16 +1,13 @@
-# TC-001 — Creación de Proyecto con Nombre y Descripción
+# TC-001 — Dado que el usuario está en la sección "Proyectos", Cuando crea un nuevo Proyecto ingresando Nombre y Descripción, Entonces el Proyecto queda creado y visible en el listado
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-001 (Casos de uso) — Creación de Proyecto con Nombre obligatorio y Descripción opcional
 Artefacto padre: US-30273
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el usuario puede crear un nuevo Proyecto ingresando tanto el Nombre (obligatorio) como la Descripción (opcional), y que el sistema lo acepta y lo agrega al listado.
 
 ## Precondiciones
 

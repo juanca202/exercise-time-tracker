@@ -1,16 +1,13 @@
-# TC-015 — Crear un Registro de Tiempo manual con Fecha, Tarea y Duración válidos
+# TC-015 — Dado que existe la Tarea "Diseñar wireframes" asociada al "Proyecto Alfa", Cuando el usuario completa Fecha, Proyecto/Tarea y Duración en el formulario "Entrada Manual" y hace clic en "Guardar Registro", Entonces el Registro de Tiempo manual queda creado y visible en el historial de la Tarea
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-009 (Casos de uso) — Crear Registro de Tiempo manual
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el usuario puede crear un Registro de Tiempo manual para una Tarea, ingresando Fecha, Proyecto/Tarea y Duración mediante el formulario "Entrada Manual".
 
 ## Precondiciones
 

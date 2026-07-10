@@ -1,16 +1,13 @@
-# TC-015 — Carga del historial en menos de 2 segundos con el volumen máximo de 1000 registros
+# TC-015 — Dado que existen exactamente 1000 Registros de Tiempo en el almacenamiento local, Cuando el usuario navega a la sección de Historial, Entonces el sistema carga y muestra el historial completo en menos de 2 segundos cumpliendo el límite de volumen del criterio
 
-Tipo: Límite
+Perspectiva: Límite
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-007 (Eficiencia de rendimiento) — Carga del historial en menos de 2 segundos hasta 1000 registros
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar el caso límite de volumen explícitamente definido por el criterio: la visualización del historial debe cargarse en menos de 2 segundos con hasta 1000 Registros de Tiempo.
 
 ## Precondiciones
 

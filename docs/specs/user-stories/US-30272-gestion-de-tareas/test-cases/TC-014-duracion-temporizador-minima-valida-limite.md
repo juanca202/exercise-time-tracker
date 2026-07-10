@@ -1,16 +1,13 @@
-# TC-014 — Duración del temporizador en el límite mínimo válido (justo mayor que cero)
+# TC-014 — Dado que el temporizador de "Diseñar wireframes" está activo, Cuando el usuario detiene la sesión aproximadamente 1 segundo después de iniciarla, Entonces el sistema persiste el Registro de Tiempo con la Duración mínima válida mayor que cero
 
-Tipo: Límite
+Perspectiva: Límite
+Automatización: Automatizable (Unit)
 Prioridad: Media
 Criterio de aceptación: AC-008 (Reglas de negocio) — Validar Duración del temporizador mayor que cero
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema acepta y persiste un Registro de Tiempo por temporizador cuando la Duración calculada es el valor mínimo posible por encima de cero.
 
 ## Precondiciones
 

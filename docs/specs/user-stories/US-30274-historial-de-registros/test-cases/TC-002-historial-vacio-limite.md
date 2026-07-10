@@ -1,16 +1,13 @@
-# TC-002 — Historial sin Registros de Tiempo (estado vacío)
+# TC-002 — Dado que el usuario no tiene ningún Registro de Tiempo creado, Cuando abre la sección de Historial de registros, Entonces el sistema muestra la lista vacía sin errores ni datos residuales
 
-Tipo: Límite
+Perspectiva: Límite
+Automatización: Automatizable (E2E)
 Prioridad: Media
 Criterio de aceptación: AC-001 (Casos de uso) — Lectura y visualización del historial de Registros de Tiempo
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar el comportamiento del sistema en el caso límite de un usuario que aún no tiene ningún Registro de Tiempo, para asegurar que la ausencia de datos no produce errores ni una pantalla en blanco sin explicación.
 
 ## Precondiciones
 

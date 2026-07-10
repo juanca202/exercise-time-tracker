@@ -1,16 +1,13 @@
-# TC-022 — Detener el temporizador y persistir el registro en menos de 1 segundo desde la acción del usuario
+# TC-022 — Dado que el temporizador de "Diseñar wireframes" está activo, Cuando el usuario hace clic en "Detener Sesión", Entonces el Registro de Tiempo queda persistido y visible en el historial en menos de 1 segundo
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Media
 Criterio de aceptación: AC-013 (Eficiencia de rendimiento) — Detención del temporizador y persistencia en menos de 1 segundo
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema detiene el temporizador y persiste el Registro de Tiempo correspondiente en menos de 1 segundo desde que el usuario ejecuta la acción "Detener Sesión", en el entorno de desarrollo local.
 
 ## Precondiciones
 

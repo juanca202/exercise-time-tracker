@@ -1,16 +1,13 @@
-# TC-021 — Iniciar el temporizador en menos de 1 segundo desde la acción del usuario
+# TC-021 — Dado que existe la Tarea "Diseñar wireframes" sin ningún temporizador activo, Cuando el usuario inicia el temporizador, Entonces el estado "En Ejecución" se refleja en la interfaz en menos de 1 segundo
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Media
 Criterio de aceptación: AC-012 (Eficiencia de rendimiento) — Inicio del temporizador en menos de 1 segundo
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema inicia el temporizador en menos de 1 segundo desde que el usuario ejecuta la acción correspondiente, en el entorno de desarrollo local.
 
 ## Precondiciones
 

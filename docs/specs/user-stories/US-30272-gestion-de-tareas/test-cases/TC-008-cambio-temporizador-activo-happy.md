@@ -1,16 +1,13 @@
-# TC-008 — Iniciar un temporizador en otra tarea detiene automáticamente el temporizador activo (BR-02)
+# TC-008 — Dado que el temporizador de la Tarea "Diseñar wireframes" está activo y existe la Tarea "Revisar backlog", Cuando el usuario inicia el temporizador de "Revisar backlog", Entonces el sistema detiene y persiste automáticamente el Registro de Tiempo de "Diseñar wireframes" e inicia el temporizador de "Revisar backlog", en cumplimiento de BR-02
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (Integration)
 Prioridad: Alta
 Criterio de aceptación: AC-005 (Reglas de negocio) — Único temporizador activo a la vez
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que, en cumplimiento de BR-02, al iniciar un temporizador en una Tarea diferente mientras otro está activo, el sistema detiene automáticamente el temporizador anterior, calcula y guarda su Registro de Tiempo antes de iniciar el nuevo.
 
 ## Precondiciones
 

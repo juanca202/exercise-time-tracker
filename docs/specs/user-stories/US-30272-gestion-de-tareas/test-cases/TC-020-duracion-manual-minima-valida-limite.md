@@ -1,16 +1,13 @@
-# TC-020 — Duración manual en el límite mínimo válido (justo mayor que cero)
+# TC-020 — Dado que el formulario "Entrada Manual" está abierto con Fecha y Proyecto/Tarea válidos, Cuando el usuario ingresa una Duración de 1 minuto y hace clic en "Guardar Registro", Entonces el sistema crea y persiste el Registro de Tiempo con la Duración mínima válida
 
-Tipo: Límite
+Perspectiva: Límite
+Automatización: Automatizable (Unit)
 Prioridad: Media
 Criterio de aceptación: AC-011 (Reglas de negocio) — Validar Duración manual mayor que cero
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el sistema acepta y persiste un Registro de Tiempo manual cuando la Duración ingresada es el valor mínimo posible por encima de cero.
 
 ## Precondiciones
 

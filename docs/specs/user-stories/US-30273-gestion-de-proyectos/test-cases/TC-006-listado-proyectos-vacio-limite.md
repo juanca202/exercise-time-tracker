@@ -1,16 +1,13 @@
-# TC-006 — Listado de Proyectos sin Proyectos creados (estado vacío)
+# TC-006 — Dado que no existe ningún Proyecto creado, Cuando el usuario navega a la sección "Proyectos", Entonces la sección se muestra sin errores y sin tarjetas de Proyecto
 
-Tipo: Límite
+Perspectiva: Límite
+Automatización: Automatizable (E2E)
 Prioridad: Media
 Criterio de aceptación: AC-003 (Interacción de usuario) — Listado de Proyectos en tarjetas con Nombre, Descripción y Tiempo Registrado, conforme al prototipo
 Artefacto padre: US-30273
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar el comportamiento de la interfaz cuando no existe ningún Proyecto creado, como caso límite del listado (cero elementos).
 
 ## Precondiciones
 

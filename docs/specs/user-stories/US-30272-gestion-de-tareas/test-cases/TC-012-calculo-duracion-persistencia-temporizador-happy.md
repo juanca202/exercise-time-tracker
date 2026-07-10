@@ -1,16 +1,13 @@
-# TC-012 — Cálculo de Duración y persistencia inmediata del Registro de Tiempo al detener el temporizador
+# TC-012 — Dado que el temporizador de "Diseñar wireframes" está activo con Hora Inicio registrada, Cuando el usuario hace clic en "Detener Sesión", Entonces el sistema calcula la Duración y persiste el Registro de Tiempo de forma inmediata
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (Integration)
 Prioridad: Alta
 Criterio de aceptación: AC-007 (Procesamiento de datos) — Cálculo y persistencia inmediata del Registro de Tiempo
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que al detener el temporizador, el sistema calcula la Duración (Hora Fin − Hora Inicio) y persiste el Registro de Tiempo de forma inmediata en el almacenamiento local.
 
 ## Precondiciones
 

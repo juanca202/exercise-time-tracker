@@ -1,16 +1,13 @@
-# TC-007 — Visualización del total acumulado por mes al abrir el historial (mes actual)
+# TC-007 — Dado que existen Registros de Tiempo dentro del mes calendario actual, Cuando el usuario abre la sección de Historial, Entonces el sistema selecciona el mes actual por defecto y muestra su total acumulado correctamente calculado
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-004 (Salidas del sistema) — Total de tiempo acumulado por mes y navegación entre periodos
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que al abrir la sección de Historial de registros, el sistema selecciona por defecto el mes actual y calcula correctamente el total acumulado de ese periodo.
 
 ## Precondiciones
 

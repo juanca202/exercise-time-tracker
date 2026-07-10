@@ -1,16 +1,13 @@
-# TC-010 — Detener el temporizador activo mediante "Detener Sesión"
+# TC-010 — Dado que el temporizador de la Tarea "Diseñar wireframes" está activo, Cuando el usuario hace clic en "Detener Sesión", Entonces el temporizador se detiene y la Tarea queda en estado inactivo
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-006 (Casos de uso) — Detener el temporizador activo
 Artefacto padre: US-30272
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el usuario puede detener el temporizador activo mediante la acción "Detener Sesión".
 
 ## Precondiciones
 

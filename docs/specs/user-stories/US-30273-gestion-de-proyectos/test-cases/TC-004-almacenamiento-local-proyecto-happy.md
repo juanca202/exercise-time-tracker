@@ -1,16 +1,13 @@
-# TC-004 — Persistencia del Proyecto en almacenamiento local del dispositivo
+# TC-004 — Dado que el usuario creó el Proyecto "Auditoría Anual", Cuando recarga la aplicación, Entonces el Proyecto sigue presente en el listado con los mismos datos, confirmando su almacenamiento en el dispositivo
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (Integration)
 Prioridad: Alta
 Criterio de aceptación: AC-002 (Procesamiento de datos) — Almacenamiento de los datos del Proyecto en el almacenamiento local del dispositivo
 Artefacto padre: US-30273
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que los datos de un Proyecto creado se almacenan en el almacenamiento local del dispositivo y persisten tras recargar o reiniciar la aplicación.
 
 ## Precondiciones
 

@@ -1,16 +1,13 @@
-# TC-008 — Navegación entre meses con Registros de Tiempo (mes anterior / mes siguiente)
+# TC-008 — Dado que existen Registros de Tiempo en el mes actual y en el mes anterior, Cuando el usuario navega al mes anterior y regresa al mes siguiente, Entonces el sistema recalcula y muestra el total acumulado correcto en cada periodo
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-004 (Salidas del sistema) — Total de tiempo acumulado por mes y navegación entre periodos
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que el usuario puede navegar al mes anterior y luego regresar al mes siguiente, y que en cada periodo el sistema recalcula y muestra el total acumulado correspondiente.
 
 ## Precondiciones
 

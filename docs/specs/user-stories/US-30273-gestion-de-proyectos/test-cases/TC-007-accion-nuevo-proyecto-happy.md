@@ -1,16 +1,13 @@
-# TC-007 — Acción visible "Nuevo Proyecto" para iniciar la creación
+# TC-007 — Dado que el usuario está en la sección "Proyectos", Cuando hace clic en la acción "Nuevo Proyecto", Entonces el sistema abre el formulario/modal de creación de Proyecto
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-004 (Interacción de usuario) — Acción visible para iniciar la creación de un Proyecto
 Artefacto padre: US-30273
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que la interfaz ofrece una acción visible ("Nuevo Proyecto" / "Crear Nuevo Proyecto") que, al activarse, inicia el flujo de creación de un Proyecto.
 
 ## Precondiciones
 

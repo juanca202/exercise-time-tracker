@@ -1,16 +1,13 @@
-# TC-010 — Listado de Registros de Tiempo con Fecha, Proyecto, Tarea y Duración
+# TC-010 — Dado que existe un Registro de Tiempo con Fecha, Proyecto, Tarea y Duración definidos, Cuando el sistema lo lista en la sección de Historial, Entonces se muestran los cuatro campos conforme al prototipo de alta fidelidad
 
-Tipo: Happy Path
+Perspectiva: Happy Path
+Automatización: Automatizable (E2E)
 Prioridad: Alta
 Criterio de aceptación: AC-005 (Interacción de usuario) — Listado de cada Registro de Tiempo conforme al prototipo de alta fidelidad
 Artefacto padre: US-30274
 Estado: Ready
 Creado por: juanca202
 Fecha: 2026-07-08
-
-## Objetivo
-
-Validar que cada Registro de Tiempo se lista en la interfaz con sus cuatro campos requeridos (Fecha, Proyecto, Tarea y Duración), conforme al prototipo de alta fidelidad referenciado en la US.
 
 ## Precondiciones
 
