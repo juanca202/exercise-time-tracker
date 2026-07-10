@@ -104,4 +104,32 @@ test.describe("Tareas", () => {
 
     await expect(row).toContainText("01:30:00");
   });
+
+  test("la Tarea y el Registro de Tiempo manual persisten tras recargar la app (AC-002, AC-010)", async ({
+    page,
+  }) => {
+    await createProject(page, "Proyecto Alfa");
+    await page.goto("/tasks");
+    await createTask(page, "Proyecto Alfa", "Diseñar wireframes");
+
+    await page.getByLabel("Proyecto / Tarea").click();
+    await page
+      .getByRole("option", { name: "Proyecto Alfa — Diseñar wireframes" })
+      .click();
+    await page.getByPlaceholder("02:30").fill("02:00");
+    await page.getByRole("button", { name: "Guardar Registro" }).click();
+
+    const row = page
+      .getByRole("listitem")
+      .filter({ hasText: "Diseñar wireframes" });
+    await expect(row).toContainText("02:00:00");
+
+    await page.reload();
+
+    await expect(
+      page.getByRole("heading", { name: "Diseñar wireframes" }),
+    ).toBeVisible();
+    await expect(page.getByText("Proyecto Alfa")).toBeVisible();
+    await expect(row).toContainText("02:00:00");
+  });
 });
