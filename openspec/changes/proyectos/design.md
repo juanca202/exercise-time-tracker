@@ -1,39 +1,36 @@
-## Context
+## Contexto
 
-Greenfield Next.js 16 (App Router) + React 19 + TypeScript app, offline-first, no backend (SRS-001 §2.1, §2.4). This is the first change implemented, so it also establishes the shared local-persistence infrastructure that the later `tareas` and `historial-de-registros` changes will reuse. Follows [ADR-005](../../../docs/adr/ADR-005-arquitectura-feature-based.md) (feature-based architecture), [ADR-004](../../../docs/adr/ADR-004-uso-de-zustand.md) (Zustand), [ADR-003](../../../docs/adr/ADR-003-uso-de-base-ui.md) (Base UI), [ADR-002](../../../docs/adr/ADR-002-uso-de-tailwind-css.md) (Tailwind).
+App greenfield Next.js 16 (App Router) + React 19 + TypeScript, offline-first, sin backend (SRS-001 §2.1, §2.4). El change `fundamentos` ya establece los tipos compartidos, el adaptador de persistencia, el store raíz de Zustand con el CRUD crudo de Proyecto, y el shell/sidebar de la app (las 3 rutas activas). Este change construye la pantalla y el modal de Proyectos sobre esa base y agrega la validación específica de Proyecto — no toca ningún archivo compartido. Sigue [ADR-005](../../../docs/adr/ADR-005-arquitectura-feature-based.md) (arquitectura feature-based), [ADR-004](../../../docs/adr/ADR-004-uso-de-zustand.md) (Zustand), [ADR-003](../../../docs/adr/ADR-003-uso-de-base-ui.md) (Base UI), [ADR-002](../../../docs/adr/ADR-002-uso-de-tailwind-css.md) (Tailwind).
 
-## Goals / Non-Goals
+## Objetivos / No-Objetivos
 
-**Goals:**
+**Objetivos:**
 
-- Implement Project create/edit/list per US-001.
-- Stand up a reusable `local-persistence` layer (storage adapter + Zustand `persist` wiring + hydration handling) that the `tareas` and `historial-de-registros` changes will build on for Tasks and Time Records.
-- Match the Figma prototype and DESIGN.md design system.
+- Implementar la creación/edición/listado de Proyecto según US-001, invocando las acciones crudas `addProject`/`updateProject`/`listProjects` de `fundamentos` y añadiendo encima la validación `isValidProjectName`.
+- Coincidir con el prototipo de Figma y el sistema de diseño de DESIGN.md.
 
-**Non-Goals:**
+**No-Objetivos:**
 
-- Task or Time Record management — covered by the `tareas` change.
-- History/reporting — covered by the `historial-de-registros` change.
-- Any storage mechanism beyond `localStorage` (no IndexedDB) — see Decisions.
-- A dedicated "Editar Proyecto" screen — the Figma prototype only has "Nuevo Proyecto"; edit reuses it.
+- Tipos compartidos, persistencia, store raíz, o shell/sidebar de la app — cubierto por el change `fundamentos`; este change solo los consume.
+- Gestión de Tareas o Registros de Tiempo — cubierto por el change `tareas`.
+- Historial/reportes — cubierto por el change `historial-de-registros`.
+- Cualquier mecanismo de almacenamiento más allá de `localStorage` (sin IndexedDB) — decidido en `fundamentos`.
+- Una pantalla dedicada "Editar Proyecto" — el prototipo de Figma solo tiene "Nuevo Proyecto"; la edición lo reutiliza.
 
-## Decisions
+## Decisiones
 
-1. **Persistence: `localStorage` via Zustand `persist`.** Chosen over IndexedDB for simplicity at this data volume (a handful of Projects, later up to ~1,000 Time Records in the `historial-de-registros` change) — synchronous reads/writes in the low-millisecond range, no async-hydration complexity in Zustand, no extra dependency. Documented in full in [US-003's RS-002](../../../docs/specs/user-stories/US-003-historial-de-registros/research/RS-002-persistencia-local-localstorage-vs-indexeddb.md), which this change's persistence layer follows even though that research was written against the history performance requirement.
-2. **Storage adapter as shared infrastructure.** Implemented in `src/shared/persistence` as a small `get`/`set`/`subscribe` interface plus a `schemaVersion` field, not inside `src/features/projects`, so the `tareas` and `historial-de-registros` changes reuse it instead of duplicating storage access.
-3. **Edit reuses the create modal.** The "Nuevo Proyecto" modal takes an optional `initialValues` prop; when present it renders as "Editar Proyecto" with the fields precargados. Confirmed against Figma — no distinct edit screen exists.
-4. **Hydration gating.** All reads of persisted Project state go through a `useHasHydrated()` hook so the server-rendered and first-client-rendered markup match, avoiding Next.js hydration-mismatch errors.
+1. **La edición reutiliza el modal de creación.** El modal "Nuevo Proyecto" recibe una prop opcional `initialValues`; cuando está presente se renderiza como "Editar Proyecto" con los campos precargados. Confirmado contra Figma — no existe una pantalla de edición distinta.
+2. **La validación vive acá, no en el store compartido.** `isValidProjectName` (no vacío después de trim) está implementada en `src/features/projects`, invocada por el modal antes de llamar al `addProject`/`updateProject` crudo de `fundamentos` — manteniendo los AC-001/AC-002 propios de este change trazables a su propio diff, y evitando cualquier edición al módulo del store compartido (según el diseño de `fundamentos`, Decisión 2).
+3. **El gating de hidratación se reutiliza tal cual.** Las lecturas del estado de Proyecto pasan por el hook `useHasHydrated()` provisto por `fundamentos`; no se necesita manejo de hidratación nuevo acá.
 
-## Risks / Trade-offs
+## Riesgos / Compromisos
 
-- **[Risk] `localStorage`'s ~5–10 MiB origin quota.** → Mitigation: the storage adapter is isolated behind an interface so a future migration to IndexedDB (if data volume grows) only touches `src/shared/persistence`.
-- **[Risk] Safari ITP may purge `localStorage` after 7+ days without interaction.** → Mitigation: call `navigator.storage.persist()` on app load (best-effort, not guaranteed).
-- **[Risk] Building shared persistence infrastructure inside the first (smallest) change risks under-designing it for the `tareas` change's heavier needs (timer state, weekly totals) and the `historial-de-registros` change's performance requirement.** → Mitigation: the adapter interface (1./2. above) is intentionally generic (`get`/`set`/`subscribe` over arbitrary JSON-serializable state), not Project-specific.
+- **[Riesgo] Acoplamiento a la firma del CRUD crudo de `fundamentos`.** → Mitigación: el diseño de `fundamentos` documenta `addProject`/`updateProject`/`listProjects` como superficie de API estable que no debe ser modificada por changes downstream; si alguna vez se necesita un cambio de firma, ocurre en `fundamentos`, no acá.
 
-## Migration Plan
+## Plan de Migración
 
-Not applicable — greenfield, no existing data. The `schemaVersion` field is included from the start to avoid a harder migration problem when the `tareas` and `historial-de-registros` changes add their own slices to the same store.
+No aplica — greenfield, sin datos existentes. `schemaVersion` ya está establecido por `fundamentos`.
 
-## Open Questions
+## Preguntas Abiertas
 
-None blocking. All ambiguities were already resolved during `work-define`/`work-research` (see US-001's Observaciones and research notes).
+Ninguna bloqueante. Todas las ambigüedades ya fueron resueltas durante `work-define`/`work-research` (ver las Observaciones de US-001 y las notas de investigación).

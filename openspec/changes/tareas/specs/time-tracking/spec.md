@@ -1,133 +1,133 @@
 ## ADDED Requirements
 
-### Requirement: Start a timer for a specific Task
+### Requirement: Iniciar un cronómetro para una Tarea específica
 
-The system SHALL allow the user to start a timer for a specific Task by selecting it from the Task list (the ▷ icon next to each Task), storing the "En Ejecución" state, the start time, and the Task identifier locally. (US-002 AC-006)
+El sistema SHALL permitir al usuario iniciar un cronómetro para una Tarea específica seleccionándola desde la lista de Tareas (el ícono ▷ junto a cada Tarea), almacenando localmente el estado "En Ejecución", la hora de inicio, y el identificador de la Tarea. (US-002 AC-006)
 
-#### Scenario: Start timer from task list
+#### Escenario: Iniciar cronómetro desde la lista de tareas
 
-- **WHEN** the user clicks the ▷ icon next to a Task that has no active timer
-- **THEN** the system starts a timer for that Task, storing its start time and marking it as running
+- **CUANDO** el usuario hace clic en el ícono ▷ junto a una Tarea que no tiene cronómetro activo
+- **ENTONCES** el sistema inicia un cronómetro para esa Tarea, almacenando su hora de inicio y marcándola como en ejecución
 
-### Requirement: Only one active timer at a time, with auto-stop
+### Requirement: Un solo cronómetro activo a la vez, con auto-detención
 
-The system SHALL allow only one (1) active timer app-wide. If the user starts a timer while another is active on a different Task, the system SHALL automatically stop the previous timer, compute and persist its Time Record, before starting the new one. (US-002 AC-007, BR-02, BR-03)
+El sistema SHALL permitir solo un (1) cronómetro activo a nivel de toda la app. Si el usuario inicia un cronómetro mientras otro está activo en una Tarea distinta, el sistema SHALL detener automáticamente el cronómetro anterior, calcular y persistir su Registro de Tiempo, antes de iniciar el nuevo. (US-002 AC-007, BR-02, BR-03)
 
-#### Scenario: Starting a new timer auto-stops the previous one
+#### Escenario: Iniciar un nuevo cronómetro auto-detiene el anterior
 
-- **WHEN** a timer is running for Task A and the user starts a timer for Task B
-- **THEN** the system stops Task A's timer, computes and persists its Duration as a Time Record, and starts Task B's timer as "En Ejecución"
+- **CUANDO** hay un cronómetro corriendo para la Tarea A y el usuario inicia un cronómetro para la Tarea B
+- **ENTONCES** el sistema detiene el cronómetro de la Tarea A, calcula y persiste su Duración como un Registro de Tiempo, e inicia el cronómetro de la Tarea B como "En Ejecución"
 
-### Requirement: Stop the active timer and compute duration
+### Requirement: Detener el cronómetro activo y calcular la duración
 
-The system SHALL allow the user to stop the active timer, recording the End Time and computing the Duration as End Time minus Start Time. (US-002 AC-008)
+El sistema SHALL permitir al usuario detener el cronómetro activo, registrando la Hora de Fin y calculando la Duración como Hora de Fin menos Hora de Inicio. (US-002 AC-008)
 
-#### Scenario: Stop active timer
+#### Escenario: Detener cronómetro activo
 
-- **WHEN** the user clicks "Detener Sesión" while a timer is active
-- **THEN** the system records the End Time and computes the Duration from Start Time to End Time
+- **CUANDO** el usuario hace clic en "Detener Sesión" mientras un cronómetro está activo
+- **ENTONCES** el sistema registra la Hora de Fin y calcula la Duración desde la Hora de Inicio hasta la Hora de Fin
 
-### Requirement: Reject a zero-or-negative computed duration
+### Requirement: Rechazar una duración calculada de cero o negativa
 
-The system SHALL validate that a Duration computed when stopping a timer is greater than zero before persisting the resulting Time Record. (US-002 AC-009, BR-04)
+El sistema SHALL validar que una Duración calculada al detener un cronómetro sea mayor a cero antes de persistir el Registro de Tiempo resultante. (US-002 AC-009, BR-04)
 
-#### Scenario: Computed duration is zero
+#### Escenario: La duración calculada es cero
 
-- **WHEN** the timer is stopped in the same instant it was started, producing a computed Duration of zero
-- **THEN** the system does not persist a Time Record with a zero Duration
+- **CUANDO** el cronómetro se detiene en el mismo instante en que se inició, produciendo una Duración calculada de cero
+- **ENTONCES** el sistema no persiste un Registro de Tiempo con Duración cero
 
-### Requirement: Persist timer-generated Time Records immediately
+### Requirement: Persistir inmediatamente los Registros de Tiempo generados por el cronómetro
 
-The system SHALL persist to local storage, immediately, the Time Record generated when a timer is stopped. (US-002 AC-010)
+El sistema SHALL persistir en el almacenamiento local, de forma inmediata, el Registro de Tiempo generado cuando se detiene un cronómetro. (US-002 AC-010)
 
-#### Scenario: Record persists after stopping
+#### Escenario: El registro persiste después de detener
 
-- **WHEN** the user stops an active timer with a valid (>0) Duration
-- **THEN** the resulting Time Record is present in local storage right after the stop action, without requiring further user action
+- **CUANDO** el usuario detiene un cronómetro activo con una Duración válida (>0)
+- **ENTONCES** el Registro de Tiempo resultante está presente en el almacenamiento local inmediatamente después de la acción de detener, sin requerir ninguna acción adicional del usuario
 
-### Requirement: Show current timer state
+### Requirement: Mostrar el estado actual del cronómetro
 
-The interface SHALL clearly show the timer's state (active/inactive) and the Task it is associated with. (US-002 AC-011)
+La interfaz SHALL mostrar claramente el estado del cronómetro (activo/inactivo) y la Tarea con la que está asociado. (US-002 AC-011)
 
-#### Scenario: Active timer is visible
+#### Escenario: El cronómetro activo es visible
 
-- **WHEN** a timer is running for a Task
-- **THEN** the Tasks screen shows the running state, the associated Task's name, and the elapsed time
+- **CUANDO** hay un cronómetro corriendo para una Tarea
+- **ENTONCES** la pantalla de Tareas muestra el estado en ejecución, el nombre de la Tarea asociada, y el tiempo transcurrido
 
-### Requirement: Timer actions complete within 1 second
+### Requirement: Las acciones del cronómetro se completan en menos de 1 segundo
 
-The system SHALL start a timer, and SHALL stop it and persist the resulting Time Record, in under 1 second from the user's action. (US-002 AC-012)
+El sistema SHALL iniciar un cronómetro, y SHALL detenerlo y persistir el Registro de Tiempo resultante, en menos de 1 segundo desde la acción del usuario. (US-002 AC-012)
 
-#### Scenario: Start/stop responsiveness
+#### Escenario: Capacidad de respuesta al iniciar/detener
 
-- **WHEN** the user starts or stops a timer
-- **THEN** the corresponding state change and persistence complete in under 1 second
+- **CUANDO** el usuario inicia o detiene un cronómetro
+- **ENTONCES** el cambio de estado correspondiente y la persistencia se completan en menos de 1 segundo
 
-### Requirement: Create a manual Time Record
+### Requirement: Crear un Registro de Tiempo manual
 
-The system SHALL allow the user to create a manual Time Record for a Task by entering the Task, the Date, and the Duration, without using the timer. (US-002 AC-013)
+El sistema SHALL permitir al usuario crear un Registro de Tiempo manual para una Tarea ingresando la Tarea, la Fecha, y la Duración, sin usar el cronómetro. (US-002 AC-013)
 
-#### Scenario: Manual entry with valid data
+#### Escenario: Entrada manual con datos válidos
 
-- **WHEN** the user submits the "Entrada Manual" form with a Task, a Date, and a Duration greater than zero
-- **THEN** the system creates a Time Record with those values
+- **CUANDO** el usuario envía el formulario "Entrada Manual" con una Tarea, una Fecha, y una Duración mayor a cero
+- **ENTONCES** el sistema crea un Registro de Tiempo con esos valores
 
-### Requirement: Reject an invalid manually-entered duration
+### Requirement: Rechazar una duración ingresada manualmente que sea inválida
 
-The system SHALL validate that a manually-entered Duration is greater than zero, rejecting the record otherwise. (US-002 AC-014, BR-04)
+El sistema SHALL validar que una Duración ingresada manualmente sea mayor a cero, rechazando el registro en caso contrario. (US-002 AC-014, BR-04)
 
-#### Scenario: Manual duration is zero or negative
+#### Escenario: La duración manual es cero o negativa
 
-- **WHEN** the user submits the "Entrada Manual" form with a Duration of zero (or an equivalent non-positive value)
-- **THEN** the system blocks submission and does not create a Time Record
+- **CUANDO** el usuario envía el formulario "Entrada Manual" con una Duración de cero (o un valor no positivo equivalente)
+- **ENTONCES** el sistema bloquea el envío y no crea un Registro de Tiempo
 
-### Requirement: Persist manual Time Records locally
+### Requirement: Persistir localmente los Registros de Tiempo manuales
 
-The system SHALL persist a manually-entered Time Record to local device storage. (US-002 AC-015)
+El sistema SHALL persistir un Registro de Tiempo ingresado manualmente en el almacenamiento local del dispositivo. (US-002 AC-015)
 
-#### Scenario: Manual record survives reload
+#### Escenario: El registro manual sobrevive al reload
 
-- **WHEN** the user creates a manual Time Record and then reloads the application
-- **THEN** the Time Record is still present with the same Task, Date and Duration
+- **CUANDO** el usuario crea un Registro de Tiempo manual y luego recarga la aplicación
+- **ENTONCES** el Registro de Tiempo sigue presente con la misma Tarea, Fecha y Duración
 
-### Requirement: Fixed 40-hour Weekly Goal
+### Requirement: Meta Semanal fija de 40 horas
 
-The system SHALL compute the Weekly Goal as a fixed value of 40 hours (8 hours × 5 workdays), not configurable by the user. (US-002 AC-017, BR-05)
+El sistema SHALL calcular la Meta Semanal como un valor fijo de 40 horas (8 horas × 5 días laborables), no configurable por el usuario. (US-002 AC-017, BR-05)
 
-#### Scenario: Weekly Goal is always 40 hours
+#### Escenario: La Meta Semanal siempre es de 40 horas
 
-- **WHEN** the Weekly Goal is displayed on the Tasks screen
-- **THEN** its value is 40 hours regardless of any existing Time Record or user setting
+- **CUANDO** se muestra la Meta Semanal en la pantalla de Tareas
+- **ENTONCES** su valor es de 40 horas sin importar ningún Registro de Tiempo existente o configuración del usuario
 
-### Requirement: Weekly Total scoped to the current workweek (Monday–Friday)
+### Requirement: Total Semanal acotado a la semana laboral actual (lunes-viernes)
 
-The system SHALL compute and display the Weekly Total by summing Time Records (from the timer and manual entries) generated during the current workweek, defined as Monday through Friday, local time. Time Records dated Saturday or Sunday SHALL NOT be included in the Weekly Total. (US-002 AC-018, BR-05)
+El sistema SHALL calcular y mostrar el Total Semanal sumando los Registros de Tiempo (del cronómetro y de entradas manuales) generados durante la semana laboral actual, definida como lunes a viernes, hora local. Los Registros de Tiempo fechados en sábado o domingo SHALL NOT ser incluidos en el Total Semanal. (US-002 AC-018, BR-05)
 
-#### Scenario: Weekly Total sums workweek records
+#### Escenario: El Total Semanal suma los registros de la semana laboral
 
-- **WHEN** Time Records exist with dates within the current Monday–Friday range
-- **THEN** the Weekly Total equals the sum of their Durations
+- **CUANDO** existen Registros de Tiempo con fechas dentro del rango lunes-viernes actual
+- **ENTONCES** el Total Semanal es igual a la suma de sus Duraciones
 
-#### Scenario: Previous week excluded
+#### Escenario: Semana anterior excluida
 
-- **WHEN** a Time Record's date falls in the calendar week before the current workweek
-- **THEN** that Time Record's Duration is not included in the Weekly Total
+- **CUANDO** la fecha de un Registro de Tiempo cae en la semana calendario anterior a la semana laboral actual
+- **ENTONCES** la Duración de ese Registro de Tiempo no se incluye en el Total Semanal
 
-#### Scenario: Weekend excluded
+#### Escenario: Fin de semana excluido
 
-- **WHEN** a Time Record's date falls on a Saturday or Sunday within the current calendar week
-- **THEN** that Time Record's Duration is not included in the Weekly Total
+- **CUANDO** la fecha de un Registro de Tiempo cae en sábado o domingo dentro de la semana calendario actual
+- **ENTONCES** la Duración de ese Registro de Tiempo no se incluye en el Total Semanal
 
-### Requirement: Weekly Goal percentage
+### Requirement: Porcentaje de la Meta Semanal
 
-The system SHALL display the percentage reached of the Weekly Goal, computed as (Weekly Total ÷ Weekly Goal) × 100. (US-002 AC-019)
+El sistema SHALL mostrar el porcentaje alcanzado de la Meta Semanal, calculado como (Total Semanal ÷ Meta Semanal) × 100. (US-002 AC-019)
 
-#### Scenario: Percentage below goal
+#### Escenario: Porcentaje por debajo de la meta
 
-- **WHEN** the Weekly Total is less than the 40-hour Weekly Goal
-- **THEN** the displayed percentage is (Weekly Total ÷ 40h) × 100, below 100%
+- **CUANDO** el Total Semanal es menor a la Meta Semanal de 40 horas
+- **ENTONCES** el porcentaje mostrado es (Total Semanal ÷ 40h) × 100, por debajo del 100%
 
-#### Scenario: Percentage above goal
+#### Escenario: Porcentaje por encima de la meta
 
-- **WHEN** the Weekly Total exceeds the 40-hour Weekly Goal
-- **THEN** the displayed percentage exceeds 100%, without being capped
+- **CUANDO** el Total Semanal excede la Meta Semanal de 40 horas
+- **ENTONCES** el porcentaje mostrado excede el 100%, sin ser capado

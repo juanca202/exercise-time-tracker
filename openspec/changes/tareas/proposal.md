@@ -1,37 +1,37 @@
 ## Why
 
-With Projects implemented (`proyectos` change), the app still cannot record any time. [US-002](../../../docs/specs/user-stories/US-002-tareas/README.md) (Ready, 19 acceptance criteria) is the core of Time Tracker: Task management, the single-timer tracker, manual time entry, and the fixed weekly goal — everything the Tasks screen needs to let a user actually track time against a Task.
+[US-002](../../../docs/specs/user-stories/US-002-tareas/README.md) (Ready, 19 criterios de aceptación) es el núcleo de Time Tracker: la gestión de Tareas, el cronómetro único, la entrada manual de tiempo y la meta semanal fija — todo lo que la pantalla de Tareas necesita para que un usuario pueda efectivamente registrar tiempo contra una Tarea. El change `fundamentos` ya provee datos reales de Project (el CRUD crudo `addProject`/`listProjects`, no solo el tipo `Project`) y el shell de la app, de modo que este change puede construirse y verificarse de extremo a extremo — incluyendo un selector real de "Proyecto" en la creación de Tarea — sin esperar a que exista la propia pantalla del change `proyectos`.
 
 ## What Changes
 
-- Add Task creation under an existing Project (Name required, Project required).
-- Add Task editing, reusing the "Nueva Tarea" modal precargado (title/button swapped to "Editar Tarea") — no separate edit screen exists in Figma.
-- Add a single, app-wide active timer per Task: start (via the ▷ icon on a Task row), stop, duration computed as End − Start.
-- Add auto-stop: starting a timer on a different Task automatically stops and persists the previously active one (only one active timer app-wide).
-- Add duration validation (> 0) shared by the timer-stop flow and manual entry.
-- Add manual Time Record entry (Task + Fecha + Duración), independent of the timer.
-- Add a fixed 40h Weekly Goal (8h × 5 workdays) and a Weekly Total scoped to the current workweek (Monday–Friday only, weekends excluded), with a percentage-of-goal indicator.
-- Persist Tasks and Time Records locally, reusing the storage adapter from the `proyectos` change.
-- Assemble the full Tasks screen (active timer card, Entrada Manual form, Total Semanal/Total Mensual stat cards, Tareas Recientes list) per the Figma prototype and DESIGN.md.
+- Agregar creación de Tarea bajo un Proyecto existente (Nombre requerido, Proyecto requerido).
+- Agregar edición de Tarea, reutilizando el modal "Nueva Tarea" precargado (título/botón intercambiados a "Editar Tarea") — no existe una pantalla de edición separada en Figma.
+- Agregar un cronómetro activo único, a nivel de toda la app, por Tarea: iniciar (mediante el ícono ▷ en una fila de Tarea), detener, duración calculada como Fin − Inicio.
+- Agregar auto-detención: iniciar un cronómetro en una Tarea distinta detiene y persiste automáticamente el que estaba activo previamente (solo un cronómetro activo a nivel de toda la app).
+- Agregar validación de duración (> 0) compartida por el flujo de detención del cronómetro y la entrada manual.
+- Agregar entrada manual de Registro de Tiempo (Tarea + Fecha + Duración), independiente del cronómetro.
+- Agregar una Meta Semanal fija de 40h (8h × 5 días laborables) y un Total Semanal acotado a la semana laboral actual (solo lunes a viernes, fines de semana excluidos), con un indicador de porcentaje de la meta.
+- Persistir Tareas y Registros de Tiempo localmente mediante el CRUD crudo `addTask`/`updateTask`/`addTimeRecord` provisto por el change `fundamentos`.
+- Ensamblar la pantalla completa de Tareas (tarjeta de cronómetro activo, formulario de Entrada Manual, tarjetas de estadísticas Total Semanal/Total Mensual, lista de Tareas Recientes) según el prototipo de Figma y DESIGN.md.
 
-No **BREAKING** changes.
+No hay cambios **BREAKING**.
 
-## Capabilities
+## Capacidades
 
-### New Capabilities
+### Capacidades Nuevas
 
-- `task-management`: Create and edit Tasks under a Project, reusing the creation modal for edit. Source: US-002, AC-001 to AC-005, AC-016.
-- `time-tracking`: Single active timer with auto-stop, manual time entry, duration validation, and the fixed Weekly Goal/Weekly Total/percentage indicator scoped to Monday–Friday. Source: US-002, AC-006 to AC-015, AC-017 to AC-019, BR-01 to BR-05.
+- `task-management`: Crear y editar Tareas bajo un Proyecto, reutilizando el modal de creación para la edición. Fuente: US-002, AC-001 a AC-005, AC-016.
+- `time-tracking`: Cronómetro activo único con auto-detención, entrada manual de tiempo, validación de duración, y la Meta Semanal/Total Semanal/indicador de porcentaje fijos, acotados a lunes-viernes. Fuente: US-002, AC-006 a AC-015, AC-017 a AC-019, BR-01 a BR-05.
 
-### Modified Capabilities
+### Capacidades Modificadas
 
-- None — `project-management` (from the `proyectos` change) is not modified; this change only consumes it (a Task references an existing Project).
+- Ninguna — `project-management` (del change `proyectos`) no se modifica; este change lee Proyectos a través del `listProjects` crudo de `fundamentos`, independientemente de si la pantalla de `proyectos` ya está lista.
 
-## Impact
+## Impacto
 
-- **Affected code**: `src/features/tasks` (new — includes the timer and manual-entry UI, colocated with Task management per the Figma layout and the US-002 scope decision). Extends the shared Zustand store (from `proyectos`) with Task, Time Record and `activeTimer` slices.
-- **Dependencies**: none new; reuses `src/shared/persistence` established by the `proyectos` change.
-- **Systems**: none external — offline-first, no backend.
-- **Design system**: must match the Figma prototype ("Tareas" and "Tareas - Diálogo Nueva Tarea" frames) and DESIGN.md "Precision Focus".
-- **Sequencing**: depends on the `proyectos` change (a Task requires an existing Project, BR-01) and should land before `historial-de-registros` (the history view has no data to show without Time Records from this change).
-- **Note on scope**: US-002's own INVEST validation marks the "Small" dimension as `Parcial` because it bundles Task management, the timer, and manual entry by explicit product decision; `tasks.md` below breaks this into independently completable steps to keep the implementation reviewable.
+- **Código afectado**: solo `src/features/tasks` (nuevo — incluye el cronómetro y la UI de entrada manual, colocados junto con la gestión de Tareas según el layout de Figma y la decisión de alcance de US-002), además de `isValidTask`, `isValidDuration`, la máquina de estados del cronómetro, y la lógica de la meta semanal, todo local a la feature. Consume (sin modificar) los tipos Task/TimeRecord/Project, el CRUD crudo y el shell de la app provistos por `fundamentos`.
+- **Dependencias**: ninguna nueva; reutiliza `src/shared/persistence` y el store raíz establecidos por el change `fundamentos`.
+- **Sistemas**: ninguno externo — offline-first, sin backend.
+- **Sistema de diseño**: debe coincidir con el prototipo de Figma (frames "Tareas" y "Tareas - Diálogo Nueva Tarea") y con DESIGN.md "Precision Focus".
+- **Secuenciación**: depende únicamente del change `fundamentos` (los datos reales de Proyecto vía su CRUD crudo son suficientes — la propia pantalla de `proyectos` no necesita existir todavía). Sin dependencia de `proyectos` ni de `historial-de-registros`; los tres pueden implementarse en paralelo una vez que `fundamentos` esté mergeado.
+- **Nota sobre el alcance**: la propia validación INVEST de US-002 marca la dimensión "Small" como `Parcial` porque agrupa la gestión de Tareas, el cronómetro y la entrada manual por decisión explícita de producto; el `tasks.md` de abajo desglosa esto en pasos completables de forma independiente para mantener la implementación revisable.
