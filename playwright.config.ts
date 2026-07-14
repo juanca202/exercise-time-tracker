@@ -1,7 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
 // Dedicated, uncommon port to avoid colliding with other local dev servers.
-const PORT = 4321;
+// Overridable via PLAYWRIGHT_PORT for environments that run multiple
+// isolated checkouts of this repo concurrently (e.g. parallel worktrees).
+const PORT = Number(process.env.PLAYWRIGHT_PORT) || 4321;
 const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({
