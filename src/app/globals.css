@@ -43,6 +43,10 @@
   --color-inverse-surface: #2d3133;
   /* Estado de error (validación de formularios). */
   --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  /* Contenedor de error tonal (p. ej. acción destructiva "Detener Sesión"), mismo patrón tonal que `secondary-container`/`on-secondary-container`. */
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
 }
 
 @theme inline {
@@ -63,6 +67,9 @@
   --color-on-surface-variant: var(--color-on-surface-variant);
   --color-inverse-surface: var(--color-inverse-surface);
   --color-error: var(--color-error);
+  --color-on-error: var(--color-on-error);
+  --color-error-container: var(--color-error-container);
+  --color-on-error-container: var(--color-on-error-container);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 
