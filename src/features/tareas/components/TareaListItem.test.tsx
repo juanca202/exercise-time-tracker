@@ -89,4 +89,62 @@ describe("TareaListItem", () => {
     // Assert
     expect(onEditar).toHaveBeenCalledWith(tarea);
   });
+
+  it("muestra la Duración acumulada formateada como HH:MM:SS", () => {
+    // Arrange & Act
+    const tarea = crearTareaDePrueba({ nombre: "Diseñar wireframes" });
+    render(
+      <TareaListItem
+        tarea={tarea}
+        nombreProyecto="Proyecto Alpha"
+        enEjecucion={false}
+        duracionAcumuladaMinutos={90}
+        onIniciarTemporizador={vi.fn()}
+        onDetenerTemporizador={vi.fn()}
+        onEditar={vi.fn()}
+      />,
+    );
+
+    // Assert: 90 minutos = 01:30:00
+    expect(screen.getByText("01:30:00")).toBeInTheDocument();
+  });
+
+  it("muestra el texto de recencia cuando se provee ultimaActividadEn", () => {
+    // Arrange & Act
+    const tarea = crearTareaDePrueba({ nombre: "Diseñar wireframes" });
+    const haceUnaHora = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    render(
+      <TareaListItem
+        tarea={tarea}
+        nombreProyecto="Proyecto Alpha"
+        enEjecucion={false}
+        ultimaActividadEn={haceUnaHora}
+        onIniciarTemporizador={vi.fn()}
+        onDetenerTemporizador={vi.fn()}
+        onEditar={vi.fn()}
+      />,
+    );
+
+    // Assert
+    expect(screen.getByText("hace 1h")).toBeInTheDocument();
+  });
+
+  it("no muestra ningún texto de recencia cuando no se provee ultimaActividadEn", () => {
+    // Arrange & Act
+    const tarea = crearTareaDePrueba({ nombre: "Diseñar wireframes" });
+    render(
+      <TareaListItem
+        tarea={tarea}
+        nombreProyecto="Proyecto Alpha"
+        enEjecucion={false}
+        onIniciarTemporizador={vi.fn()}
+        onDetenerTemporizador={vi.fn()}
+        onEditar={vi.fn()}
+      />,
+    );
+
+    // Assert
+    expect(screen.queryByText(/^hace /)).not.toBeInTheDocument();
+    expect(screen.queryByText("Ayer")).not.toBeInTheDocument();
+  });
 });

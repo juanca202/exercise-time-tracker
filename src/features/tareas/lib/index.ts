@@ -31,3 +31,17 @@ export {
   type EntradaRegistroManual,
   type ResultadoCrearRegistroManual,
 } from "./acciones-registro-manual";
+export { calcularTotalMensual } from "./calcular-total-mensual";
+export { calcularSegundosTranscurridos } from "./calcular-segundos-transcurridos";
+export {
+  calcularDuracionAcumuladaMinutos,
+  obtenerUltimaActividad,
+} from "./calcular-duracion-acumulada-tarea";
+export {
+  formatearHMS,
+  formatearHoraAmPm,
+  formatearHorasYMinutos,
+} from "./formatear-tiempo";
+export { formatearTiempoRelativo } from "./formatear-tiempo-relativo";
+export { parsearDuracionHHMM } from "./parsear-duracion-hhmm";
+export { obtenerColorAcentoTarea } from "./color-acento-tarea";

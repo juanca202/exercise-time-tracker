@@ -3,19 +3,27 @@
 import { useMemo, useState } from "react";
 import type { Tarea } from "@/shared/domain";
 import { useAppStore } from "@/shared/store";
+import { TopAppBar } from "@/shared/ui";
 import { TareaFormModal, type ModoTareaFormModal } from "./TareaFormModal";
-import { TareaListItem } from "./TareaListItem";
-import { RegistroManualForm } from "./RegistroManualForm";
-import { MetaSemanalWidget } from "./MetaSemanalWidget";
+import { TareasRecientesCard } from "./TareasRecientesCard";
+import { RegistroManualForm, type TareaOpcion } from "./RegistroManualForm";
+import { ResumenTareas } from "./ResumenTareas";
+import { SesionActivaCard } from "./SesionActivaCard";
+import {
+  calcularDuracionAcumuladaMinutos,
+  obtenerUltimaActividad,
+} from "../lib/calcular-duracion-acumulada-tarea";
 import {
   iniciarTemporizador,
   detenerTemporizador,
 } from "../lib/acciones-temporizador";
 
 /**
- * Panel principal de la feature Tareas: agrupa el listado "Tareas
- * Recientes" con los controles de temporizador, el modal de creación/edición
- * de Tarea, el ingreso manual de tiempo y el widget de Meta Semanal.
+ * Panel principal de la feature Tareas (frame Figma "Tareas"): TopAppBar
+ * con la acción "Nueva Tarea", resumen semanal/mensual, la tarjeta "Sesión
+ * Activa" del temporizador en curso, el ingreso manual de tiempo ("Entrada
+ * Manual") y el listado "Tareas Recientes" con su propio control de
+ * temporizador.
  *
  * Consume el store raíz compartido (`useAppStore`), ya rehidratado por
  * `InicializadorAplicacion` desde el layout raíz (`fundamentos-infraestructura-compartida`):
@@ -25,8 +33,8 @@ import {
  */
 export interface PanelTareasProps {
   /**
-   * Fecha "actual" usada para calcular la semana laboral del widget de Meta
-   * Semanal. Por defecto, ahora. Permite inyectar una fecha fija en pruebas.
+   * Fecha "actual" usada para calcular la semana/mes laboral del resumen.
+   * Por defecto, ahora. Permite inyectar una fecha fija en pruebas.
    */
   fecha?: Date;
 }
@@ -60,10 +68,43 @@ export function PanelTareas({ fecha }: PanelTareasProps = {}) {
     [proyectos],
   );
 
-  const tareasOpciones = useMemo(
-    () => tareas.map((tarea) => ({ id: tarea.id, nombre: tarea.nombre })),
-    [tareas],
+  const tareasOpciones = useMemo<TareaOpcion[]>(
+    () =>
+      tareas.map((tarea) => ({
+        id: tarea.id,
+        nombre: tarea.nombre,
+        nombreProyecto: proyectosPorId.get(tarea.proyectoId) ?? "",
+      })),
+    [tareas, proyectosPorId],
   );
+
+  const tareasRecientesVista = useMemo(
+    () =>
+      tareas.map((tarea) => {
+        const enEjecucion = temporizadorActivo?.tareaId === tarea.id;
+        return {
+          tarea,
+          nombreProyecto: proyectosPorId.get(tarea.proyectoId) ?? "",
+          enEjecucion,
+          duracionAcumuladaMinutos: calcularDuracionAcumuladaMinutos(
+            registrosDeTiempo,
+            tarea.id,
+          ),
+          horaInicioTemporizador: enEjecucion
+            ? temporizadorActivo?.horaInicio
+            : undefined,
+          ultimaActividadEn: obtenerUltimaActividad(
+            registrosDeTiempo,
+            tarea.id,
+          ),
+        };
+      }),
+    [tareas, proyectosPorId, registrosDeTiempo, temporizadorActivo],
+  );
+
+  const tareaActiva = temporizadorActivo
+    ? tareas.find((tarea) => tarea.id === temporizadorActivo.tareaId)
+    : undefined;
 
   function abrirModalCrear(): void {
     setModo("crear");
@@ -78,19 +119,16 @@ export function PanelTareas({ fecha }: PanelTareasProps = {}) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 sm:p-10">
-      <header className="flex items-center justify-between">
-        <h1 className="font-sans text-2xl font-semibold text-on-surface">
-          Tareas
-        </h1>
+    <div className="flex w-full flex-col">
+      <TopAppBar>
         <button
           type="button"
           onClick={abrirModalCrear}
-          className="rounded bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-container"
+          className="rounded-precision-sm bg-primary px-4 py-2 text-sm font-bold text-on-primary hover:bg-primary/90"
         >
           Nueva Tarea
         </button>
-      </header>
+      </TopAppBar>
 
       {/*
        * `proyectos`/`tareas`/`registrosDeTiempo` reflejan datos persistidos:
@@ -100,37 +138,31 @@ export function PanelTareas({ fecha }: PanelTareasProps = {}) {
        * antes de rehidratar (AC-004 de `fundamentos-infraestructura-compartida`).
        */}
       {haHidratado && (
-        <>
-          <MetaSemanalWidget registros={registrosDeTiempo} fecha={fecha} />
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 p-6">
+          <ResumenTareas registros={registrosDeTiempo} fecha={fecha} />
 
-          <section className="flex flex-col gap-3">
-            <h2 className="font-sans text-lg font-semibold text-on-surface">
-              Tareas Recientes
-            </h2>
-            {tareas.length === 0 ? (
-              <p className="text-sm text-on-surface-variant">
-                Todavía no hay Tareas. Crea la primera con &quot;Nueva
-                Tarea&quot;.
-              </p>
-            ) : (
-              <ul className="flex flex-col gap-2">
-                {tareas.map((tarea) => (
-                  <TareaListItem
-                    key={tarea.id}
-                    tarea={tarea}
-                    nombreProyecto={proyectosPorId.get(tarea.proyectoId) ?? ""}
-                    enEjecucion={temporizadorActivo?.tareaId === tarea.id}
-                    onIniciarTemporizador={iniciarTemporizador}
-                    onDetenerTemporizador={detenerTemporizador}
-                    onEditar={abrirModalEditar}
-                  />
-                ))}
-              </ul>
-            )}
-          </section>
+          <div className="grid grid-cols-12 gap-6">
+            <SesionActivaCard
+              nombreTarea={tareaActiva?.nombre}
+              nombreProyecto={
+                tareaActiva
+                  ? proyectosPorId.get(tareaActiva.proyectoId)
+                  : undefined
+              }
+              horaInicio={temporizadorActivo?.horaInicio}
+              onDetener={() => detenerTemporizador()}
+            />
 
-          <RegistroManualForm tareas={tareasOpciones} />
-        </>
+            <RegistroManualForm tareas={tareasOpciones} />
+
+            <TareasRecientesCard
+              tareas={tareasRecientesVista}
+              onIniciarTemporizador={iniciarTemporizador}
+              onDetenerTemporizador={detenerTemporizador}
+              onEditar={abrirModalEditar}
+            />
+          </div>
+        </div>
       )}
 
       <TareaFormModal
