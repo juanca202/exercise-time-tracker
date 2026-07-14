@@ -1,74 +1,59 @@
-# Code Review — US-002-tareas (openspec: gestion-tareas-temporizador)
+# Code Review — US-002-tareas (reconciliación de layout con Figma)
 
-**Fecha**: 2026-07-14 10:29 (re-ejecución completa sobre el estado ya reconciliado en `loop/test-3`)
+**Fecha**: 2026-07-14 18:30
 **Repositorio**: exercise-time-tracker
-**Rama**: loop/test-3 · **Commit**: d3190ff (base) + reconciliación en working tree, sin commitear aún
-**Working tree**: sucio (todos los cambios de la reconciliación en stage, listos para commit)
+**Rama**: loop/test-3 · **Commit**: 073e536 (base) + working tree sin commitear
+**Working tree**: sucio (todos los cambios del rediseño de layout en working tree, listos para commit)
 **Modo**: default
 **Historia**: US-002-tareas (docs/specs/user-stories/US-002-tareas/README.md)
 **Veredicto**: ✅ Apto
 
 ## Resumen
 
-Se revisó el resultado **ya reconciliado** de mergear `worktree-wf_f50d6d04-9a0-3` (change OpenSpec `gestion-tareas-temporizador`, US-002) sobre `loop/test-3`. La rama de origen había reimplementado su propia copia paralela de la infraestructura compartida (`useRaizStore`, `src/shared/domain/types.ts`, `local-storage-adapter.ts`) porque partió de un estado anterior al merge de `fundamentos-infraestructura-compartida`. La reconciliación eliminó esa infraestructura duplicada y adaptó toda `src/features/tareas/` para consumir `useAppStore`/`@/shared/domain`/`@/shared/persistence` canónicos, incluyendo la conversión de `duracionMs` → `duracionMinutos` y de `fecha` (ISO datetime) → día calendario puro `YYYY-MM-DD`. No se asumió el code-review previo de la rama de origen: se re-ejecutó todo desde cero sobre el estado final ya mergeado. Todas las verificaciones automatizadas pasan y no se detectaron hallazgos cualitativos bloqueantes.
+Se revisó el rediseño del LAYOUT/PRESENTACIÓN de la pantalla `/tareas` para reconciliarla con el frame Figma "Tareas" (AC-005/AC-016, previamente `Parcial` en el trace-report por falta de acceso a Figma), preservando la lógica de negocio y el store ya probados. El cambio introduce `TopAppBar` (compartido), `ResumenTareas` (título + % de meta + tarjetas de stat semanal/mensual), `SesionActivaCard`, rediseña `RegistroManualForm` (selector combinado Proyecto/Tarea, Duración en `HH:MM`) y `TareaListItem`/`TareasRecientesCard` (fila con ícono, duración acumulada en vivo y recencia), sin tocar Proyectos ni Historial. Todas las verificaciones automatizadas pasan; se detectó y corrigió en el propio ciclo de review una duplicación menor (fórmula de segundos transcurridos) extrayéndola a `calcularSegundosTranscurridos`.
 
 ## 1. Verificaciones automatizadas
 
 Símbolos de estado: `✅` PASS · `❌` FAIL · `⏭️` SKIPPED · `—` N/A · `ℹ️` informativo (Sonar).
 
-| #   | Check      | Comando                                                     | Categoría   | Estado | Detalle                                                                                                                                                                                               | Duración |
-| --- | ---------- | ----------------------------------------------------------- | ----------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| 1   | tipado     | `npx tsc --noEmit -p tsconfig.json`                         | Bloqueante  | ✅     | 0 errores                                                                                                                                                                                             | ~2s      |
-| 2   | linter     | `npm run lint` (eslint .)                                   | Bloqueante  | ✅     | 0 errors, 0 warnings (1 warning informativo en `coverage/` generado y gitignorado, no forma parte del código fuente)                                                                                  | ~2s      |
-| 3   | unit tests | `npx vitest run`                                            | Bloqueante  | ✅     | 149 passed, 0 failed (32 archivos)                                                                                                                                                                    | 3.49s    |
-| 4   | coverage   | `npx vitest run --coverage`                                 | Bloqueante  | ✅     | 94.22% stmts / 88.18% branch / 96.71% funcs / 93.82% lines (ADR-007 exige ≥80%, se cumple ampliamente)                                                                                                | 3.52s    |
-| 5   | build      | `npx next build`                                            | Bloqueante  | ✅     | Compiló y generó `/`, `/_not-found`, `/proyectos`, `/historial`, `/tareas`                                                                                                                            | ~2s      |
-| 6   | e2e        | `PLAYWRIGHT_PORT=4877 npx playwright test` (suite completa) | Condicional | ✅     | 18 passed, 0 failed (smoke, app-shell-navegacion, gestion-proyectos ×4, historial ×3, historial-design-tokens, historial-rendimiento ×2, tareas-regresion-visual ×2, tareas-temporizador-performance) | 9.7s     |
-| 7   | sonar      | —                                                           | Informativo | —      | N/A (no existe `sonar-project.properties`)                                                                                                                                                            | —        |
+| #   | Check      | Comando                                                         | Categoría   | Estado | Detalle                                                                                                                                                                                                  | Duración |
+| --- | ---------- | --------------------------------------------------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| 1   | tipado     | `npx tsc --noEmit -p tsconfig.json`                             | Bloqueante  | ✅     | 0 errores                                                                                                                                                                                                | ~2s      |
+| 2   | linter     | `npx eslint .`                                                  | Bloqueante  | ✅     | 0 errors, 0 warnings                                                                                                                                                                                     | ~2s      |
+| 3   | unit tests | `npx vitest run`                                                | Bloqueante  | ✅     | 216 passed, 0 failed (43 archivos)                                                                                                                                                                       | 3.8s     |
+| 4   | coverage   | `npx vitest run --coverage`                                     | Bloqueante  | ✅     | 96.26% stmts / 91.2% branch / 97.77% funcs / 96.03% lines (ADR-007 exige ≥80%, se cumple ampliamente; `src/features/tareas/components` en 96.87% stmts)                                                  | 4.7s     |
+| 5   | build      | `npx next build`                                                | Bloqueante  | ✅     | Compiló y generó `/`, `/_not-found`, `/proyectos`, `/historial`, `/tareas`                                                                                                                               | ~2s      |
+| 6   | e2e        | `npx playwright test` (suite completa, puerto 4321 por defecto) | Condicional | ✅     | 18 passed, 0 failed (smoke, app-shell-navegacion ×4, gestion-proyectos ×4, historial ×3, historial-design-tokens, historial-rendimiento ×2, tareas-regresion-visual ×2, tareas-temporizador-performance) | 9.4s     |
+| 7   | sonar      | —                                                               | Informativo | —      | N/A (no existe `sonar-project.properties` ni `sonar-scanner` en PATH)                                                                                                                                    | —        |
 
 ### Detalle de checks fallidos
 
-Sin checks fallidos. (Durante la reconciliación se detectó y corrigió un snapshot visual desactualizado — ver Feedback adicional — pero quedó resuelto antes de este informe.)
+Sin checks fallidos. El snapshot visual `pantalla-tareas-chromium-darwin.png` se regeneró deliberadamente (`--update-snapshots`) tras confirmar visualmente el nuevo layout, según lo esperado por el propio alcance de la tarea (romper y renovar el guardrail visual); el modal "Nueva Tarea" no cambió y su snapshot pasó sin regenerar.
 
 ## 2. Revisión cualitativa
 
 Símbolos de severidad: `🔴` Crítico · `🟠` Mayor · `🟡` Menor · `💡` Sugerencia · `✅` dimensión conforme.
 
-**Intención detectada:** completar la reconciliación de la última de cuatro specs integradas secuencialmente en `loop/test-3`: eliminar la infraestructura compartida duplicada que la rama de origen había reimplementado por partir de una base desactualizada, y dejar la feature Tareas/Temporizador (US-002) consumiendo exclusivamente la infraestructura canónica ya validada por las tres integraciones anteriores, sin regresiones funcionales ni de diseño.
+**Intención detectada:** reconciliar el layout/presentación de `/tareas` con el frame Figma "Tareas" (fidelidad visual, AC-005/AC-016), preservando íntegramente la lógica de negocio y el store ya probados (temporizador, registro manual, meta semanal) sin tocar Proyectos/Historial.
 
 ### Análisis semántico
 
-`✅ conforme`. La reconciliación preserva exactamente el comportamiento funcional original (AC-001 a AC-019 de US-002: CRUD de Tareas, máquina de estados del temporizador con auto-detención al cambiar de Tarea, ingreso manual con validación de Duración > 0, Meta Semanal/Total Semanal/porcentaje) mientras traduce las formas de datos al contrato canónico:
-
-- `duracionMs` (worktree) → `duracionMinutos` (canónico): conversión exacta (`duracionMs / 60_000`) sin redondeo, verificada con los mismos casos de prueba originales (25 min, etc.).
-- `fecha` como ISO datetime completo → día calendario puro `YYYY-MM-DD`: se introdujo `fechaLocalACalendario`/`fechaCalendarioALocal` (`src/features/tareas/lib/fecha-calendario.ts`) para preservar, en ambos sentidos, el día calendario **local** (no UTC) tanto al persistir el Registro del temporizador como al comparar Registros contra el rango Lunes-Viernes en `calcularTotalSemanal` — evita el mismo corrimiento de día por offset UTC que la propia rama de origen ya prevenía con `fechaInputALocalIso` para el ingreso manual, y lo generaliza también al temporizador.
-- El ingreso manual se simplificó: el valor de `<input type="date">` ya es `YYYY-MM-DD` por especificación HTML, así que ahora se pasa directo como `fecha` sin conversión intermedia (antes se convertía a ISO completo y se reconvertía) — menos codificación/decodificación redundante para el mismo dato.
-
-Ambos caminos de creación de Registros (temporizador y manual) quedan conectados a las mismas acciones canónicas (`crearRegistroDeTiempo`, `establecerTemporizadorActivo`) del store único, con `id`/`creadoEn` generados igual que el resto de la app (`generarId()` de `@/shared/store`).
+✅ conforme. El diff cubre los 6 puntos pedidos (TopAppBar separado, tarjetas de stat semanal/mensual con el % movido al subtítulo, tarjeta Sesión Activa con estado vacío, Entrada Manual en formato Figma, Tareas Recientes con ícono/duración/recencia, modal sin cambios de layout) sin tocar `src/features/proyectos` ni `src/features/historial` (confirmado por `git status`). Toda la lógica de negocio probada (`acciones-temporizador.ts`, `acciones-registro-manual.ts`, `acciones-tareas.ts`, `calcular-total-semanal.ts`, `calcular-porcentaje-meta.ts`, `validar-duracion.ts`, `validar-tarea-form.ts`) permanece sin cambios; el formato `HH:MM` del formulario manual se resuelve con un parser nuevo (`parsearDuracionHHMM`) que convierte a minutos _antes_ de llegar a `crearRegistroManual`/`validarDuracion`, sin alterar su contrato.
 
 ### Arquitectura y diseño
 
-`✅ conforme`, con una observación menor no bloqueante.
-
-- [ISO-25010: Mantenibilidad] 🟡 Barrel `src/features/tareas/lib/index.ts` sin consumidores.
-  **Qué:** ningún archivo importa `../lib` (barrel); todos los módulos de la feature importan directo del archivo concreto (p. ej. `./validar-duracion`), y `src/app/tareas/page.tsx` importa `PanelTareas` por ruta directa, igual que hace `historial` (a diferencia de `proyectos`, que sí consume su barrel desde la página).
-  **Por qué:** es código que no cumple ninguna función hoy; queda como superficie a mantener sincronizada manualmente si se agregan/renombran funciones en `lib/`.
-  **Impacto:** local, cosmético — no afecta build, tipado ni runtime.
-  **Sugerencia concreta:** si no hay un consumidor externo previsto para esta feature, eliminar `lib/index.ts`; si se prevé una API pública (como en `proyectos`), hacer que `src/app/tareas/page.tsx` la consuma para que dead code no se acumule. No es atribuible a la reconciliación: el barrel ya estaba sin consumir en la rama de origen; se documenta para que quede trazado, no bloquea el merge.
-
-Puntos positivos a destacar:
-
-- La eliminación de la infraestructura duplicada (`raiz-store.ts`, `local-storage-adapter.ts`, `domain/types.ts`, `testing/object-mother.ts`) fue completa y verificada por `grep` antes de borrar — no quedaron referencias huérfanas.
-- El patrón de gate de hidratación en `PanelTareas.tsx` (encabezado siempre visible, contenido dependiente de datos gateado tras `haHidratado`) se alineó al patrón ya establecido por `HistorialScreen`/`ProyectosListado`, en vez de mantener el `return null` de cuerpo completo que tenía la rama de origen (que ocultaba innecesariamente el `<h1>` y el botón "Nueva Tarea" hasta hidratar).
-- Los tests unitarios migrados sustituyen el Object Mother local (`src/features/tareas/testing/object-mother.ts`, eliminado) por el canónico `@/shared/domain/object-mother`, siguiendo el mismo patrón ya usado por `historial`.
+- 🟡 (ya corregido) **Duplicación de la fórmula de segundos transcurridos.** `TareaListItem.tsx` y `SesionActivaCard.tsx` repetían `Math.max(0, Math.floor((ahora - new Date(x).getTime()) / 1000))`. **Por qué:** aunque el _tick_ en sí ya estaba unificado en `useAhoraEnVivo` (tal como pedía el enunciado: "reutiliza el patrón... revisa si `TareaListItem` ya tiene un intervalo/tick"), la aritmética que consume ese tick quedaba copiada en dos sitios, con riesgo de divergencia futura si uno de los dos cambia el redondeo. **Impacto:** local a la feature Tareas, bajo riesgo pero exactamente el tipo de duplicación que el propio enunciado pedía evitar. **Corrección aplicada:** extraída a `src/features/tareas/lib/calcular-segundos-transcurridos.ts` (con test propio) y consumida por ambos componentes. Verificado con `npx vitest run` (216 passed) y `npx playwright test` (18 passed) tras el cambio.
+- ✅ conforme en el resto: `TopAppBar` se ubicó en `src/shared/ui/` siguiendo el patrón de `Sidebar`, sin acoplarse a Tareas. `TareaListItem` se **adaptó** (no se reescribió desde cero) preservando sus `aria-label`s exactos (`Iniciar/Detener temporizador de {nombre}`, `Editar {nombre}`) y el texto `"En Ejecución"`, que son el contrato consumido por `e2e/tareas-temporizador-performance.spec.ts` y por `PanelTareas.test.tsx` — ningún selector de esas pruebas necesitó reescribirse por una ruptura de contrato, solo por el nuevo formato de duración/labels del formulario. `RegistroManualForm` sigue delegando en `crearRegistroManual`/`validarDuracion` sin duplicarlos. `calcularTotalMensual` reutiliza `obtenerMesCalendario` (`@/shared/date`), el mismo cálculo de mes calendario que ya usa Historial, en vez de reimplementarlo — y no importa nada de `src/features/historial` (ADR-005: aislamiento entre features), aceptando una pequeña duplicación deliberada de un formateador de duración específico de Tareas (`formatear-tiempo.ts`) en vez de acoplarse a `historial/utils/formatearDuracion.ts`.
 
 ### Feedback adicional
 
-Durante la verificación e2e se detectó que el snapshot visual `pantalla-tareas-chromium-darwin.png` (regresión visual TC-006/TC-018) estaba desactualizado: el baseline se había capturado contra el layout propio de la rama de origen (sin `Sidebar`, `<div>{children}</div>` a secas), mientras que el layout canónico ya mergeado sí monta el `Sidebar` de 280px. Esto no es un defecto de la feature: es consecuencia directa de reconciliar el layout raíz (`src/app/layout.tsx`, resuelto con `--ours`) con el layout que `worktree-wf_f50d6d04-9a0-3` traía. Se regeneró el snapshot con `--update-snapshots` y se confirmó visualmente que el resultado (sidebar + panel de Tareas con Meta Semanal, listado y formulario) es correcto; el snapshot del modal "Nueva Tarea" no se vio afectado (overlay centrado, independiente del ancho del sidebar).
+- Buen trabajo separando cada bento card en su propio componente (`SesionActivaCard`, `TareasRecientesCard`, `ResumenTareas`) en vez de dejar todo inline en `PanelTareas`: cada uno quedó testeable de forma aislada (`SesionActivaCard.test.tsx`, `TareasRecientesCard.test.tsx`, `ResumenTareas.test.tsx`) y `PanelTareas.tsx` quedó como puro orquestador de datos del store.
+- 🟡 El botón "Editar" en `TareaListItem` no aparece en el frame Figma de referencia (Figma no cubre esa acción). Es una decisión de buen criterio documentada en el propio TSDoc del componente para no perder AC-004, pero vale la pena que quien haga la validación visual con el equipo de diseño confirme que ese pequeño desvío es aceptable a largo plazo.
+- 💡 `calcularDuracionAcumuladaMinutos`/`obtenerUltimaActividad` recorren `registrosDeTiempo` completo por cada Tarea dentro de un `.map` (`O(tareas × registros)`). Para los volúmenes actuales de la app (demo, sin backend) es irrelevante; si el dataset creciera mucho valdría la pena indexar los registros por `tareaId` una sola vez con un `Map`, como ya hace `useHistorialRegistros` en Historial.
 
 ## Próximas acciones
 
-Sin acciones pendientes bloqueantes. Opcional (no bloqueante, 🟡): decidir si `src/features/tareas/lib/index.ts` se elimina o se adopta como API pública de la feature.
+Sin acciones pendientes.
 
 ## Justificaciones aceptadas
 
