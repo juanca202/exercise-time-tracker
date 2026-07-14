@@ -1,7 +1,13 @@
 import type { EstadoPersistido } from "./estado-persistido";
 
-/** Clave bajo la que se guarda el estado persistido en el almacenamiento local. */
-const CLAVE_ALMACENAMIENTO = "time-tracker:estado";
+/**
+ * Clave bajo la que se guarda el estado persistido en el almacenamiento
+ * local. Se exporta únicamente para que los E2E (Playwright) puedan sembrar
+ * `localStorage` con datos de prueba antes de que la aplicación arranque
+ * (`page.addInitScript`), sin duplicar este literal ni acoplarse a un valor
+ * que podría desincronizarse silenciosamente del adaptador real.
+ */
+export const CLAVE_ALMACENAMIENTO = "time-tracker:estado";
 
 function hayAlmacenamientoLocalDisponible(): boolean {
   return (

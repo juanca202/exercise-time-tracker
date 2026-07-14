@@ -58,11 +58,15 @@ test.describe("app shell y navegación (US-000)", () => {
 
     await nav.getByRole("link", { name: "Historial de registros" }).click();
     await expect(page).toHaveURL(/\/historial$/);
-    await expect(page.getByText("Próximamente")).toBeVisible();
+    // Historial de registros (US-003) reemplazó el stub "Próximamente" por
+    // la pantalla final: verificamos su encabezado en lugar del texto de stub.
+    await expect(
+      page.getByRole("heading", { name: "Historial de registros" }),
+    ).toBeVisible();
   });
 
   test.describe("acceso directo sin autenticación", () => {
-    for (const ruta of ["/tareas", "/historial"] as const) {
+    for (const ruta of ["/tareas"] as const) {
       test(`${ruta} resuelve sin error y sin gate de acceso`, async ({
         page,
       }) => {
@@ -88,6 +92,22 @@ test.describe("app shell y navegación (US-000)", () => {
       ).toBeVisible();
       await expect(page.getByRole("navigation")).toBeVisible();
       expect(page.url()).toContain("/proyectos");
+    });
+
+    // Historial de registros (US-003) ya no es un stub: se verifica por
+    // separado que resuelve sin error ni gate de acceso, con su propia
+    // pantalla final (estado vacío, sin datos sembrados).
+    test("/historial resuelve sin error y sin gate de acceso", async ({
+      page,
+    }) => {
+      const respuesta = await page.goto("/historial");
+
+      expect(respuesta?.ok()).toBe(true);
+      await expect(
+        page.getByRole("heading", { name: "Historial de registros" }),
+      ).toBeVisible();
+      await expect(page.getByRole("navigation")).toBeVisible();
+      expect(page.url()).toContain("/historial");
     });
   });
 });

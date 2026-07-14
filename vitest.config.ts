@@ -22,5 +22,19 @@ export default defineConfig({
       ".claude/worktrees/**",
     ],
     passWithNoTests: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+      exclude: [
+        "**/node_modules/**",
+        "**/.next/**",
+        "**/out/**",
+        "**/e2e/**",
+        ".claude/worktrees/**",
+        "**/*.d.ts",
+        "**/*.config.*",
+        "src/app/**",
+      ],
+    },
   },
 });

@@ -4,7 +4,7 @@
  * una entidad o un campo no cambia esta interfaz, solo el contenido de
  * `EstadoPersistido`.
  */
-export { leer, escribir, suscribir } from "./adaptador";
+export { leer, escribir, suscribir, CLAVE_ALMACENAMIENTO } from "./adaptador";
 export {
   crearEstadoPersistidoInicial,
   VERSION_ESQUEMA_ESTADO_PERSISTIDO,
