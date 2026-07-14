@@ -5,3 +5,7 @@ build
 coverage
 pnpm-lock.yaml
 package-lock.json
+# Sibling git worktrees checked out inside .claude/worktrees/ in this sandbox
+# (e.g. their own .claude/settings.local.json, playwright-report/, test-results/)
+# must never be picked up when formatting from the main checkout.
+.claude/worktrees
