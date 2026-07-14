@@ -1,0 +1,8 @@
+/**
+ * Meta Semanal fija de la aplicación: 8 horas × 5 días laborales (BR-05).
+ * No configurable por el usuario (AC-017).
+ */
+export const META_SEMANAL_HORAS = 8 * 5;
+
+/** Cantidad de milisegundos en una hora, usada para convertir Duraciones. */
+export const MS_POR_HORA = 3_600_000;
