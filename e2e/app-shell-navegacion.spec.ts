@@ -50,7 +50,11 @@ test.describe("app shell y navegación (US-000)", () => {
 
     await nav.getByRole("link", { name: "Proyectos" }).click();
     await expect(page).toHaveURL(/\/proyectos$/);
-    await expect(page.getByText("Próximamente")).toBeVisible();
+    // Proyectos (US-001) reemplazó el stub "Próximamente" por la pantalla
+    // final: verificamos su encabezado en lugar del texto de stub.
+    await expect(
+      page.getByRole("heading", { name: "Proyectos" }),
+    ).toBeVisible();
 
     await nav.getByRole("link", { name: "Historial de registros" }).click();
     await expect(page).toHaveURL(/\/historial$/);
@@ -58,7 +62,7 @@ test.describe("app shell y navegación (US-000)", () => {
   });
 
   test.describe("acceso directo sin autenticación", () => {
-    for (const ruta of ["/tareas", "/proyectos", "/historial"] as const) {
+    for (const ruta of ["/tareas", "/historial"] as const) {
       test(`${ruta} resuelve sin error y sin gate de acceso`, async ({
         page,
       }) => {
@@ -70,5 +74,20 @@ test.describe("app shell y navegación (US-000)", () => {
         expect(page.url()).toContain(ruta);
       });
     }
+
+    // Proyectos (US-001) ya no es un stub: se verifica por separado que
+    // resuelve sin error ni gate de acceso, con su propia pantalla final.
+    test("/proyectos resuelve sin error y sin gate de acceso", async ({
+      page,
+    }) => {
+      const respuesta = await page.goto("/proyectos");
+
+      expect(respuesta?.ok()).toBe(true);
+      await expect(
+        page.getByRole("heading", { name: "Proyectos" }),
+      ).toBeVisible();
+      await expect(page.getByRole("navigation")).toBeVisible();
+      expect(page.url()).toContain("/proyectos");
+    });
   });
 });

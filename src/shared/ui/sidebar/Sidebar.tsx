@@ -2,6 +2,7 @@
 
 import { Toolbar } from "@base-ui/react/toolbar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ComponentType } from "react";
 import { IconoHistorial, IconoProyectos, IconoTareas } from "./iconos";
 
@@ -41,8 +42,13 @@ const ENLACES_DE_NAVEGACION: EnlaceDeNavegacion[] = [
  * AC-010): las historias funcionales de Proyectos, Tareas e Historial de
  * registros no necesitan modificar este componente, solo reemplazar el
  * contenido de sus propias rutas.
+ *
+ * Marca como activo (`aria-current="page"`) el enlace de la sección actual,
+ * a partir de la ruta activa (US-001, AC-008).
  */
 export function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <aside className="sticky top-0 flex h-screen w-[280px] shrink-0 flex-col border-r border-outline-variant bg-surface py-6 pr-[17px] pl-4">
       <div className="flex w-full flex-col items-start gap-6 px-2 pb-10">
@@ -59,16 +65,21 @@ export function Sidebar() {
           orientation="vertical"
           className="flex w-full flex-col gap-1"
         >
-          {ENLACES_DE_NAVEGACION.map(({ href, etiqueta, Icono }) => (
-            <Toolbar.Link
-              key={href}
-              render={<Link href={href} />}
-              className="flex w-full items-center gap-3 rounded px-4 py-3 text-sm leading-5 text-on-surface-variant hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-            >
-              <Icono className="size-5 shrink-0" />
-              <span>{etiqueta}</span>
-            </Toolbar.Link>
-          ))}
+          {ENLACES_DE_NAVEGACION.map(({ href, etiqueta, Icono }) => {
+            const estaActivo = pathname === href;
+
+            return (
+              <Toolbar.Link
+                key={href}
+                render={<Link href={href} />}
+                aria-current={estaActivo ? "page" : undefined}
+                className="flex w-full items-center gap-3 rounded px-4 py-3 text-sm leading-5 text-on-surface-variant hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary aria-[current=page]:bg-black/5 aria-[current=page]:font-medium aria-[current=page]:text-primary"
+              >
+                <Icono className="size-5 shrink-0" />
+                <span>{etiqueta}</span>
+              </Toolbar.Link>
+            );
+          })}
         </Toolbar.Root>
       </nav>
     </aside>

@@ -7,33 +7,56 @@
 
 /*
  * Tokens del sistema de diseño "Precision Focus" (DESIGN.md), extraídos del
- * frame Figma "Aside - SideNavBar" (US-000, AC-012) y mapeados a la
- * configuración de Tailwind CSS (ADR-002). Solo se declaran aquí los tokens
- * efectivamente usados por el app shell (layout + sidebar); el resto de la
- * paleta del sistema de diseño se incorpora cuando una historia funcional la
- * necesite, para mantener el alcance acotado de esta base compartida.
+ * frame Figma "Aside - SideNavBar" (US-000, AC-012) y ampliados con el resto
+ * de la paleta y la escala tipográfica necesarias para la pantalla de
+ * Proyectos (US-001, AC-009), mapeados a la configuración de Tailwind CSS
+ * (ADR-002). Solo se declaran aquí los tokens efectivamente consumidos por
+ * alguna historia funcional; el resto de la paleta del sistema de diseño se
+ * incorpora cuando una historia funcional la necesite, para mantener el
+ * alcance acotado de esta base compartida.
  */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 
-  /* Superficie de fondo del sidebar. */
+  /* Superficie de fondo del sidebar y de tarjetas/paneles. */
   --color-surface: #f7f9fb;
-  /* Borde/divisor sutil (borde derecho del sidebar). */
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container: #eceef0;
+  /* Borde/divisor sutil (borde derecho del sidebar, bordes de campos). */
   --color-outline-variant: #c6c6ce;
-  /* Color primario (Deep Indigo): navegación, encabezados. */
+  /* Color primario (Deep Indigo): navegación, encabezados, acciones principales. */
   --color-primary: #182442;
-  /* Texto secundario/metadatos (etiquetas de navegación). */
+  --color-on-primary: #ffffff;
+  /* Color secundario: acciones alternativas (p. ej. "Editar"). */
+  --color-secondary: #006c4b;
+  --color-secondary-container: #64f9bc;
+  --color-on-secondary-container: #00714e;
+  /* Texto sobre superficie y texto secundario/metadatos. */
+  --color-on-surface: #191c1e;
   --color-on-surface-variant: #45464e;
+  /* Superficie inversa (p. ej. backdrop de diálogos). */
+  --color-inverse-surface: #2d3133;
+  /* Estado de error (validación de formularios). */
+  --color-error: #ba1a1a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--color-surface);
+  --color-surface-container-lowest: var(--color-surface-container-lowest);
+  --color-surface-container: var(--color-surface-container);
   --color-outline-variant: var(--color-outline-variant);
   --color-primary: var(--color-primary);
+  --color-on-primary: var(--color-on-primary);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-container: var(--color-secondary-container);
+  --color-on-secondary-container: var(--color-on-secondary-container);
+  --color-on-surface: var(--color-on-surface);
   --color-on-surface-variant: var(--color-on-surface-variant);
+  --color-inverse-surface: var(--color-inverse-surface);
+  --color-error: var(--color-error);
   --font-sans: var(--font-inter);
 }
 
@@ -49,4 +72,42 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Escala tipográfica de Precision Focus (DESIGN.md), usada por Proyectos. */
+@utility text-headline-lg {
+  font-family: var(--font-sans);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+}
+
+@utility text-headline-md {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+@utility text-body-lg {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+@utility text-body-md {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+/* Elevación de tarjetas y diálogos de Precision Focus (DESIGN.md). */
+@utility shadow-elevation-1 {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.04);
+}
+
+@utility shadow-elevation-2 {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
 }
