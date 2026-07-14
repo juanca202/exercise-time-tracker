@@ -5,6 +5,6 @@ test.describe("smoke", () => {
     const response = await page.goto("/");
 
     expect(response?.ok()).toBe(true);
-    await expect(page).toHaveTitle(/Create Next App/);
+    await expect(page).toHaveTitle(/TimeTracker/);
   });
 });
