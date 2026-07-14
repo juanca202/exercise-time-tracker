@@ -48,6 +48,9 @@ const ENLACES_DE_NAVEGACION: EnlaceDeNavegacion[] = [
  */
 export function Sidebar() {
   const pathname = usePathname();
+  const seccionActiva = ENLACES_DE_NAVEGACION.find(
+    (enlace) => enlace.href === pathname,
+  );
 
   return (
     <aside className="sticky top-0 flex h-screen w-[280px] shrink-0 flex-col border-r border-outline-variant bg-surface py-6 pr-[17px] pl-4">
@@ -56,7 +59,7 @@ export function Sidebar() {
           TimeTracker
         </h1>
         <p className="w-full text-base leading-6 text-on-surface-variant">
-          Título
+          {seccionActiva?.etiqueta}
         </p>
       </div>
 
@@ -73,7 +76,7 @@ export function Sidebar() {
                 key={href}
                 render={<Link href={href} />}
                 aria-current={estaActivo ? "page" : undefined}
-                className="flex w-full items-center gap-3 rounded px-4 py-3 text-sm leading-5 text-on-surface-variant hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary aria-[current=page]:bg-black/5 aria-[current=page]:font-medium aria-[current=page]:text-primary"
+                className="flex w-full items-center gap-3 rounded border-l-2 border-transparent px-4 py-3 text-sm leading-5 text-on-surface-variant hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary aria-[current=page]:border-secondary aria-[current=page]:bg-black/5 aria-[current=page]:font-medium aria-[current=page]:text-primary"
               >
                 <Icono className="size-5 shrink-0" />
                 <span>{etiqueta}</span>

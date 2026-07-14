@@ -57,4 +57,40 @@ describe("Sidebar", () => {
       "page",
     );
   });
+
+  it.each([
+    ["/tareas", "Tareas"],
+    ["/proyectos", "Proyectos"],
+    ["/historial", "Historial de registros"],
+  ])(
+    "muestra el nombre de la sección activa (%s) como subtítulo",
+    (ruta, etiquetaEsperada) => {
+      // Arrange
+      usePathnameMock.mockReturnValue(ruta);
+
+      // Act
+      render(<Sidebar />);
+
+      // Assert
+      expect(
+        screen.getByText(etiquetaEsperada, { selector: "p" }),
+      ).toBeInTheDocument();
+    },
+  );
+
+  it("reserva el borde izquierdo de foco (DESIGN.md, Level 2 Active/Hover) que se colorea cuando el ítem está activo", () => {
+    // Act
+    render(<Sidebar />);
+
+    // Assert: la variante condicional de Tailwind vive en la clase estática
+    // (se resuelve en CSS según `aria-current`, no se agrega/quita en el DOM),
+    // así que se verifica en los tres enlaces por igual.
+    for (const nombre of ["Tareas", "Proyectos", "Historial de registros"]) {
+      expect(screen.getByRole("link", { name: nombre })).toHaveClass(
+        "border-l-2",
+        "border-transparent",
+        "aria-[current=page]:border-secondary",
+      );
+    }
+  });
 });
