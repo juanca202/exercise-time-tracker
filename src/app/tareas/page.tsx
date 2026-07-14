@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
+import { PanelTareas } from "@/features/tareas/components/PanelTareas";
 
 export const metadata: Metadata = {
   title: "Tareas · TimeTracker",
 };
 
 /**
- * Ruta stub de la sección Tareas (US-000, AC-008): sin gate de autenticación
- * (AC-009), resuelve sin error hasta que US-002 (Tareas) reemplace este
- * contenido por la pantalla final.
+ * Ruta de la sección Tareas (US-002): renderiza el panel principal de
+ * Tareas (listado "Tareas Recientes", temporizador, ingreso manual de
+ * tiempo y widget de Meta Semanal), consumiendo el store raíz compartido
+ * (`useAppStore`) provisto por `fundamentos-infraestructura-compartida`.
  */
-export default function PaginaTareas() {
-  return (
-    <div className="flex min-h-full flex-1 items-center justify-center p-10">
-      <p className="text-lg text-on-surface-variant">Próximamente</p>
-    </div>
-  );
+export default function TareasPage() {
+  return <PanelTareas />;
 }
