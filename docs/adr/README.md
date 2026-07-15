@@ -14,3 +14,4 @@
 - [ADR-010: Estrategia de branching GitFlow con Conventional Commits](ADR-010-branching-gitflow-conventional-commits.md)
 - [ADR-011: Persistencia local con Web Storage API (localStorage)](ADR-011-persistencia-local-con-web-storage-api.md)
 - [ADR-012: Separación entre el store raíz (CRUD crudo) y stores de feature (estado de negocio)](ADR-012-separacion-store-raiz-y-stores-de-feature.md)
+- [ADR-013: Convenciones de código según la Google TypeScript Style Guide](ADR-013-convenciones-de-codigo-google-style-guide.md)

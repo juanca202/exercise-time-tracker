@@ -7,13 +7,13 @@
 
 ## Descripción
 
-Garantizar que toda Tarea creada o actualizada, incluyendo su asociación al Proyecto (`proyectoId`), quede persistida en el almacenamiento local del dispositivo y sea recuperable tras un cierre inesperado o un reinicio, apoyándose en el store raíz y el adaptador de persistencia ya construidos en US-000 (sin introducir un mecanismo de persistencia adicional).
+Garantizar que toda Tarea creada o actualizada, incluyendo su asociación al Proyecto (`projectId`), quede persistida en el almacenamiento local del dispositivo y sea recuperable tras un cierre inesperado o un reinicio, apoyándose en el store raíz y el adaptador de persistencia ya construidos en US-000 (sin introducir un mecanismo de persistencia adicional).
 
 ## Dependencias
 
-- `src/shared/store/app-store.ts` — `crearTarea`, `actualizarTarea`, `useTareas()`; ya persistidos mediante el adaptador de persistencia compartido (US-000, AC-002).
-- `src/shared/persistence/` — `AdaptadorPersistencia<T>`, `crearAdaptadorLocalStorage`, `useHasHydrated()`.
-- `src/features/tareas/hooks/useCrearTarea.ts` ([TK-001](./TK-001-crear-tarea.md)) — consumidor de `crearTarea` cuya persistencia valida esta tarea.
+- `src/shared/store/app-store.ts` — `createTask`, `updateTask`, `useTasks()`; ya persistidos mediante el adaptador de persistencia compartido (US-000, AC-002).
+- `src/shared/persistence/` — `PersistenceAdapter<T>`, `createLocalStorageAdapter`, `useHasHydrated()`.
+- `src/features/tareas/hooks/use-create-task.ts` ([TK-001](./TK-001-crear-editar-tarea-temporizador-y-registro-manual.md)) — consumidor de `createTask` cuya persistencia valida esta tarea.
 
 ## Referencias
 
@@ -28,8 +28,8 @@ exercise-time-tracker/
 
 ## Plan de implementación
 
-- [ ] **IT-01** — Confirmar que `crearTarea` y `actualizarTarea` (`src/shared/store/app-store.ts`, US-000) escriben el objeto `Tarea` completo — incluyendo `proyectoId` — a través de `AdaptadorPersistencia<T>`, sin omitir campos al serializar.
-- [ ] **IT-02** — Confirmar que `useTareas()` solo se lee en componentes que ya pasaron el gate `useHasHydrated()` ([TK-001](./TK-001-crear-tarea.md), [TK-004](./TK-004-ui-pantalla-tareas.md)), evitando renderizar una lista vacía o parcial antes de la hidratación del store persistido.
+- [ ] **IT-01** — Confirmar que `createTask` y `updateTask` (`src/shared/store/app-store.ts`, US-000) escriben el objeto `Task` completo — incluyendo `projectId` — a través de `PersistenceAdapter<T>`, sin omitir campos al serializar.
+- [ ] **IT-02** — Confirmar que `useTasks()` solo se lee en componentes que ya pasaron el gate `useHasHydrated()` ([TK-001](./TK-001-crear-editar-tarea-temporizador-y-registro-manual.md), [TK-003](./TK-003-ui-pantalla-tareas-y-meta-semanal.md)), evitando renderizar una lista vacía o parcial antes de la hidratación del store persistido.
 - [ ] **IT-03** — Verificar manualmente (recarga completa del navegador tras crear una Tarea) que la Tarea y su asociación al Proyecto sobreviven al reinicio, conforme a [TC-004](./test-cases/TC-004-persistencia-tarea-happy.md).
 
 ## Observaciones
