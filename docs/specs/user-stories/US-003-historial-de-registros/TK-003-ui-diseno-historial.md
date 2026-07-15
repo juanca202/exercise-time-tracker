@@ -13,7 +13,7 @@ Implementar la interfaz de la pantalla de Historial de registros (tarjetas de to
 
 - [TK-001: Lectura del historial y presentación de totales por Tarea, Proyecto y mes](TK-001-lectura-historial-y-calculo-de-totales.md) — reutiliza `useHistory`, `HistoryTable` y `EmptyHistory`.
 - [TK-002: Rendimiento de los reportes de tiempo](TK-002-rendimiento-reportes.md) — reutiliza `useHistoryReports` (memoizado, envuelve `calculateTotalByProject` de [US-000 TK-001](../US-000-fundamentos/TK-001-dominio-persistencia-store-y-fecha.md)) para alimentar las stat cards sin recomputar en cada render (AC-003).
-- [US-000 TK-002: Layout, navegación y rutas placeholder](../US-000-fundamentos/TK-002-layout-navegacion-y-rutas-placeholder.md) — el sidebar ya enlaza a `/historial`; esta tarea solo reemplaza el contenido de esa ruta, reemplazando el `<ComingSoon title="Historial de registros" />` actual de `src/app/historial/page.tsx`.
+- [US-000 TK-002: Layout, navegación, tema de Tailwind y rutas placeholder](../US-000-fundamentos/TK-002-layout-navegacion-y-rutas-placeholder.md) — el sidebar ya enlaza a `/historial`; esta tarea solo reemplaza el contenido de esa ruta, reemplazando el `<ComingSoon title="Historial de registros" />` actual de `src/app/historial/page.tsx`. Los tokens Tailwind (`@theme` en `src/app/globals.css`, IT-01 de ese TK) del tema "Precision Focus" ya quedan definidos ahí; esta tarea los consume, no los redefine.
 - Tailwind CSS — aplicación de los tokens de DESIGN.md.
 - Base UI (`@base-ui/react`) — solo si algún elemento interactivo puntual (p. ej. un tooltip sobre el total de una Tarea) lo requiere; no se introduce ninguna otra librería de componentes.
 

@@ -12,7 +12,7 @@ Leer los Registros de Tiempo persistidos junto con su Tarea y Proyecto asociados
 ## Dependencias
 
 - [US-000 TK-001: Dominio, persistencia local, store raíz y helper de fecha compartidos](../US-000-fundamentos/TK-001-dominio-persistencia-store-y-fecha.md) — tipos `Project`, `Task`, `TimeEntry`; `useHasHydrated()` como gate de hidratación antes de leer los selectores del store; su adaptador (`read()` devuelve `null` ante datos no parseables) es la primera línea de defensa frente al caso de JSON corrupto de TC-002; selectores `useProjects()`, `useTasks()`, `useTimeEntries()`; contratos `TaskTotal`/`ProjectTotal`/`MonthTotal` y funciones `indexById`, `isValidTimeEntry`, `calculateTotalByTask`, `calculateTotalByMonth` (`src/shared/reports/`, IT-23 a IT-30 de ese TK) — este TK las consume, no las redefine.
-- [US-000 TK-002: Layout, navegación y rutas placeholder](../US-000-fundamentos/TK-002-layout-navegacion-y-rutas-placeholder.md) — esta tarea provee los componentes que [TK-003: UI y diseño de la pantalla de Historial de registros](TK-003-ui-diseno-historial.md) usa para reemplazar el placeholder `src/app/historial/page.tsx`.
+- [US-000 TK-002: Layout, navegación, tema de Tailwind y rutas placeholder](../US-000-fundamentos/TK-002-layout-navegacion-y-rutas-placeholder.md) — esta tarea provee los componentes que [TK-003: UI y diseño de la pantalla de Historial de registros](TK-003-ui-diseno-historial.md) usa para reemplazar el placeholder `src/app/historial/page.tsx`.
 
 ## Referencias
 
@@ -53,4 +53,4 @@ exercise-time-tracker/
 
 ## Observaciones
 
-Sin pendientes documentados. El cálculo de totales (`calculateTotalByTask`/`calculateTotalByProject`/`calculateTotalByMonth`) y sus contratos (`TaskTotal`/`ProjectTotal`/`MonthTotal`) se movieron a [US-000 TK-001](../US-000-fundamentos/TK-001-dominio-persistencia-store-y-fecha.md) (IT-23 a IT-30) para que Proyectos y Tareas puedan consumirlos sin depender directamente de `features/historial/` (ADR-005); ver [TK-001 de US-001](../US-001-proyectos/TK-001-crear-editar-y-listar-proyectos.md) y [TK-003 de US-002](../US-002-tareas/TK-003-ui-pantalla-tareas-y-meta-semanal.md) para esas integraciones.
+Sin pendientes documentados. El cálculo de totales (`calculateTotalByTask`/`calculateTotalByProject`/`calculateTotalByMonth`) y sus contratos (`TaskTotal`/`ProjectTotal`/`MonthTotal`) se movieron a [US-000 TK-001](../US-000-fundamentos/TK-001-dominio-persistencia-store-y-fecha.md) (IT-23 a IT-30) para que Proyectos y Tareas puedan consumirlos sin depender directamente de `features/historial/` (ADR-005); ver [TK-001 de US-001](../US-001-proyectos/TK-001-crear-editar-y-listar-proyectos.md) y [TK-002 de US-002](../US-002-tareas/TK-002-ui-pantalla-tareas-y-meta-semanal.md) para esas integraciones.

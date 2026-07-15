@@ -1,4 +1,4 @@
-# TK-003: UI de la pantalla de Tareas, modal y meta/total semanal
+# TK-002: UI de la pantalla de Tareas, modal y meta/total semanal
 
 **Estado**: Ready
 **Historia**: [US-002](./README.md)
@@ -12,6 +12,7 @@ Implementar la pantalla de Tareas (panel principal: listado de Tareas Recientes 
 ## Dependencias
 
 - `src/shared/layout/` — `AppShell`, `SidebarNav` (US-000); resuelven la ruta `/tareas` con un placeholder que esta tarea reemplaza.
+- [TK-002: Layout, navegación, tema de Tailwind y rutas placeholder (US-000)](../US-000-fundamentos/TK-002-layout-navegacion-y-rutas-placeholder.md) — tokens Tailwind (`@theme` en `src/app/globals.css`, IT-01 de ese TK) del tema "Precision Focus"; esta tarea los consume, no los redefine.
 - `src/shared/store/app-store.ts` — `useTasks()`, `useProjects()`, `useTimeEntries()`.
 - `src/shared/persistence/` — `useHasHydrated()`.
 - [TK-001: Crear/editar Tarea, temporizador y registro manual de tiempo](TK-001-crear-editar-tarea-temporizador-y-registro-manual.md) — `use-create-task.ts` y `use-edit-task.ts` (lógica que `TaskModal`/`TaskForm` invocan), `timer-widget.tsx` y `use-timer.ts` (compuestos dentro de `TasksPanel`; `TaskList`/`TaskCard` los usan para alternar entre la acción de iniciar (▷) y la de detener según la Tarea con el temporizador activo), y `manual-entry-card.tsx` (tarjeta "Entrada Manual" compuesta directamente en el Bento Grid del panel principal).
