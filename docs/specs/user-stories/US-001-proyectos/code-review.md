@@ -1,73 +1,73 @@
 # Code Review — US-001-proyectos · exercise-time-tracker
 
-**Fecha**: 2026-07-14 07:56
+**Fecha**: 2026-07-14 19:00
 **Repositorio**: exercise-time-tracker
-**Rama**: loop/test-3 (merge en curso de `worktree-wf_f50d6d04-9a0-2`, reconciliado con la infraestructura canónica de `fundamentos-infraestructura-compartida`) · **Commit**: 4e8cfae (base pre-merge; commit de merge pendiente)
-**Working tree**: sucio (merge resuelto y en stage, pendiente de `git commit`)
+**Rama**: loop/test-3
+**Commit**: e2b5338 (base; cambios de esta revisión aún sin commitear)
+**Working tree**: sucio (7 archivos: 3 modificados, 4 nuevos, sin stagear)
 **Modo**: default
 **Historia**: US-001-proyectos (`docs/specs/user-stories/US-001-proyectos/README.md`)
 **Veredicto**: ✅ Apto
 
 ## Resumen
 
-Se revisó el resultado de reconciliar el change OpenSpec `gestion-proyectos` (US-001) con la infraestructura compartida canónica ya mergeada en `loop/test-3` (`fundamentos-infraestructura-compartida`, US-000). El agente que implementó `gestion-proyectos` había reimplementado en paralelo su propia copia del store raíz, el adaptador de persistencia y el app shell (nombres distintos, misma responsabilidad); esta revisión cubre el diff final tras eliminar esa duplicación y migrar la feature Proyectos (`src/features/proyectos/`) a `useAppStore`. Los seis checks automatizados aplicables (tipado, linter, unit tests, coverage, build, e2e) pasan sin errores ni omisiones. La revisión cualitativa no encontró hallazgos bloqueantes; se documentan observaciones menores no bloqueantes.
+Se revisó la reconciliación del layout de `/proyectos` con el prototipo Figma de referencia (AC-007/AC-009), preservando intacta la lógica de negocio ya probada (validación, store, persistencia). El diff toca `ProyectosListado.tsx` (rediseño de presentación + reutilización de `calcularTotalPorProyecto`), dos utilidades nuevas de presentación en `src/features/proyectos/lib/`, sus tests unitarios, la extensión de `ProyectosListado.test.tsx` y un ajuste mínimo de `e2e/gestion-proyectos.spec.ts` para desambiguar el nuevo botón "Crear Nuevo Proyecto". Los siete checks automatizados aplicables pasan sin errores ni omisiones. La revisión cualitativa no encontró hallazgos bloqueantes; se documentan dos observaciones menores no bloqueantes sobre duplicación acotada.
 
 ## 1. Verificaciones automatizadas
 
 Símbolos de estado: `✅` PASS · `❌` FAIL · `⏭️` SKIPPED · `—` N/A · `ℹ️` informativo (Sonar).
 
-| #   | Check      | Comando                      | Categoría   | Estado | Detalle                                                                                                                  | Duración |
-| --- | ---------- | ---------------------------- | ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------ | -------- |
-| 1   | tipado     | `npx tsc --noEmit`           | Bloqueante  | ✅     | 0 errores                                                                                                                | ~2s      |
-| 2   | linter     | `npm run lint` (eslint .)    | Bloqueante  | ✅     | 0 errors, 0 warnings (el único warning reportado es de `coverage/`, artefacto generado e ignorado en git, ajeno al diff) | ~2s      |
-| 3   | unit tests | `npm run test:run` (vitest)  | Bloqueante  | ✅     | 56 passed, 0 failed (10 archivos)                                                                                        | ~2s      |
-| 4   | coverage   | `npx vitest run --coverage`  | Bloqueante  | ✅     | 94.52% stmts / 83.78% branch (sin umbral configurado, exit 0)                                                            | ~2s      |
-| 5   | build      | `npm run build` (next build) | Bloqueante  | ✅     | Compilación y prerender OK (`/proyectos`, `/tareas`, `/historial` estáticos)                                             | ~3s      |
-| 6   | e2e        | `npx playwright test`        | Condicional | ✅     | 9 passed (smoke, app-shell-navegación US-000, gestión de Proyectos US-001)                                               | ~8s      |
-| 7   | sonar      | —                            | Informativo | —      | N/A (sin `sonar-project.properties`)                                                                                     | —        |
+| #   | Check      | Comando                                 | Categoría   | Estado | Detalle                                                                                                        | Duración |
+| --- | ---------- | --------------------------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------- | -------- |
+| 1   | tipado     | `npx tsc --noEmit -p tsconfig.json`     | Bloqueante  | ✅     | 0 errores                                                                                                      | ~1.0s    |
+| 2   | linter     | `npm run lint` (eslint .)               | Bloqueante  | ✅     | 0 errors, 0 warnings en el diff (único warning reportado es de `coverage/`, artefacto generado, ajeno al diff) | ~2s      |
+| 3   | unit tests | `npx vitest run`                        | Bloqueante  | ✅     | 230 passed, 0 failed (45 archivos)                                                                             | ~4.2s    |
+| 4   | coverage   | `npx vitest run --coverage`             | Bloqueante  | ✅     | 96.37% stmts / 91.71% branch global; `ProyectosListado.tsx` 95.83% stmts (sin umbral configurado, exit 0)      | ~5.0s    |
+| 5   | build      | `npm run build` (next build, Turbopack) | Bloqueante  | ✅     | Compilación y prerender OK (`/`, `/tareas`, `/proyectos`, `/historial` estáticos)                              | ~2.5s    |
+| 6   | e2e        | `npx playwright test`                   | Condicional | ✅     | 18 passed (smoke, app-shell-navegación US-000, gestión de Proyectos US-001, Historial US-003, Tareas US-002)   | ~9.4s    |
+| 7   | sonar      | —                                       | Informativo | —      | N/A (sin `sonar-project.properties`, sin `sonar-scanner` en PATH)                                              | —        |
 
 ### Detalle de checks fallidos
 
-Sin checks fallidos. (Durante la reconciliación se detectó y corrigió que `e2e/app-shell-navegacion.spec.ts`, ya mergeado por US-000, esperaba el stub "Próximamente" en `/proyectos`; se actualizó para reflejar la pantalla final de Proyectos, dejando intacta la expectativa de stub para `/tareas` y `/historial`.)
+Sin checks fallidos.
 
 ## 2. Revisión cualitativa
 
 Símbolos de severidad: `🔴` Crítico · `🟠` Mayor · `🟡` Menor · `💡` Sugerencia · `✅` dimensión conforme.
 
-**Intención detectada:** completar el merge de `gestion-proyectos` (US-001) a `loop/test-3` eliminando la infraestructura duplicada que el agente de esa feature reimplementó en paralelo (`store-raiz.ts`/`useStoreRaiz`, `adaptador-persistencia-local.ts`, `AppShell.tsx`, `domain/index.test.ts`) y adaptando la feature Proyectos para consumir la infraestructura canónica ya validada por `fundamentos-infraestructura-compartida` (`useAppStore`, `src/shared/persistence/adaptador.ts`, `InicializadorAplicacion`, `Sidebar`), sin perder ninguna de las 9 AC de US-001 ni la cobertura de pruebas ya escrita.
+**Intención detectada:** reconciliar el LAYOUT/PRESENTACIÓN de `/proyectos` con el prototipo Figma referenciado por AC-009 (acento de color por tarjeta, "Tiempo Registrado" en fuente monoespaciada, tarjeta "ghost" de creación, `TopAppBar` compartido), reutilizando el patrón ya validado en la reconciliación de `/tareas` (mismo `TopAppBar`) y el selector de agregación ya probado de Historial (`calcularTotalPorProyecto`, AC-003 de US-003), sin modificar la lógica de negocio de US-001 (validación, store, persistencia, modal de creación/edición).
 
 ### Análisis semántico
 
-✅ conforme. Las 9 AC de US-001 siguen cubiertas tras la reconciliación:
+✅ conforme. Las AC de US-001 relevantes al diff siguen cubiertas:
 
-- AC-001/AC-002 (creación con Nombre obligatorio/Descripción opcional): `ProyectoFormModal` + `validarProyecto`, sin cambios de comportamiento — solo el store consumido cambió de `useStoreRaiz` a `useAppStore`. Cubierto por TC-001–TC-004 (unit) y el flujo E2E de creación.
-- AC-003 (persistencia local): delegada íntegramente al store/adaptador canónicos (`src/shared/persistence/adaptador.ts`); cubierto por E2E de recarga (TC-005/TC-006, incl. 20 Proyectos).
-- AC-004 (listado, incl. vacío): `ProyectosListado`, TC-007/TC-008. Se añadió el gate de hidratación (`haHidratado`) exigido por el contrato documentado en `app-store.ts` ("todo componente que lea datos persistidos DEBE comprobar este indicador"), que la implementación original no tenía porque su store paralelo no imponía esa regla del mismo modo.
-- AC-005/AC-006 (edición reutilizando el mismo modal, bloqueo de guardado): sin cambios de comportamiento. TC-009–TC-012.
-- AC-007/AC-009 (adherencia a DESIGN.md / fidelidad a Figma): la store canónica trajo un `globals.css` deliberadamente acotado al app shell (comentario explícito: "el resto de la paleta se incorpora cuando una historia funcional la necesite"). Se extendió aditivamente con los tokens de color y la escala tipográfica/elevación que Proyectos consume (`on-surface`, `secondary*`, `surface-container*`, `error`, `inverse-surface`, `text-headline-*`, `text-body-*`, `shadow-elevation-*`), preservando el soporte de modo oscuro ya validado y sin reintroducir tokens no usados (p. ej. `tertiary*`, `font-jetbrains-mono`) que la implementación paralela sí traía sin consumidor.
-- AC-008 (navegación lateral con ítem activo, TC-014): la implementación paralela de Proyectos traía su propio `Sidebar` (con `usePathname`/`aria-current`) que reemplazaba al `Sidebar` canónico (basado en `Toolbar` de Base UI, sin marcado de activo). Se optó por conservar el `Sidebar` canónico — ya probado y con la superficie de API estable declarada en su TSDoc — y extenderlo mínimamente con `usePathname` + `aria-current="page"`, en vez de sustituirlo. Verificado con TC-014 (E2E) y una prueba unitaria nueva equivalente a la de la implementación paralela.
+- **AC-004** (listado, incl. estado vacío): comportamiento sin cambios — `ProyectosListado` sigue leyendo `useAppStore` en modo de solo lectura y respetando el gate de hidratación (`haHidratado`). El estado vacío ahora combina el texto existente con la tarjeta ghost (decisión de buen criterio explícita del encargo, ninguna AC lo prohíbe). Cubierto por TC-007/TC-008 (sin cambios) más las nuevas pruebas de la tarjeta ghost en estado vacío.
+- **AC-005/AC-006** (edición reutilizando el mismo modal, bloqueo de guardado con Nombre vacío): `ProyectoFormModal` no se tocó; el botón "Editar" por tarjeta conserva su nombre accesible exacto ("Editar", sin `aria-label` adicional) para no romper ni el test unitario ni el flujo E2E existentes.
+- **AC-003** (persistencia, vía US-003 AC-003 para el cálculo de tiempo): el diff reutiliza `calcularTotalPorProyecto(registrosDeTiempo, tareas, proyectos)` de `src/features/historial/selectors/`, exactamente como el `README.md` de US-001 anticipa en su nota de alcance ("AC-004 de esta historia cubre únicamente el listado... sin duplicar la regla de cálculo"). No se reimplementó la agregación.
+- **AC-007/AC-009** (adherencia a DESIGN.md y fidelidad visual a Figma): verificado visualmente con captura de pantalla contra datos de ejemplo — acento izquierdo de 6px, tarjeta blanca con borde `outline-variant`, "TIEMPO REGISTRADO" en `font-mono` con el valor en formato `HH:MM`, tarjeta ghost con borde punteado e ícono "+", `TopAppBar` reutilizado sin reimplementar el patrón. Los tokens de color usados (`primary`, `secondary`, `on-surface-variant`, `outline-variant`, `surface-container-lowest`, `surface-container-low`) son los ya mapeados en `globals.css`, sin introducir valores hex sueltos salvo el mismo `bg-[#2e3a59]` que ya usaba `color-acento-tarea.ts` (colores puntuales del prototipo sin token propio, precedente ya aceptado).
 
-No se detecta scope creep: el diff no toca lógica de Tareas/Historial ni reintroduce responsabilidades de negocio en el store compartido.
+No se detecta scope creep: el diff no toca `ProyectoFormModal.tsx` ni `validar-proyecto.ts` (tal como pedía el encargo), ni introduce lógica de negocio nueva en el store.
 
 ### Arquitectura y diseño
 
-✅ conforme, con una observación menor no bloqueante:
+✅ conforme, con dos observaciones menores no bloqueantes:
 
-- [ISO-25010: Mantenibilidad] 🟡 Duplicación de infraestructura eliminada correctamente — **Qué:** se eliminaron `src/shared/store/store-raiz.ts` (+ test), `src/shared/persistence/adaptador-persistencia-local.ts` (+ test), `src/shared/domain/index.test.ts` y `src/shared/ui/app-shell/AppShell.tsx`, todos funcionalmente redundantes con la infraestructura ya mergeada por `fundamentos-infraestructura-compartida` (confirmado por lectura comparada de ambos pares antes de borrar, y por `grep` de que ningún archivo restante los importaba). **Por qué se marca igualmente como observación:** el store canónico (`useAppStore`) expone únicamente CRUD crudo — `crearProyecto(proyecto: Proyecto)` recibe la entidad completa, a diferencia del store paralelo eliminado (`crearProyecto(input: EntradaProyecto): Proyecto`) que generaba `id`/timestamps internamente. Esto trasladó la construcción de la entidad (`generarId()` + `new Date().toISOString()`) a `ProyectoFormModal.tsx`, un componente de UI. **Impacto:** bajo y local — un único call site, sin lógica de negocio real involucrada (solo construcción de entidad), pero es el primer punto donde una feature necesita ensamblar una entidad completa antes de pasarla al store crudo; si Tareas y Registros de Tiempo repiten este patrón inline en sus propios componentes, se dispersará la misma responsabilidad en varios lugares. **Sugerencia concreta:** si al implementar la siguiente feature (Tareas) aparece el mismo patrón, considerar extraer un pequeño factory (`crearProyectoNuevo(input): Proyecto` en `src/features/proyectos/lib/` o similar) que combine `generarId()` + timestamp, dejando el componente solo con la orquestación de UI. No amerita bloquear este merge.
+- [ISO-25010: Mantenibilidad] 🟡 Duplicación acotada del hash de color determinístico — **Qué:** `src/features/proyectos/lib/color-acento-proyecto.ts` reimplementa, línea por línea, el mismo algoritmo de hash (`hash = hash * 31 + charCodeAt(...)`) que `src/features/tareas/lib/color-acento-tarea.ts`, solo con el orden de la paleta cambiado. **Por qué:** es una duplicación real (misma razón de cambio: si el algoritmo de hash necesitara ajustarse — p. ej. para mejorar la distribución — habría que tocar ambos archivos). **Impacto:** bajo — 10 líneas, sin lógica de negocio, sin riesgo de divergencia funcional observable hoy; el propio encargo de esta tarea pedía explícitamente replicar el patrón local a la feature (ADR-005, features independientes) en vez de acoplar Proyectos y Tareas a una abstracción compartida por una única reutilización. **Sugerencia concreta:** si una tercera feature necesita el mismo patrón de "color determinístico por id" (regla de las tres repeticiones), extraer `obtenerColorAcentoPorId(id, paleta)` a `src/shared/lib/` entonces; hoy, con dos usos, la duplicación es aceptable y evita acoplar dos features por una utilidad de 10 líneas.
+- [ISO-25010: Mantenibilidad] 🟡 Tercera función de formateo de duración con forma propia — **Qué:** `formatearTiempoRegistrado` (`src/features/proyectos/lib/formatear-tiempo-registrado.ts`, formato `HH:MM`) se suma a `formatearDuracion` (Historial, `Xh Ym`/`X min`) y a `formatearHorasYMinutos`/`formatearHMS` (Tareas, `Xh Ym` y `HH:MM:SS`), tres formatos de duración ligeramente distintos implementados de forma independiente en tres features. **Por qué:** aunque cada formato es legítimamente distinto (el prototipo Figma pide explícitamente `HH:MM` sin segundos para "Tiempo Registrado", distinto de los otros dos), la revisión de código de la reconciliación anterior de US-001 ya anticipaba este riesgo para el patrón de fábrica de entidades y ahora se repite para el formateo de tiempo. **Impacto:** bajo hoy (cada función tiene un único call site y una firma simple `minutos → string`), pero si aparece una cuarta variante el costo de descubrir cuál reutilizar (o si hace falta una nueva) empieza a subir. **Sugerencia concreta:** no bloquea este cambio — el formato `HH:MM` es requisito explícito de Figma y no existía antes; considerar, en una futura iteración transversal, un pequeño módulo `src/shared/lib/tiempo.ts` que centralice las variantes de formateo de duración ya estabilizadas (`Xh Ym`, `HH:MM:SS`, `HH:MM`) como funciones puras reexportadas, sin forzar aún una refactorización de las features existentes.
 
 ### Feedback adicional
 
-- La resolución de conflictos priorizó correctamente distinguir "duplicación redundante" (nombres distintos, misma lógica: dominio, persistencia, store barrel, date/mes-calendario, vitest.config, e2e/smoke) de "funcionalidad real en riesgo de perderse" (el marcado de ítem activo en el Sidebar exigido por AC-008/TC-014, y los tokens de diseño exigidos por AC-009): en ambos casos se extendió la versión canónica en vez de descartarla o de aceptar ciegamente la versión paralela, evitando tanto duplicación como regresión funcional.
-- El ajuste de `e2e/app-shell-navegacion.spec.ts` (propiedad de US-000, ya mergeado) fue el mínimo necesario: solo la aserción sobre `/proyectos` cambió de "Próximamente" a la pantalla real; `/tareas` y `/historial` conservan su expectativa de stub intacta.
-- `generarId()` (`src/shared/store/id.ts`) se conservó como utilidad compartida — no era redundante frente a nada canónico existente — y se re-exportó desde el barrel `src/shared/store/index.ts` para que esté disponible a futuras features (Tareas, Registros de Tiempo) que necesiten el mismo patrón de generación de id.
-- La cobertura de pruebas se mantiene sólida y trazable a TC-XXX tras la migración: 56 unit tests (Vitest + Testing Library, 10 archivos) más 4 specs E2E de Proyectos y 3 de app-shell/smoke (Playwright), sin pérdida de casos respecto a la implementación original.
+- Buen uso del truco `display: contents` en el `<ul>` que envuelve los `<li>` de Proyecto (`ProyectosListado.tsx`): mantiene la tarjeta ghost dentro del mismo `flex flex-wrap` que las tarjetas de Proyecto (fidelidad visual a la cuadrícula de Figma) sin que cuente como `listitem` — decisión explícita y comentada en el código, verificada con una prueba unitaria dedicada (`"la tarjeta ghost no es un Proyecto: no debe contarse como listitem"`) y con el E2E de 20 Proyectos que sigue contando exactamente 20 `listitem` dentro de `main`.
+- El ajuste mínimo de `e2e/gestion-proyectos.spec.ts` (`exact: true` en las 4 ocurrencias de `page.getByRole("button", { name: "Nuevo Proyecto" })` a nivel de página) está bien acotado: solo toca las llamadas que podían capturar por error el nuevo botón "Crear Nuevo Proyecto" por coincidencia de subcadena (comportamiento por defecto de Playwright, distinto del de Testing Library); las llamadas ya scopeadas a `dialogo` no se tocaron porque no tenían ambigüedad.
+- El reposicionamiento de "Editar" junto al valor "Tiempo Registrado" (en vez de junto al título, como en un primer intento visual) evita truncar nombres de Proyecto largos y sigue el mismo patrón espacial que `TareaListItem` (tiempo + acción agrupados a la derecha) — buena decisión de consistencia entre features tras verificar visualmente el problema de espacio con Chrome DevTools.
+- Cobertura de pruebas ampliada de forma proporcional al cambio: 5 pruebas unitarias nuevas en `ProyectosListado.test.tsx` (tiempo registrado con y sin registros, apertura de modal desde la tarjeta ghost, ghost visible con Proyectos existentes y en estado vacío) más pruebas dedicadas para las dos utilidades nuevas (`color-acento-proyecto.test.ts`, `formatear-tiempo-registrado.test.ts`, con casos borde de valores negativos/no numéricos).
 
 ## Próximas acciones
 
-Sin acciones bloqueantes pendientes. Opcionalmente, en una iteración futura (no bloqueante para este merge):
+Sin acciones bloqueantes pendientes. Opcionalmente, en una iteración futura (no bloqueante para este cambio):
 
-1. Si Tareas o Registros de Tiempo repiten el patrón de construir la entidad completa (`id` + timestamps) dentro de un componente de UI, extraer un factory compartido en lugar de duplicar el patrón inline (🟡).
-2. Unificar el campo "Descripción" de `ProyectoFormModal` bajo `Field.Root`/`Field.Control` de Base UI para consistencia con "Nombre" (observación heredada de la revisión original de `gestion-proyectos`, no bloqueante).
+1. Si una tercera feature necesita "color determinístico por id", extraer la función de hash compartida en vez de duplicarla una vez más (🟡).
+2. Si aparece una cuarta variante de formateo de duración, evaluar centralizar las variantes estabilizadas en `src/shared/lib/tiempo.ts` (🟡).
 
 ## Justificaciones aceptadas
 
