@@ -38,7 +38,7 @@ Apto: Sí
 Estado: Creada
 Herramienta: ESLint (`no-restricted-globals` + `no-restricted-properties`)
 Ubicación: `eslint.config.mjs` (bloque `files: ["src/**/*.{js,jsx,ts,tsx}"], ignores: ["src/shared/persistence/**"]`)
-Comando: `npm run lint`
+Comando: `pnpm run lint`
 
 ## Referencias
 

@@ -39,7 +39,7 @@ Apto: Sí
 Estado: Creada
 Herramienta: gts (Google TypeScript Style) vía ESLint
 Ubicación: eslint.config.mjs
-Comando: npm run lint
+Comando: pnpm run lint
 
 ## Referencias
 

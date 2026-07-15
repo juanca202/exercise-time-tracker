@@ -2,7 +2,7 @@
 
 Estado: Accepted
 Fecha de creación: 2026-07-06
-Última actualización: 2026-07-07
+Última actualización: 2026-07-15
 Decisores: Equipo de desarrollo
 Etiquetas: git, branching, gitflow, conventional-commits, release
 
@@ -34,7 +34,7 @@ Apto: Sí
 Estado: Creada
 Herramienta: Vitest (script de verificación de config y rama actual)
 Ubicación: src/architecture/adr-010-branching-conventional-commits.test.ts
-Comando: npx vitest run src/architecture/adr-010-branching-conventional-commits.test.ts
+Comando: pnpm exec vitest run src/architecture/adr-010-branching-conventional-commits.test.ts
 
 ## Referencias
 

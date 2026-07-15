@@ -2,7 +2,7 @@
 
 Estado: Accepted
 Fecha de creación: 2026-07-06
-Última actualización: 2026-07-07
+Última actualización: 2026-07-15
 Decisores: Equipo de desarrollo
 Etiquetas: architecture, feature-based, project-structure
 
@@ -33,7 +33,7 @@ Apto: Sí
 Estado: Creada
 Herramienta: Vitest (script de test sobre el árbol de imports)
 Ubicación: src/architecture/adr-005-feature-isolation.test.ts
-Comando: npx vitest run src/architecture/adr-005-feature-isolation.test.ts
+Comando: pnpm exec vitest run src/architecture/adr-005-feature-isolation.test.ts
 
 ## Referencias
 

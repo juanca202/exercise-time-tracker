@@ -30,7 +30,7 @@
 - **Quality gate**: ESLint 9 (`eslint-config-next`), Prettier, Husky + lint-staged (pre-commit) y Sonar Scanner, según [ADR-009](docs/adr/ADR-009-quality-gate-shift-left.md).
 - **Branching y commits**: GitFlow (`main`/`develop`) con Conventional Commits validados por commitlint (hook `commit-msg` de Husky), según [ADR-010](docs/adr/ADR-010-branching-gitflow-conventional-commits.md).
 - **Bundler/dev server**: Turbopack (configurado en `next.config.ts`)
-- **Gestor de paquetes**: npm (`package-lock.json`)
+- **Gestor de paquetes**: pnpm (`pnpm-lock.yaml`)
 
 <!-- BEGIN:nextjs-agent-rules -->
 

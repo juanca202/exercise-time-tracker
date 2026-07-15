@@ -33,7 +33,7 @@ Apto: Sí
 Estado: Creada
 Herramienta: ESLint (`no-restricted-imports`)
 Ubicación: `eslint.config.mjs` (bloque `files: ["src/shared/store/**/*.{js,jsx,ts,tsx}"]`)
-Comando: `npm run lint`
+Comando: `pnpm run lint`
 
 ## Referencias
 
