@@ -17,7 +17,12 @@ test.describe("gestion-proyectos", () => {
   test("crea y luego edita un Proyecto reutilizando el mismo modal", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "Nuevo Proyecto" }).click();
+    // `exact: true` porque el TopAppBar (botón "Nuevo Proyecto") y la
+    // tarjeta ghost final del listado (botón "Crear Nuevo Proyecto")
+    // coinciden por coincidencia parcial de nombre accesible.
+    await page
+      .getByRole("button", { name: "Nuevo Proyecto", exact: true })
+      .click();
 
     const dialogo = page.getByRole("dialog");
     await expect(
@@ -36,7 +41,9 @@ test.describe("gestion-proyectos", () => {
 
     // Nombre vacío bloquea la creación (TC-003) antes de continuar con la
     // edición para verificar que el modal permanece abierto con el error.
-    await page.getByRole("button", { name: "Nuevo Proyecto" }).click();
+    await page
+      .getByRole("button", { name: "Nuevo Proyecto", exact: true })
+      .click();
     await dialogo.getByRole("button", { name: "Nuevo Proyecto" }).click();
     await expect(dialogo).toBeVisible();
     await expect(dialogo.getByText("El nombre es obligatorio.")).toBeVisible();
@@ -70,7 +77,9 @@ test.describe("gestion-proyectos", () => {
   test("un Proyecto creado sigue visible con los mismos datos tras recargar", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "Nuevo Proyecto" }).click();
+    await page
+      .getByRole("button", { name: "Nuevo Proyecto", exact: true })
+      .click();
     const dialogo = page.getByRole("dialog");
     await dialogo.getByLabel("Nombre").fill("Proyecto persistente");
     await dialogo
@@ -96,7 +105,9 @@ test.describe("gestion-proyectos", () => {
     const listadoProyectos = page.getByRole("main").getByRole("listitem");
 
     for (let indice = 1; indice <= total; indice += 1) {
-      await page.getByRole("button", { name: "Nuevo Proyecto" }).click();
+      await page
+        .getByRole("button", { name: "Nuevo Proyecto", exact: true })
+        .click();
       const dialogo = page.getByRole("dialog");
       await dialogo.getByLabel("Nombre").fill(`Proyecto ${indice}`);
       await dialogo.getByRole("button", { name: "Nuevo Proyecto" }).click();
