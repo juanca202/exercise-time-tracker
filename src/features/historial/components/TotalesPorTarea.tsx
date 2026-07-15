@@ -8,8 +8,12 @@ import { obtenerTotal } from "../selectors/calcularTotalPorTarea";
  * El prototipo Figma no le da una tarjeta visual propia (ver Observaciones
  * de US-003 y "Open Questions" de design.md), por lo que se integra como
  * una lista compacta de solo lectura en vez de stat cards, evitando
- * duplicar el tratamiento visual de los totales por Proyecto. Una Tarea sin
- * Registros asociados igualmente aparece con total 0.
+ * duplicar el tratamiento visual de los totales por Proyecto. En su lugar
+ * adopta el mismo lenguaje visual de fila zebra-striped y duración
+ * monoespaciada en `secondary` que la tabla principal del historial, para
+ * que los tres desgloses (Proyecto, Tarea, mes) se lean como un mismo
+ * sistema. Una Tarea sin Registros asociados igualmente aparece con total
+ * 0.
  */
 export function TotalesPorTarea({
   tareas,
@@ -29,18 +33,22 @@ export function TotalesPorTarea({
     >
       <h2
         id="totales-por-tarea-titulo"
-        className="text-sm font-semibold tracking-wide text-on-surface-variant uppercase"
+        className="text-sm font-bold tracking-wide text-primary uppercase"
       >
         Total por Tarea
       </h2>
-      <ul className="flex flex-col divide-y divide-outline-variant rounded-precision-lg border border-outline-variant bg-surface-container-lowest">
-        {tareas.map((tarea) => (
+      <ul className="flex flex-col divide-y divide-outline-variant overflow-hidden rounded-precision-lg border border-outline-variant bg-surface-container-lowest">
+        {tareas.map((tarea, indice) => (
           <li
             key={tarea.id}
-            className="flex items-center justify-between gap-4 px-4 py-2.5 text-sm"
+            className={`flex items-center justify-between gap-4 px-4 py-2.5 text-sm ${
+              indice % 2 === 1 ? "bg-surface-container-low" : ""
+            }`}
           >
-            <span className="truncate text-on-surface">{tarea.nombre}</span>
-            <span className="shrink-0 font-mono text-xs font-medium text-on-surface-variant">
+            <span className="truncate text-on-surface-variant">
+              {tarea.nombre}
+            </span>
+            <span className="shrink-0 font-mono text-xs font-semibold tracking-wide text-secondary">
               {formatearDuracion(obtenerTotal(totalesPorTarea, tarea.id))}
             </span>
           </li>

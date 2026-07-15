@@ -15,10 +15,10 @@ export function EstadoVacioHistorial() {
       role="status"
       className="flex flex-col items-center justify-center gap-2 rounded-precision-lg border border-dashed border-outline-variant bg-surface-container-lowest px-6 py-16 text-center"
     >
-      <p className="text-base font-medium text-on-surface">
+      <p className="text-body-lg font-semibold text-primary">
         No hay registros de tiempo aún
       </p>
-      <p className="max-w-md text-sm text-on-surface-variant">
+      <p className="max-w-md text-body-md text-on-surface-variant">
         Los Registros de Tiempo que generes desde el temporizador o de forma
         manual aparecerán aquí.
       </p>

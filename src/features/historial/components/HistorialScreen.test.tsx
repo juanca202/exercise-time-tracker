@@ -59,6 +59,9 @@ describe("HistorialScreen", () => {
     expect(screen.getByText("Total por Proyecto")).toBeInTheDocument();
     expect(screen.getByText("Total por Tarea")).toBeInTheDocument();
     expect(screen.getByText("Total por mes")).toBeInTheDocument();
+    // Barra de resumen inferior (lenguaje visual del frame Figma).
+    expect(screen.getByText("1 registro")).toBeInTheDocument();
+    expect(screen.getByText("1 proyecto")).toBeInTheDocument();
   });
 
   it("TC-003: renderiza el estado vacío cuando no hay Registros de Tiempo", () => {

@@ -3,7 +3,10 @@ import { formatearMes } from "../utils/formatearMes";
 
 /**
  * Total de tiempo acumulado por mes (AC-004, 5.4), en orden cronológico
- * ascendente por clave `"YYYY-MM"`.
+ * ascendente por clave `"YYYY-MM"`. Mismo lenguaje visual de fila
+ * zebra-striped y duración monoespaciada en `secondary` que
+ * {@link TotalesPorTarea} y la tabla principal del historial (ver su
+ * comentario para el porqué de no usar stat cards aquí).
  */
 export function TotalesPorMes({
   totalesPorMes,
@@ -25,18 +28,22 @@ export function TotalesPorMes({
     >
       <h2
         id="totales-por-mes-titulo"
-        className="text-sm font-semibold tracking-wide text-on-surface-variant uppercase"
+        className="text-sm font-bold tracking-wide text-primary uppercase"
       >
         Total por mes
       </h2>
-      <ul className="flex flex-col divide-y divide-outline-variant rounded-precision-lg border border-outline-variant bg-surface-container-lowest">
-        {mesesOrdenados.map(([claveMes, totalMinutos]) => (
+      <ul className="flex flex-col divide-y divide-outline-variant overflow-hidden rounded-precision-lg border border-outline-variant bg-surface-container-lowest">
+        {mesesOrdenados.map(([claveMes, totalMinutos], indice) => (
           <li
             key={claveMes}
-            className="flex items-center justify-between gap-4 px-4 py-2.5 text-sm"
+            className={`flex items-center justify-between gap-4 px-4 py-2.5 text-sm ${
+              indice % 2 === 1 ? "bg-surface-container-low" : ""
+            }`}
           >
-            <span className="text-on-surface">{formatearMes(claveMes)}</span>
-            <span className="shrink-0 font-mono text-xs font-medium text-on-surface-variant">
+            <span className="text-on-surface-variant">
+              {formatearMes(claveMes)}
+            </span>
+            <span className="shrink-0 font-mono text-xs font-semibold tracking-wide text-secondary">
               {formatearDuracion(totalMinutos)}
             </span>
           </li>
