@@ -11,10 +11,6 @@
 - Si es preferencia o regla operativa → usar MEMORY.md
 - Si hay conflicto → ADRs tienen prioridad sobre MEMORY.md
 
-## Reglas generales
-
-### Convenciones
-
 ## Stack tecnológico
 
 - **Framework**: Next.js 16.2.10 — enrutamiento vía App Router (`src/app/`) según [ADR-001](docs/adr/ADR-001-adopcion-exclusiva-app-router.md).

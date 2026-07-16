@@ -25,6 +25,7 @@ El sistema "Time Tracker" se enfocará exclusivamente en el flujo principal de g
 ### 1.4 Referencias
 
 - [DESIGN.md](https://github.com/HectorAndradeBayteq/taller-sdd/blob/master/etapa-2/assets/DESIGN.md) – Sistema de diseño del laboratorio con paleta, tipografía, espaciado y patrones de componentes.
+- [Figma – exercise-time-tracker](https://www.figma.com/design/K6uQLWg82KsCSpHJVXSf6L/exercise-time-tracker) – Diseño de referencia (mockups) al que la interfaz debe ser fiel.
 
 ### 1.5 Visión general del documento
 
@@ -125,6 +126,7 @@ No se especifican requisitos de interfaces de comunicación, ya que la aplicaci�
 
 - RD-001: El diseño de la aplicación deberá basarse en el sistema de diseño DESIGN.md y los wireframes proporcionados.
 - RD-002: La aplicación deberá ser desarrollada para funcionar con almacenamiento local exclusivamente.
+- RD-003: La interfaz de usuario implementada deberá ser fiel al diseño definido en Figma ([exercise-time-tracker](https://www.figma.com/design/K6uQLWg82KsCSpHJVXSf6L/exercise-time-tracker)), respetando layout, componentes, espaciado y estilos allí especificados.
 
 ### 3.5 Atributos del sistema de software (Calidad)
 
@@ -158,19 +160,19 @@ No se identifican otros requisitos específicos fuera de las categorías anterio
 
 ### 4.1 Apéndices
 
-- Apéndice A: Wireframes de la Interfaz de Usuario
+- Apéndice A: Capturas del prototipo de alta fidelidad en Figma ([exercise-time-tracker](https://www.figma.com/design/K6uQLWg82KsCSpHJVXSf6L/exercise-time-tracker))
 - Pantalla de Tareas
 
-![Wireframes de Tareas (panel principal)](assets/LB-TT-img-1.png)
+![Pantalla de Tareas (panel principal)](assets/figma-tareas.png)
 
 - Modal de creación y edición de tareas
 
-![Wireframes de Nueva Tarea](assets/LB-TT-img-2.png)
+![Diálogo Nueva Tarea](assets/figma-nueva-tarea.png)
 
 - Pantalla de proyectos
 
-![Wireframes de Proyectos](assets/LB-TT-img-5.png)
+![Pantalla de Proyectos](assets/figma-proyectos.png)
 
 - Historial de registros
 
-![image.png](assets/image.png)
+![Pantalla de Historial de registros](assets/figma-historial.png)
