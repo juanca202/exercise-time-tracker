@@ -24,7 +24,7 @@ El sistema "Time Tracker" se enfocará exclusivamente en el flujo principal de g
 
 ### 1.4 Referencias
 
-- [DESIGN.md](https://github.com/HectorAndradeBayteq/taller-sdd/blob/master/etapa-2/assets/DESIGN.md) – Sistema de diseño del laboratorio con paleta, tipografía, espaciado y patrones de componentes.
+- [DESIGN.md](../../../../DESIGN.md) – Sistema de diseño del laboratorio con paleta, tipografía, espaciado y patrones de componentes.
 - [Figma – exercise-time-tracker](https://www.figma.com/design/K6uQLWg82KsCSpHJVXSf6L/exercise-time-tracker) – Diseño de referencia (mockups) al que la interfaz debe ser fiel.
 
 ### 1.5 Visión general del documento
@@ -163,16 +163,16 @@ No se identifican otros requisitos específicos fuera de las categorías anterio
 - Apéndice A: Capturas del prototipo de alta fidelidad en Figma ([exercise-time-tracker](https://www.figma.com/design/K6uQLWg82KsCSpHJVXSf6L/exercise-time-tracker))
 - Pantalla de Tareas
 
-![Pantalla de Tareas (panel principal)](assets/figma-tareas.png)
+Pantalla de Tareas (panel principal)
 
 - Modal de creación y edición de tareas
 
-![Diálogo Nueva Tarea](assets/figma-nueva-tarea.png)
+Diálogo Nueva Tarea
 
 - Pantalla de proyectos
 
-![Pantalla de Proyectos](assets/figma-proyectos.png)
+Pantalla de Proyectos
 
 - Historial de registros
 
-![Pantalla de Historial de registros](assets/figma-historial.png)
+Pantalla de Historial de registros
