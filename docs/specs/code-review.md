@@ -1,16 +1,16 @@
 # Code Review — exercise-time-tracker · feature/implementacion → main
 
-**Fecha:** 2026-08-04 09:55
+**Fecha:** 2026-08-04 10:30
 **Repositorio:** exercise-time-tracker
 **Rama:** feature/implementacion
-**Commit:** a5fd5d8
-**Working tree:** sucio (5 archivos modificados: `package.json`, `pnpm-lock.yaml`, `src/app/page.tsx`, `src/features/tasks/use-task-actions.ts`, `src/features/tasks/use-task-actions.test.ts` — correcciones aplicadas durante este review, pendientes de commit)
+**Commit:** bf2bfd4
+**Working tree:** sucio (`e2e/navigation.spec.ts` nuevo, `vitest.config.ts` modificado — pendientes de commit tras esta última corrección)
 **Modo:** default
-**Veredicto:** ❌ Rechazado
+**Veredicto:** ✅ Aprobado
 
 ## Resumen
 
-Se revisó el diff completo `origin/main..HEAD` (132 archivos, ~7000 líneas): implementación de las 4 historias de usuario del producto (layout, gestión de proyectos, gestión de tareas y registro de tiempo, reportes e historial) más el archivado de 5 changes de OpenSpec. La etapa automatizada y la revisión cualitativa quedaron ambas superadas tras corregir dos hallazgos bloqueantes autorizados por el usuario (pérdida de datos al eliminar una Tarea con temporizador activo, y validación asimétrica de Proyecto en `createTask`). El único punto pendiente es el check de **E2E**, que falla con "No tests found": existe `playwright.config.ts` (ADR-008) pero no hay ningún test bajo `e2e/` todavía; el usuario decidió explícitamente no corregirlo ahora. Por eso el veredicto es `❌ Rechazado` — es la única puerta que falta para `✅ Aprobado`.
+Se revisó el diff completo `origin/main..HEAD` (132 archivos, ~7000 líneas): implementación de las 4 historias de usuario del producto (layout, gestión de proyectos, gestión de tareas y registro de tiempo, reportes e historial) más el archivado de 5 changes de OpenSpec. La etapa automatizada y la revisión cualitativa quedaron ambas superadas tras corregir, con autorización del usuario, dos hallazgos bloqueantes (pérdida de datos al eliminar una Tarea con temporizador activo, y validación asimétrica de Proyecto en `createTask`) y el FAIL de **E2E** (`playwright.config.ts` existía sin ningún test bajo `e2e/`): se agregó un smoke test de navegación (`e2e/navigation.spec.ts`) y se corrigió `vitest.config.ts` para excluir `e2e/` de la suite de Vitest, evitando el conflicto de globs entre ambos runners. Todos los checks quedan en verde y no quedan hallazgos cualitativos bloqueantes sin resolver.
 
 ## 1. Verificaciones automatizadas
 
@@ -20,17 +20,20 @@ Símbolos de estado: `✅` PASS · `❌` FAIL · `⏭️` SKIPPED · `—` N/A �
 | --- | ---------- | ----------------------- | ----------- | ------ | ------------------------------------------- | -------- |
 | 1   | tipado     | `tsc --noEmit`          | Bloqueante  | ✅     | 0 errores                                   | ~2s      |
 | 2   | linter     | `eslint .`              | Bloqueante  | ✅     | 0 errors, 0 warnings                        | ~2s      |
-| 3   | unit tests | `vitest run`            | Bloqueante  | ✅     | 119 passed, 0 failed (29 archivos)          | 3.1s     |
-| 4   | coverage   | `vitest run --coverage` | Bloqueante  | ✅     | 98.13% stmts / 89.43% branches (sin umbral) | 3.4s     |
+| 3   | unit tests | `vitest run`            | Bloqueante  | ✅     | 119 passed, 0 failed (29 archivos)          | 4.4s     |
+| 4   | coverage   | `vitest run --coverage` | Bloqueante  | ✅     | 98.13% stmts / 89.43% branches (sin umbral) | 4.7s     |
 | 5   | build      | `next build`            | Bloqueante  | ✅     | OK — 4 rutas generadas                      | ~2s      |
-| 6   | e2e        | `playwright test`       | Condicional | ❌     | "Error: No tests found" (0 specs en `e2e/`) | —        |
+| 6   | e2e        | `playwright test`       | Condicional | ✅     | 3 passed (smoke test de navegación)         | 7.6s     |
 | 7   | sonar      | —                       | Informativo | —      | N/A (sin `sonar-project.properties`)        | —        |
 
 ### Detalle de checks fallidos
 
-- **e2e** — `playwright test` se ejecutó (config y navegador Chromium disponibles, `webServer` levanta `next build && next start` correctamente) pero terminó con `Error: No tests found`: el directorio `e2e/` (declarado como `testDir` en `playwright.config.ts`) no existe, no hay ningún archivo `*.spec.ts` bajo él. El usuario confirmó continuar sin escribir tests e2e en este momento.
+Sin checks fallidos.
 
-**Nota sobre coverage:** inicialmente `SKIPPED` porque `@vitest/coverage-v8` no estaba instalado (ni `@vitest/coverage-istanbul`) y no había script de coverage configurado. El usuario autorizó instalar `@vitest/coverage-v8` como devDependency; tras instalarlo, el check pasa a `✅ PASS` (sin umbrales de cobertura configurados en `vitest.config.ts`, por lo que exit 0 basta).
+**Historial de correcciones durante este review:**
+
+- **coverage** — inicialmente `SKIPPED` porque `@vitest/coverage-v8` no estaba instalado (ni `@vitest/coverage-istanbul`) y no había script de coverage configurado. El usuario autorizó instalar `@vitest/coverage-v8` como devDependency; tras instalarlo, pasa a `✅ PASS` (sin umbrales configurados en `vitest.config.ts`, exit 0 basta).
+- **e2e** — inicialmente `❌ FAIL` con `Error: No tests found`: existía `playwright.config.ts` (ADR-008) pero ningún archivo bajo `e2e/`. El usuario autorizó escribir un smoke test (`e2e/navigation.spec.ts`, 3 casos: carga de Tareas por defecto, navegación a Proyectos, navegación a Historial, verificando URL, `aria-current` y contenido visible). Al agregarlo, el patrón `include` de Vitest (`**/*.{test,spec}.{ts,tsx}`) lo capturó también, rompiendo la suite de unit tests (el archivo usa la API de `@playwright/test`, incompatible con el runtime de Vitest). Se corrigió agregando `"e2e"` a `exclude` en `vitest.config.ts`, alineado con el `testDir: "./e2e"` ya declarado en `playwright.config.ts`. Ambos checks re-ejecutados en verde tras el fix.
 
 ## 2. Revisión cualitativa
 
@@ -63,13 +66,14 @@ Hallazgos no bloqueantes (no impiden `✅ Aprobado`, quedan como mejora futura):
 
 ## Próximas acciones
 
-1. Escribir al menos un test e2e bajo `e2e/` (o remover/posponer formalmente el check de Playwright) para que el check **e2e** deje de fallar — es el único bloqueante restante para `✅ Aprobado`.
-2. Commitear los 5 archivos modificados por las correcciones de este review (`package.json`, `pnpm-lock.yaml`, `src/app/page.tsx`, `src/features/tasks/use-task-actions.ts`, `src/features/tasks/use-task-actions.test.ts`).
-3. (No bloqueante) Mostrar un mensaje de error en `handleFormSubmit` cuando `projectNotFound` es `true`.
-4. (No bloqueante) Validar `name.trim().length > 0` en `ProjectForm`/`TaskForm`.
-5. (No bloqueante) Decidir si cablear `onStorageChange` a los stores o retirarlo.
-6. (No bloqueante) Evaluar aplicar el guard de temporizador activo también en `updateTask`.
+Sin acciones bloqueantes pendientes. No bloqueantes, para una iteración futura:
+
+1. Mostrar un mensaje de error en `handleFormSubmit` cuando `projectNotFound` es `true`.
+2. Validar `name.trim().length > 0` en `ProjectForm`/`TaskForm`.
+3. Decidir si cablear `onStorageChange` a los stores o retirarlo.
+4. Evaluar aplicar el guard de temporizador activo también en `updateTask`.
+5. Ampliar la suite e2e más allá del smoke test de navegación (flujos de creación/eliminación de Tareas y Proyectos, timer, registro manual).
 
 ## Justificaciones aceptadas
 
-Ninguna — ambos hallazgos bloqueantes (🔴 delete+timer activo, 🟠 createTask sin validar Proyecto) fueron corregidos, no justificados. El FAIL de e2e no es un hallazgo cualitativo sino un check automatizado; el usuario decidió no corregirlo ahora, sin ofrecer una justificación formal para registrar — queda como acción pendiente (ver arriba).
+Ninguna — los tres hallazgos bloqueantes (🔴 delete+timer activo, 🟠 createTask sin validar Proyecto, ❌ e2e sin tests) fueron corregidos, no justificados.
