@@ -29,6 +29,21 @@ describe("useTaskActions", () => {
     expect(useTaskStore.getState().tasks).toHaveLength(1);
   });
 
+  it("rechaza la creación de una Tarea con un Proyecto inexistente", () => {
+    const { result } = renderHook(() => useTaskActions());
+
+    let createResult: ReturnType<typeof result.current.createTask>;
+    act(() => {
+      createResult = result.current.createTask({
+        projectId: "inexistente",
+        name: "T1",
+      });
+    });
+
+    expect(createResult!).toEqual({ created: false, projectNotFound: true });
+    expect(useTaskStore.getState().tasks).toEqual([]);
+  });
+
   it("reasigna una Tarea a otro Proyecto existente", () => {
     const projectA = useProjectStore
       .getState()
@@ -115,6 +130,27 @@ describe("useTaskActions", () => {
     expect(deleteResult!).toEqual({
       deleted: false,
       blockedByTimeEntryCount: 1,
+    });
+    expect(useTaskStore.getState().tasks).toHaveLength(1);
+  });
+
+  it("bloquea la eliminación de una Tarea con un temporizador activo", () => {
+    const project = useProjectStore
+      .getState()
+      .createProject({ name: "A", description: "" });
+    const task = useTaskStore
+      .getState()
+      .createTask({ projectId: project.id, name: "T1" });
+    const { result } = renderHook(() => useTaskActions());
+
+    let deleteResult: ReturnType<typeof result.current.deleteTask>;
+    act(() => {
+      deleteResult = result.current.deleteTask(task.id, task.id);
+    });
+
+    expect(deleteResult!).toEqual({
+      deleted: false,
+      blockedByActiveTimer: true,
     });
     expect(useTaskStore.getState().tasks).toHaveLength(1);
   });

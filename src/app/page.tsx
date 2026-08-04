@@ -57,16 +57,22 @@ export default function TasksPage() {
         return;
       }
     } else {
-      createTask(values);
+      const result = createTask(values);
+      if (!result.created) {
+        return;
+      }
     }
     setFormState(null);
   }
 
   function handleDeleteTask(task: Task) {
-    const result = deleteTask(task.id);
+    const result = deleteTask(task.id, activeTimer?.taskId);
     if (!result.deleted) {
+      const reason = result.blockedByActiveTimer
+        ? "tiene un temporizador en ejecución"
+        : `tiene ${result.blockedByTimeEntryCount} Registro(s) de Tiempo asociado(s)`;
       setBlockedMessage(
-        `No se puede eliminar "${task.name}" porque tiene ${result.blockedByTimeEntryCount} Registro(s) de Tiempo asociado(s).`,
+        `No se puede eliminar "${task.name}" porque ${reason}.`,
       );
     } else {
       setBlockedMessage(null);

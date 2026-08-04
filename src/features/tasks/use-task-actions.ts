@@ -3,6 +3,11 @@ import { useTaskStore } from "@/shared/store/use-task-store";
 import type { TaskInput } from "@/shared/store/use-task-store";
 import { useTimeEntryStore } from "@/shared/store/use-time-entry-store";
 
+export interface CreateTaskResult {
+  created: boolean;
+  projectNotFound?: boolean;
+}
+
 export interface UpdateTaskResult {
   updated: boolean;
   projectNotFound?: boolean;
@@ -11,11 +16,13 @@ export interface UpdateTaskResult {
 export interface DeleteTaskResult {
   deleted: boolean;
   blockedByTimeEntryCount?: number;
+  blockedByActiveTimer?: boolean;
 }
 
 /**
- * Lógica de negocio de Tareas: valida el Proyecto al reasignar (BR-01) y
- * bloquea la eliminación de una Tarea con Registros de Tiempo asociados (BR-06).
+ * Lógica de negocio de Tareas: valida el Proyecto al crear y al reasignar
+ * (BR-01), y bloquea la eliminación de una Tarea con un temporizador activo
+ * o con Registros de Tiempo asociados (BR-06).
  */
 export function useTaskActions() {
   const tasks = useTaskStore((state) => state.tasks);
@@ -33,8 +40,12 @@ export function useTaskActions() {
     return timeEntries.filter((entry) => entry.taskId === taskId).length;
   }
 
-  function createTask(input: TaskInput) {
-    return createTaskRaw(input);
+  function createTask(input: TaskInput): CreateTaskResult {
+    if (!projectExists(input.projectId)) {
+      return { created: false, projectNotFound: true };
+    }
+    createTaskRaw(input);
+    return { created: true };
   }
 
   function updateTask(id: string, input: TaskInput): UpdateTaskResult {
@@ -45,7 +56,13 @@ export function useTaskActions() {
     return { updated: true };
   }
 
-  function deleteTask(id: string): DeleteTaskResult {
+  function deleteTask(
+    id: string,
+    activeTimerTaskId?: string,
+  ): DeleteTaskResult {
+    if (activeTimerTaskId === id) {
+      return { deleted: false, blockedByActiveTimer: true };
+    }
     const blockedByTimeEntryCount = countTimeEntriesForTask(id);
     if (blockedByTimeEntryCount > 0) {
       return { deleted: false, blockedByTimeEntryCount };
