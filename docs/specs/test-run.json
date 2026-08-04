@@ -1,0 +1,38 @@
+{
+  "schema": "test-run/v1",
+  "generatedBy": "code-review",
+  "timestamp": "2026-08-04T10:48:00-06:00",
+  "work": "feature/implementacion",
+  "git": {
+    "branch": "feature/implementacion",
+    "commit": "d88c86e",
+    "workingTreeClean": true,
+    "fingerprint": "561c1a89dd3c5209dd8a7ab802088f8a7d3f48d5"
+  },
+  "suites": [
+    {
+      "type": "unit",
+      "command": "vitest run",
+      "result": "PASS",
+      "summary": "134 passed (33 files)"
+    },
+    {
+      "type": "coverage",
+      "command": "vitest run --coverage",
+      "result": "PASS",
+      "summary": "94.18% stmts / 80.12% branches / 93.87% funcs / 93.64% lines (sin umbral configurado)"
+    },
+    {
+      "type": "integration",
+      "command": "—",
+      "result": "N/A",
+      "summary": "sin suite de integración separada en este stack"
+    },
+    {
+      "type": "e2e",
+      "command": "playwright test",
+      "result": "PASS",
+      "summary": "3 passed (smoke test de navegación entre Tareas/Proyectos/Historial)"
+    }
+  ]
+}
