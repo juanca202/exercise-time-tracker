@@ -66,4 +66,20 @@ describe("TaskForm", () => {
       name: "Wireframing",
     });
   });
+
+  it("no envía el formulario si el Nombre está vacío", async () => {
+    const onSubmit = vi.fn();
+    render(
+      <TaskForm
+        open
+        onOpenChange={vi.fn()}
+        projects={projects}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "Crear Tarea" }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 });

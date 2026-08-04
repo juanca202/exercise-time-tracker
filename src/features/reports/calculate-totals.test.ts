@@ -75,6 +75,12 @@ describe("totalSecondsForMonth", () => {
 
     expect(totalSecondsForMonth(entries, 2026, 7)).toBe(300);
   });
+
+  it("devuelve 0 cuando no hay Registros de Tiempo en el mes seleccionado", () => {
+    const entries = [timeEntry({ date: "2026-08-01", durationSeconds: 900 })];
+
+    expect(totalSecondsForMonth(entries, 2026, 7)).toBe(0);
+  });
 });
 
 describe("startOfIsoWeek", () => {

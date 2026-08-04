@@ -4,6 +4,12 @@ import {
   calculateWeeklyGoalPercentage,
 } from "./weekly-goal";
 
+describe("WEEKLY_GOAL_HOURS", () => {
+  it("es una meta fija de 40 horas (AC-007)", () => {
+    expect(WEEKLY_GOAL_HOURS).toBe(40);
+  });
+});
+
 describe("calculateWeeklyGoalPercentage", () => {
   it("calcula el porcentaje exacto por debajo de la meta", () => {
     const totalSeconds = WEEKLY_GOAL_HOURS * 3600 * 0.5;

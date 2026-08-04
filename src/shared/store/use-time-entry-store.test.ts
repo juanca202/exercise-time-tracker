@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { localStorageAdapter } from "@/shared/persistence/local-storage-adapter";
 import { useTimeEntryStore } from "./use-time-entry-store";
 
 function resetStore() {
@@ -34,5 +35,26 @@ describe("useTimeEntryStore", () => {
     });
 
     expect(useTimeEntryStore.getState().timeEntries).toEqual([timeEntry]);
+  });
+
+  it("rehidrata los Registros de Tiempo persistidos en localStorage tras un reinicio simulado", async () => {
+    const persistedEntry = {
+      id: "te1",
+      taskId: "task-1",
+      source: "manual",
+      date: "2026-07-30",
+      durationSeconds: 3600,
+    };
+    localStorageAdapter.setItem(
+      "registros-de-tiempo",
+      JSON.stringify({
+        state: { timeEntries: [persistedEntry] },
+        version: 0,
+      }),
+    );
+
+    await useTimeEntryStore.persist.rehydrate();
+
+    expect(useTimeEntryStore.getState().timeEntries).toEqual([persistedEntry]);
   });
 });

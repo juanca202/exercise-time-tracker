@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { localStorageAdapter } from "@/shared/persistence/local-storage-adapter";
 import { useTaskStore } from "./use-task-store";
 
 function resetStore() {
@@ -42,5 +43,23 @@ describe("useTaskStore", () => {
     useTaskStore.getState().deleteTask(task.id);
 
     expect(useTaskStore.getState().tasks).toEqual([]);
+  });
+
+  it("rehidrata las Tareas persistidas en localStorage tras un reinicio simulado", async () => {
+    localStorageAdapter.setItem(
+      "tareas",
+      JSON.stringify({
+        state: {
+          tasks: [{ id: "t1", projectId: "project-2", name: "Editada" }],
+        },
+        version: 0,
+      }),
+    );
+
+    await useTaskStore.persist.rehydrate();
+
+    expect(useTaskStore.getState().tasks).toEqual([
+      { id: "t1", projectId: "project-2", name: "Editada" },
+    ]);
   });
 });
